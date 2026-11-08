@@ -1,0 +1,11 @@
+# Production control-plane overlay: deploy against independent managed PostgreSQL.
+# No Docker socket, no exposed database listener. Existing operator SQLite
+# routes are intentionally disabled while ENTERPRISE_MODE=1.
+services:
+  capsula:
+    environment:
+      CAPSULA_ENTERPRISE_MODE: '1'
+      CAPSULA_CLUSTER_DATABASE_URL: ${CAPSULA_CLUSTER_DATABASE_URL:?PostgreSQL TLS DSN required}
+      CAPSULA_OIDC_ISSUER: ${CAPSULA_OIDC_ISSUER:?Pinned issuer required}
+      CAPSULA_OIDC_AUDIENCE: ${CAPSULA_OIDC_AUDIENCE:?Audience required}
+      CAPSULA_OIDC_JWKS_URL: ${CAPSULA_OIDC_JWKS_URL:?Pinned JWKS required}

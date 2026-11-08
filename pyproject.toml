@@ -1,8 +1,8 @@
 [project]
 name = "capsula-work-os"
-version = "0.6.0a1"
+version = "0.7.0a1"
 description = "CAPSULA governed execution and proof-first workspaces"
 requires-python = ">=3.11"
 dependencies = ["fastapi==0.115.12", "uvicorn==0.34.2", "pydantic==2.11.4", "cryptography>=44,<47"]
 [tool.pytest.ini_options]
-testpaths = ['tests.py', 'test_proof.py', 'test_api_v2.py', 'test_workspaces.py', 'test_offline.py', 'test_federation_v3.py', 'test_nexus_bridge.py', 'test_artifacts_v3.py', 'test_platform_v4.py', 'test_rah_learning.py', 'test_worker_limits.py', 'test_challenge.py', 'test_autonomy.py', 'test_browser_vision.py', 'test_vultr_cloud.py']
+testpaths = ['tests.py', 'test_proof.py', 'test_api_v2.py', 'test_workspaces.py', 'test_offline.py', 'test_federation_v3.py', 'test_nexus_bridge.py', 'test_artifacts_v3.py', 'test_platform_v4.py', 'test_rah_learning.py', 'test_worker_limits.py', 'test_challenge.py', 'test_autonomy.py', 'test_browser_vision.py', 'test_vultr_cloud.py', 'test_cluster_v07.py']
