@@ -32,7 +32,7 @@ Vultr Cloud Compute (deployment pending), Vultr Serverless Inference (connection
 ## Required links and assets
 
 - Public repository: https://github.com/FreddyCreates/VultrEco — **v0.4 source merged; v0.5 extends autonomy and browser controls**.
-- Public live Vultr URL: **NOT YET VERIFIED**.
+- Public live Vultr URL: produced by `python scripts/provision_vultr.py`. Do not paste a URL until that command prints `main_ip`.
 - Recorded demo video: **NOT YET RECORDED**.
 - Slide presentation: **NOT YET PRODUCED**.
 - Cover image: existing CAPSULA image supplied in this conversation; attach directly when submitting.

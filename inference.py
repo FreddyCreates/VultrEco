@@ -23,12 +23,25 @@ class InferenceResult(BaseModel):
     usage:dict={}
 
 def config():
-    """No fake provider: the URL and explicit allowlist must exist."""
+    """No fake provider: the URL and explicit allowlist must exist.
+
+    A Vultr Serverless Inference token with no other endpoint pins the official
+    chat-completions host. A prompt cannot change that host.
+    """
     vendor=os.getenv('CAPSULA_MODEL_PROVIDER','openai-compatible').strip()
     endpoint=os.getenv('CAPSULA_MODEL_URL','') or os.getenv('VULTR_INFERENCE_URL','')
     key=os.getenv('CAPSULA_MODEL_API_KEY','') or os.getenv('VULTR_INFERENCE_API_KEY','')
     models=[x.strip() for x in (os.getenv('CAPSULA_MODEL_ALLOWED_MODELS','') or os.getenv('VULTR_ALLOWED_MODELS','')).split(',') if x.strip()]
     host=os.getenv('CAPSULA_MODEL_HOST','') or os.getenv('VULTR_INFERENCE_HOST','')
+    vultr_key=os.getenv('VULTR_INFERENCE_API_KEY','').strip()
+    if not endpoint and vultr_key:
+        endpoint='https://api.vultrinference.com/v1/chat/completions'
+        host=host or 'api.vultrinference.com'
+        if not models:
+            models=[os.getenv('VULTR_CHAT_MODEL','mimo-v2.6-flash').strip() or 'mimo-v2.6-flash']
+        if vendor in ('','openai-compatible','self-hosted'):
+            vendor='vultr-serverless'
+        key=key or vultr_key
     if not endpoint or not models:return {'configured':False,'provider':vendor,'models':[], 'mode':'unconfigured'}
     p=urlparse(endpoint)
     loopback=p.hostname in ('127.0.0.1','localhost','::1')

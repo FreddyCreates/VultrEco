@@ -1,4 +1,5 @@
 .env
+.vultr-demo-token
 __pycache__/
 .pytest_cache/
 data/

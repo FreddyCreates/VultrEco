@@ -1,9 +1,18 @@
 # CAPSULA · Work Operating System
 
 **Intelligence has a place to work.**  
-**Medina Labs · v0.5.0-alpha.1 · Provider-neutral, self-hostable alpha**
+**Medina Labs · v0.5.0-alpha.1 · Vultr Agent Rush control plane**
 
-CAPSULA gives agents actual workspaces and controlled computer access: a responsive operator interface, encrypted project files, durable memory, agent identities, natural-language plan compilation, reviewed workflows, isolated execution, job and worker registries, content-addressed artifacts, invoices and wallet proposals, and cryptographically signed evidence. CAPSULA works without Vultr: use your own machine, VM, model, and worker network. Vultr is an optional deployment/inference provider, not a requirement of the product.
+CAPSULA gives agents actual workspaces and controlled computer access: a responsive operator interface, encrypted project files, durable memory, agent identities, natural-language plan compilation, reviewed workflows, isolated execution, job and worker registries, content-addressed artifacts, invoices and wallet proposals, and cryptographically signed evidence.
+
+For Vultr Agent Rush, this repository deploys on Vultr:
+
+- Cloud Compute hosts the control plane. `python scripts/provision_vultr.py` creates one Ubuntu VM labeled `capsula-agent-rush` from `VULTR_API_KEY` and `VULTR_INFERENCE_API_KEY`. A second run reuses that VM.
+- Serverless Inference is the agent model. An inference token with no other model URL pins `https://api.vultrinference.com/v1/chat/completions` and the chat model `mimo-v2.6-flash`.
+- Per-job Docker on that VM runs Python with `--network none`, a read-only root, dropped capabilities, and CPU and memory caps. The sandbox does not receive the Vultr tokens.
+- `GET /api/vultr/live` returns the account balance and instance list, with no secrets.
+
+The same process can run on another machine. Missing tokens fail closed. Local tests are not a public URL, a containment recording, or an attestation. See `hackathon/RELEASE_GATE.md`.
 
 The canonical engine repository `ItsNotAILABS/CAPSULA` remains a separate execution-runtime project. This repository (`FreddyCreates/VultrEco`, product CAPSULA) is the user-facing Work OS. The application can exchange contracts with NEXUS, Loom Cluster, POCKET Agent, NOVA Runtime, LiveVault, PARRALAX, Triple-MCP, and Medina Memory, but their external deployments are **not silently assumed connected**.
 

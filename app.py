@@ -476,11 +476,18 @@ def providers(authorization:str|None=Header(None)):
     authed(authorization)
     from inference import public_config
     model=public_config()
+    vultr_on=bool(os.getenv('VULTR_API_KEY','').strip() or os.getenv('VULTR_INFERENCE_API_KEY','').strip())
     return [{'id':'local-docker','class':'sandbox','state':'operator-enabled' if os.getenv('CAPSULA_ALLOW_DIRECT_DOCKER')=='1' and docker_ready() else 'not-active','details':'Per-job Docker container; use a segregated host'},
         {'id':'remote-worker','class':'execution','state':'configured' if WORKER_ALLOWED and WORKER_TOKEN else 'not-active','details':'Leased, allowlisted worker endpoint with bounded execution'},
         {'id':'model-compatible','class':'inference','state':'configured-not-tested' if model['configured'] else 'not-active','details':model},
-        {'id':'vultr','class':'optional','state':'not-required','details':'Can use a provider adapter, not part of app core'},
+        {'id':'vultr','class':'cloud','state':'configured' if vultr_on else 'not-required','details':'Cloud Compute plus Serverless Inference when operator tokens are present. Live account data is /api/vultr/live.'},
         {'id':'phantom','class':'wallet','state':'browser-connect-only','details':'No custody or automatic spending'}]
+
+@app.get('/api/vultr/live')
+def vultr_live(authorization:str|None=Header(None)):
+    authed(authorization)
+    import vultr_cloud
+    return vultr_cloud.snapshot()
 
 @app.get('/api/templates')
 def templates(authorization:str|None=Header(None)):
