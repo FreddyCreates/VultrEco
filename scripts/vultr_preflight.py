@@ -14,7 +14,13 @@ def check():
                 headers={"Authorization":"Bearer "+token})
             instances=client.get("https://api.vultr.com/v2/instances",
                 headers={"Authorization":"Bearer "+token})
-        return {"cloud_api":"reachable" if account.status_code==200 and instances.status_code==200 else "not-verified",
+        items=(instances.json().get("instances") or []) if instances.status_code==200 else []
+        capsula=[{"label":str(i.get("label") or "")[:80],
+                  "region":str(i.get("region") or "")[:20],
+                  "status":str(i.get("status") or "")[:30]}
+                 for i in items if str(i.get("label") or "").startswith("capsula")]
+        return {"sampled_instance_count":len(items),"capsula_instances":capsula,
+                "cloud_api":"reachable" if account.status_code==200 and instances.status_code==200 else "not-verified",
                 "account_http_status":account.status_code,"instances_http_status":instances.status_code,
                 "inference_key_present":bool(os.getenv("VULTR_INFERENCE_API_KEY")),
                 "live_deployment_verified":False}

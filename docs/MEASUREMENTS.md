@@ -22,3 +22,20 @@ A meaningful multi-host result additionally requires:
 
 A database-only green check is explicitly **not** a production performance
 certification. Save measured benchmark JSON and cloud receipts separately.
+
+## Real remote VM acceptance
+
+The optional `scripts/benchmark_multi_vm.py` requires **2–16** distinct HTTPS
+worker origins and exact node IDs. Set the configuration in a private
+`CAPSULA_LIVE_VM_TARGETS` environment variable containing JSON objects
+`{"id":"vm-001","origin":"https://worker1.example","token_env":"CAPSULA_LIVE_TOKEN_FIRST"}`
+with a **separate** record for each worker. Set each referenced token environment
+variable independently, and `CAPSULA_LIVE_VM_TEST_APPROVED=1` to authorize the
+real workload. Never store credentials in source or the JSON declaration.
+
+The benchmark refuses unsafe local/dev workers and checks per-job output,
+digest, UID, no root writes, blocked public network, absence of privileged env
+variables and live cgroup ceilings. It emits task p50/p95 and per-host evidence.
+A failed network/permission check causes a failed release receipt. Its declared
+node identity is operator-supplied, not independently attested; corroborate
+Vultr instance identities through the cloud API and hypervisor records.
