@@ -1,0 +1,26 @@
+{
+  "status": "negative_runtime_results_preserved",
+  "attempts": [
+    {
+      "environment": "minimal QEMU test VM",
+      "error": "Docker client used /var/run/docker.sock while daemon listened on /run/docker.sock",
+      "repair": "Explicit DOCKER_HOST in the disposable bootstrap"
+    },
+    {
+      "environment": "same minimal image",
+      "error": "containerd shim executable mode missing",
+      "repair": "Initialize executable modes in the guest bootstrap"
+    },
+    {
+      "environment": "earlier v0.4 kernel",
+      "error": "bpf_prog_query(BPF_CGROUP_DEVICE) not implemented",
+      "repair": "Enable and gate BPF_SYSCALL, CGROUP_BPF and BPF_JIT; rebuild Linux"
+    },
+    {
+      "environment": "initramfs root",
+      "error": "pivot_root invalid argument",
+      "repair": "Switch onto actual ext4 root before starting Docker; retain normal OCI isolation"
+    }
+  ],
+  "claim": "These attempts are not passing containment evidence; successful acceptance is a distinct receipt."
+}

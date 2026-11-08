@@ -1,0 +1,54 @@
+{
+  "schema": "dot.actual-source-improvement.v1",
+  "status": "promoted",
+  "capsule_id": "6557084c063e4a0f91e0b2e2917b6579",
+  "objective": "Support bounded waits for asynchronous browser controls",
+  "baseline_hash": "197a3230ee2ab6a06efa4de93cb3c71ebcbf5508e8ed3c133d8cdf691ab8219c",
+  "candidate_hash": "61a7e71abb4493ea23f99c298117c4d8b839a0e6fa6b135773451507cc7aa573",
+  "trials": [
+    {
+      "at": 1794155610.7736454,
+      "candidate_hash": "61a7e71abb4493ea23f99c298117c4d8b839a0e6fa6b135773451507cc7aa573",
+      "checks": {
+        "baseline_regression": {
+          "passed": true,
+          "exit_code": 0,
+          "budget_exhausted": false,
+          "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "duration_seconds": 0.04072288199995455
+        },
+        "baseline_holdout": {
+          "passed": false,
+          "exit_code": 1,
+          "budget_exhausted": false,
+          "output_sha256": "30db3374b33907b278533226d5e9ebc64977ee6052ba4cfeb8ded3abad44a971",
+          "duration_seconds": 0.06078160500010199
+        },
+        "candidate_regression": {
+          "passed": true,
+          "exit_code": 0,
+          "budget_exhausted": false,
+          "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "duration_seconds": 0.04067381499999101
+        },
+        "candidate_holdout": {
+          "passed": true,
+          "exit_code": 0,
+          "budget_exhausted": false,
+          "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "duration_seconds": 0.0406685830000697
+        }
+      },
+      "status": "verified"
+    }
+  ],
+  "changed_files": [
+    "dot/computer.py"
+  ],
+  "undo_checkpoint": "8c56423b22bb4f99bc8fb8f5ac56d1b7",
+  "execution": "real local Python processes against actual project source",
+  "intelligence": "assistant-authored patch; no provider inference was executed",
+  "verification_scope": "browser action contract validation; not a real Chromium execution",
+  "vm_boot_verified": false,
+  "subscription_inference_verified": false
+}

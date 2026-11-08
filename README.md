@@ -1,7 +1,7 @@
 # CAPSULA · Work Operating System
 
 **Intelligence has a place to work.**  
-**Medina Labs · v0.5.0-alpha.1 · Vultr Agent Rush control plane**
+**Medina Labs · v0.6.0-alpha.1 · Vultr Agent Rush control plane**
 
 CAPSULA gives agents actual workspaces and controlled computer access: a responsive operator interface, encrypted project files, durable memory, agent identities, natural-language plan compilation, reviewed workflows, isolated execution, job and worker registries, content-addressed artifacts, invoices and wallet proposals, and cryptographically signed evidence.
 
@@ -16,6 +16,22 @@ The same process can run on another machine. Missing tokens fail closed. Local t
 
 The canonical engine repository `ItsNotAILABS/CAPSULA` remains a separate execution-runtime project. This repository (`FreddyCreates/VultrEco`, product CAPSULA) is the user-facing Work OS. The application can exchange contracts with NEXUS, Loom Cluster, POCKET Agent, NOVA Runtime, LiveVault, PARRALAX, Triple-MCP, and Medina Memory, but their external deployments are **not silently assumed connected**.
 
+
+## RAH and agent evolution — v0.6
+
+CAPSULA is a general work platform for software development, research, analysis, file creation, application QA, operations and the agents' own improvements. Individual agents and enterprise project workspaces use the same mission, artifact and evidence machinery.
+
+- **Persistent agent computers:** assign each agent a unique Dot-managed Linux VM, disk, SSH identity and provider sign-in. ChatGPT work uses the official Codex CLI; Gemini work uses the official Google CLI. Login caches stay inside the agent's computer. The CAPSULA controller uses a separate server-held host-management token, never a worker or browser credential.
+- **Real project continuity:** encrypted project revisions, per-agent objectives, notes, recent outcomes and verified procedure references persist across sessions. Small projects can be imported into their computer with an undo checkpoint and exact byte hashes. Larger projects use the computer's native SSH/SCP lane.
+- **RAH bounded mission autonomy:** authorize a mission once, with a fixed worker pool, explicit capabilities through VM leases, maximum depth/children, shared time/change reservations, and a deadline. Authorized branches can execute and request child work without repeating a human approval at every step. No branch can provision new infrastructure or extend its grant. Ungranted language-generated plans remain proposals.
+- **Actual dependency artifacts:** transfer only the explicitly granted files from a completed dependency into the next worker's VM. Verify hashes against the completed job, checkpoint the target and charge transfer bytes to its change reservation. Reports do not silently become authority or shared filesystem mounts.
+- **Curiosity and self-improvement:** retain outcomes automatically, produce bounded experiment proposals from observed failures or the owner's objective, and create reusable procedure drafts after completed workflows. VM task outcomes also feed continuity when the computer is refreshed. Curiosity alone never authorizes new effects.
+- **Clean improvement capsules:** freeze source revisions, writable files, inputs and expected outputs. Run baseline and candidate programs only in a separate per-job Docker worker. Expected answers stay on the controller. Require old behavior to pass and a distinguishing new case to improve; retain failed trials, enforce attempt/deadline/byte budgets, reject stale baselines, and support atomic promotion and rollback.
+- **Skills that earn activation:** drafts stay under `skills/proposals`. A verified promotion can activate the exact procedure under `skills/active`; later edits invalidate its use. Skill maintenance improves tools and procedures, not underlying model weights.
+- **One product, two workspace lanes:** personal and enterprise project organization metadata are supported. This remains a single-operator alpha; workspace labels do not claim multi-tenant identity or access isolation.
+
+Read [RAH platform contracts](docs/RAH_PLATFORM.md), [acceptance and evidence](docs/ACCEPTANCE.md), and the integrated [Dot runtime](runtimes/dot/README.md). The full source is in this repository; compiled Linux images remain reproducible external artifacts rather than committed binaries.
+
 ## Built now
 
 **Release focus:** autonomous mission contracts, delegated capsule trees, a separate opt-in scheduler, code-generation / sandbox loop with retry, and disposable browser screenshot + vision verification. See [RELEASE_SCOPE.md](RELEASE_SCOPE.md) for exact authority boundaries and unmet live deployment gates.
@@ -23,9 +39,10 @@ The canonical engine repository `ItsNotAILABS/CAPSULA` remains a separate execut
 
 | Area | Product behavior | Proven status |
 |---|---|---|
-| Command deck | 12 responsive application sections, status/metrics and live data | Local HTTP + API tests |
+| Command deck | 14 responsive application sections, status/metrics and live data | Local HTTP + API tests |
+
 | Workspaces & files | Create projects; encrypt and version text files; reject traversal; compare expected revisions | Tested |
-| Autonomous missions | Authorize once, run bounded cycles, delegate child capsules, pause/cancel, persist goals, signed audit | 277 local tests incl. negative paths; real model/worker must be configured |
+| Autonomous missions | Authorize once, run bounded cycles, delegate child capsules, pause/cancel, persist goals, signed audit | 317 local tests incl. negative paths; real model/worker must be configured |
 | Agent registry | Create, scope, disable agents; explicit capabilities, step ceiling and model identity | Tested |
 | Natural-language planning | Model generates strict, validated JSON steps; plan creates a reviewable approval request, never auto-executes | Contract tested; real model requires configured endpoint |
 | Workflow engine | Compose runs, require approval for effects, execute bounded steps, seal results, stop on failure | Tested |
@@ -124,9 +141,15 @@ The loopback smoke runs trusted literal Python in an explicitly unsafe test-only
 - Governance: `/api/approvals`, `/api/audit`, `/api/security/posture`, `/api/federation/contracts`
 - Finance: `/api/invoices`, `/api/finance/intents`, `/api/finance/grants`
 
-**Pre-1.0 disclosure:** Single administrator only (no production identity/tenant separation), no external cryptographic witness or hardware attestation, no integrated paid inference unless configured, no self-running scheduler, and no production financial execution. External services require independently provisioned credentials and security review. Do not expose this alpha directly to the public internet with a weak API key. The Vultr Agent Rush deadline does not change these claims.
+**Pre-1.0 disclosure:** Single administrator only (no production identity/tenant separation), no external cryptographic witness or hardware attestation, no integrated paid inference unless configured, scheduler runs only when explicitly deployed, and no production financial execution. External services require independently provisioned credentials and security review. Do not expose this alpha directly to the public internet with a weak API key. The Vultr Agent Rush deadline does not change these claims.
 
 See `ARCHITECTURE.md`, `DEPLOYMENT.md`, `PRODUCTION.md`, `OPERATOR_BOUNDARY.md`, `WORKER_SECURITY.md`, and `CHANGELOG.md` for release boundaries.
+
+## Vultr challenge profile
+
+The core product is self-hostable. For **Blast Radius Zero**, deploy the central CAPSULA controller on Vultr, dispatch into separate disposable execution environments, and configure Vultr Serverless Inference for the model lane. Subscription-backed agent computers are an additional product capability, not evidence that the challenge's Vultr inference requirement has been met. The distinct original challenge/deployment work from `main` is retained under `docs/vultr-original`; current instructions are in `DEPLOYMENT.md` and `hackathon/`.
+
+A local source test, a signed record, a CPU-emulated VM, and a live Vultr deployment are different evidence gates. Current receipts identify their execution environment. No live Vultr deployment, model inference, wallet settlement, external witness or hardware attestation is claimed merely from source.
 
 - Autonomy: `/api/autonomy/goals`, `/api/autonomy/goals/{id}/activate`, `/api/autonomy/goals/{id}/tick`, `/api/autonomy/goals/{id}/children`, `/api/autonomy/scheduler/tick`, `/api/autonomy/playbooks`
 - Challenge flows: `/api/challenge/code/propose`, `/api/challenge/code/retry`, `/api/challenge/preflight`

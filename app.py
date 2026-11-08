@@ -10,6 +10,7 @@ from typing import Literal
 from proof import Signer, Vault, canon as canonical_bytes, sha, tree, inclusion, check_inclusion
 from policy import CAPABILITIES, evaluate
 import platform_core as core
+import learning
 from workspaces import MemoryInput, WorkspaceInput
 from audit import schema as audit_schema, append as audit_append, verify as audit_verify
 from federation import schema as federation_schema, inventory as federation_inventory, WorkerRegistration, FinanceIntent, GrantInput, ApprovalInput, now as fed_now, expiry as fed_expiry, worker_status
@@ -23,7 +24,7 @@ API_KEY=os.environ.get('CAPSULA_API_KEY','')
 DOCKER_IMAGE=os.environ.get('CAPSULA_SANDBOX_IMAGE','python:3.12-alpine')
 ALLOWED_IMAGE=re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._/:@-]{1,127}$')
 if not ALLOWED_IMAGE.fullmatch(DOCKER_IMAGE): raise RuntimeError('Invalid sandbox image')
-app=FastAPI(title='CAPSULA Mission Control',version='0.5.0-alpha.1')
+app=FastAPI(title='CAPSULA Mission Control',version='0.6.0-alpha.1')
 signer=Signer(DATA/'keys'/'ed25519.pem')
 vault=Vault(DATA/'keys'/'vault.key')
 
@@ -100,7 +101,7 @@ def health():
         r=subprocess.run(['docker','info','--format','{{.ServerVersion}}'],capture_output=True,timeout=3)
         docker_ready=r.returncode==0
     except (FileNotFoundError,subprocess.TimeoutExpired):pass
-    return {'service':'capsula','version':'0.5.0-alpha.1','auth_configured':bool(API_KEY),'sandbox_ready':docker_ready,'execution_mode':'docker-or-worker' if docker_ready else 'worker-required-or-deny','proof_protocol':'capsula.proof.v2','signing_key_id':signer.key_id,'inference_configured':__import__('inference').config()['configured']}
+    return {'service':'capsula','version':'0.6.0-alpha.1','auth_configured':bool(API_KEY),'sandbox_ready':docker_ready,'execution_mode':'docker-or-worker' if docker_ready else 'worker-required-or-deny','proof_protocol':'capsula.proof.v2','signing_key_id':signer.key_id,'inference_configured':__import__('inference').config()['configured']}
 
 @app.get('/api/overview')
 def overview(authorization:str|None=Header(None)):
@@ -244,7 +245,10 @@ def get_memory(workspace:str,memory_id:str,authorization:str|None=Header(None)):
 @app.get('/api/integrations')
 def integrations(authorization:str|None=Header(None)):
     authed(authorization)
-    x=federation_inventory();x['model_provider']={'status':'configured-not-verified' if __import__('inference').config()['configured'] else 'unconnected','purpose':'operator-selected OpenAI-compatible inference, local or remote'};x['vultr_inference']={'status':'optional adapter, not required','purpose':'interchangeable cloud inference'};x['phantom']={'status':'browser-connection-only','purpose':'user-controlled wallet discovery'};return x
+    x=federation_inventory();x['model_provider']={'status':'configured-not-verified' if __import__('inference').config()['configured'] else 'unconnected','purpose':'operator-selected OpenAI-compatible inference, local or remote'};x['vultr_inference']={'status':'optional adapter, required in challenge deployment profile','purpose':'Vultr challenge model lane'};x['phantom']={'status':'browser-connection-only','purpose':'user-controlled wallet discovery'}
+    x['rah']={'name':'RAH bounded mission autonomy','status':'host configured, live execution requires acceptance' if __import__('computers').configured()['configured'] else 'implemented; dedicated host unconfigured','purpose':'Existing VM pool, recursive grants, hashed artifact handoffs'}
+    x['improvement']={'name':'Clean improvement capsules','status':'implemented; separate worker required','purpose':'Frozen baseline/candidate cases and verified procedure promotion'}
+    return x
 
 @app.get('/api/invoices')
 def invoices(authorization:str|None=Header(None)):
@@ -369,7 +373,7 @@ def list_payment_intents(authorization:str|None=Header(None)):
 @app.get('/api/security/posture')
 def security_posture(authorization:str|None=Header(None)):
     authed(authorization)
-    return {'version':'0.5.0-alpha.1','execution_attested':False,'remote_workers_enforced':bool(WORKER_ALLOWED and WORKER_TOKEN),'external_witness':False,'finance_signing_enabled':False,'key_management':'local encrypted private key; not external KMS','tenancy':'single-admin','browser_status':'requires separately isolated Playwright worker and network-level egress policy','deployment_verified':False}
+    return {'version':'0.6.0-alpha.1','execution_attested':False,'remote_workers_enforced':bool(WORKER_ALLOWED and WORKER_TOKEN),'external_witness':False,'finance_signing_enabled':False,'key_management':'local encrypted private key; not external KMS','tenancy':'single-admin','browser_status':'requires separately isolated Playwright worker and network-level egress policy','deployment_verified':False}
 
 from artifacts import ArtifactInput
 from inference import InferenceInput, infer
@@ -381,7 +385,7 @@ def inference_complete(body:InferenceInput,authorization:str|None=Header(None)):
 @app.get('/api/federation/contracts')
 def contracts(authorization:str|None=Header(None)):
     authed(authorization)
-    return {'supported':['capsula.policy.v2','capsula.proof.v2','capsula.worker.v1','capsula.finance-intent.v1','capsula.approval.v1'],
+    return {'supported':['capsula.policy.v2','capsula.proof.v2','capsula.worker.v1','capsula.finance-intent.v1','capsula.approval.v1','capsula.rah-work-grant.v1','capsula.improvement-grant.v1','capsula.improvement-trial.v1'],
       'adapters':federation_inventory(), 'external_services_verified':False,
       'transport':'operator-configured HTTPS only', 'execution_permissions':'deny-by-default'}
 
@@ -467,7 +471,7 @@ def platform_status(authorization:str|None=Header(None)):
     from inference import public_config
     with conn() as db:
         counts={k:db.execute(f'SELECT COUNT(*) n FROM {k}').fetchone()['n'] for k in ('workspaces','project_files','agent_profiles','agent_runs','missions','workers','approvals','artifact_blobs','memory')}
-    return {'name':'CAPSULA','version':'0.5.0-alpha.1','counts':counts,'models':public_config(),
+    return {'name':'CAPSULA','version':'0.6.0-alpha.1','counts':counts,'models':public_config(),
             'execution_backends':['docker-worker','remote-worker'],'default_runtime':'deny-without-isolation',
             'provider_policy':'no dependency on Vultr','tenancy':'single-admin','payment_execution':'disabled'}
 
@@ -569,6 +573,12 @@ def agent_plan(aid:str,body:PlanRequest,authorization:str|None=Header(None)):
         'and do not include shells, network probes, money transfers, or filesystem escapes. '
         f'Capabilities: {core.serial(agent["capabilities"])}. Maximum steps: {agent["max_steps"]}. '
         'Every proposed step requires operator review. Goal: '+body.goal)
+    with conn() as db:context=learning.context(db,agent,vault)
+    compact={'objective':context['continuity']['objective'][:200],'notes':context['continuity']['notes'][:150],
+        'recent_outcomes':context['continuity']['recent_outcomes'][-2:],
+        'procedures':[{'path':s['path'],'content':s['content'][:300]} for s in context['verified_procedures'][:2]],
+        'authority':'reference only; no additional capabilities'}
+    schema_prompt+='\nPersistent agent continuity and verified procedures:\n'+core.serial(compact)
     response=infer(InferenceInput(model=agent['model'],system=('You are an execution-plan compiler. Role: '+agent['role']+' '+agent['instructions'])[:1000],prompt=schema_prompt[:5000],max_tokens=1024))
     raw=response['text'].strip()
     if raw.startswith('```'):
@@ -603,6 +613,7 @@ def agent_run_execute(rid:str,authorization:str|None=Header(None)):
     with conn() as db:
         r=core.run_row(db,rid,vault)
         if r['state'] not in ('awaiting_approval','ready'):raise HTTPException(409,'Run already executed or blocked')
+        if core.agent_row(db,r['agent_id'])['status']!='active':raise HTTPException(409,'Agent disabled; existing approvals do not reactivate it')
         if r['approval_id']:
             approval=db.execute('SELECT status FROM approvals WHERE id=?',(r['approval_id'],)).fetchone()
             if not approval or approval['status']!='approved':raise HTTPException(403,'Explicit operator approval required')
@@ -614,6 +625,10 @@ def agent_run_execute(rid:str,authorization:str|None=Header(None)):
     from inference import InferenceInput, infer
     for ix,step in enumerate(steps):
         kind=step['kind'];entry={'index':ix,'title':step['title'],'kind':kind}
+        with conn() as db:still_active=core.agent_row(db,a['id'])['status']=='active'
+        if not still_active:
+            entry.update(status='denied',reason='Agent disabled before this step')
+            results.append(entry);final='denied';break
         try:
             if kind in ('python','browser'):
                 mission=MissionInput(title=step['title'],kind=kind,code=step['code'],url=step['url'],selector=step['selector'])
@@ -649,8 +664,15 @@ def agent_run_execute(rid:str,authorization:str|None=Header(None)):
             entry.update({'status':'failed','reason':str(exc.detail if isinstance(exc,HTTPException) else exc)[:300]})
         results.append(entry)
         if entry['status']!='completed':final='failed' if entry['status']=='failed' else 'denied';break
-    with conn() as db:core.update_run(db,rid,final,results,vault,signer,audit_append)
-    return {'id':rid,'status':final,'steps_completed':sum(x['status']=='completed' for x in results),'steps_total':len(steps),'results':results}
+    with conn() as db:
+        core.update_run(db,rid,final,results,vault,signer,audit_append)
+        observed=learning.observe(db,a,rid,final,results,vault,signer,audit_append)
+    return {'id':rid,'status':final,'steps_completed':sum(x['status']=='completed' for x in results),'steps_total':len(steps),'results':results,'learning':observed}
+
+
+import sys as _sys
+from platform_routes import register as _register_platform
+_register_platform(_sys.modules[__name__])
 
 # Challenge API is intentionally installed after all base routes and tables are initialized.
 from challenge import bind as bind_challenge

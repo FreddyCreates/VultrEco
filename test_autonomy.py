@@ -101,6 +101,9 @@ def test_successful_self_execution_with_delegated_grant(monkeypatch):
     assert t.status_code==200,t.text
     d=t.json();assert d['status']=='active';assert d['run']['status']=='completed'
     assert d['run']['steps_completed']==2
+    learned=req('get',f"/api/agents/{a['id']}/learning").json()
+    assert any(o['run_id']==d['run']['id'] for o in learned['observations'])
+    assert any(p['kind']=='procedure' for p in learned['proposals'])
     rid=d['run']['id'];r=req('get','/api/agent-runs/'+rid).json()
     assert r['state']=='completed' and r['approval_id']
     with app.conn() as db:

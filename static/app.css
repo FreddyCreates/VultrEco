@@ -5,6 +5,8 @@
 
 .mark img{width:32px;height:32px;object-fit:contain}.mark.lg img{width:48px;height:48px}
 
+#page-learning .panel{margin-bottom:18px}#rah-detail,#lab-detail,#computer-detail{max-height:440px;overflow:auto;overflow-wrap:anywhere}#rah-children{min-height:100px}#labs-list .list-row{flex-wrap:wrap;gap:12px}#labs-list small{display:block}details>summary{cursor:pointer;padding:12px 0;color:var(--lime)}
+
 /* Autonomous mission governance and capsule trees */
 .auto-task{border:1px solid #314549;border-radius:10px;background:linear-gradient(140deg,#16242b,#10181e);padding:16px;display:flex;flex-direction:column;gap:13px}
 .auto-task-top{display:flex;justify-content:space-between;gap:10px;align-items:center}

@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-08",
+  "version": "0.4.0",
+  "task": "Finish partials; add agent and enterprise self-improvement and RAH flagship foundation",
+  "verified": [
+    "Recovered v0.3.0 source from saved canonical artifact",
+    "Implemented improvement capsules, frozen baseline/candidate checks, budgets, negative trial retention, promotion, recovery and rollback",
+    "Ran real local Python verifiers on actual dot/computer.py change; bounded wait contract improved and promoted",
+    "Ran authenticated HTTP lab lifecycle with real verifiers and fixture VM transport",
+    "Ran actual local guest-task process with fixture provider executable; hash-only learning observation persisted",
+    "Installed and verified reusable personal RAH improvement workflow; project AGENTS.md included",
+    "Compiled Linux 6.6.162-itsnotai-dot bzImage from publisher-SHA-verified source",
+    "Two actual QEMU TCG VMs on independent disks: 26 improvement tests each, promotion, reboot persistence and rollback",
+    "Actual Chrome 157.0.8103.38 desktop/mobile dashboard and browser controls passed in clean guest; all tested runtime source hashes match release"
+  ],
+  "test_receipt": "receipts/source-validation.json",
+  "actual_source_improvement_receipt": "receipts/self-improvement.json",
+  "remaining": [
+    "ChatGPT/Gemini subscription inference requires real guest sign-in",
+    "Automated credential-free verifier VM routing/cross-VM transfer remains unimplemented",
+    "Enterprise identity/tenant isolation remains unimplemented",
+    "No permanent production deployment",
+    "Hardware KVM/libvirt/cloud-init/systemd/firewall and Debian disk installation need separate production acceptance"
+  ],
+  "resume": [
+    "Read AGENTS.md and docs/RAH_IMPROVEMENT.md",
+    "Recover this same artifact identity; preserve version guard",
+    "Run source validation after changes; perform live KVM/provider acceptance separately",
+    "Use disposable credential-free VMs for untrusted trials; local directories are not security isolation"
+  ],
+  "authority_boundary": "Self-improvement does not authorize model-weight changes, owner-policy changes, paid allocation or background work",
+  "kernel_source_library_file_id": "libfile_0561965178c0819184ede3ae1a2c995b",
+  "source_archive_library_file_id": "libfile_0561965178c0819184ede3ae1a2c995b"
+}

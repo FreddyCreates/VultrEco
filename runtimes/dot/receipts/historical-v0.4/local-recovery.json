@@ -1,0 +1,113 @@
+{
+  "schema": "dot.local-recovery-exercise.v1",
+  "execution": "real local Python processes",
+  "vm_boot_verified": false,
+  "subscription_inference_verified": false,
+  "phases": [
+    {
+      "phase": "initial_verified",
+      "checkpoint_id": "298b4a9770574ee3825d35633b90fe65",
+      "acceptance": {
+        "schema": "dot.acceptance-result.v1",
+        "passed": true,
+        "configured": true,
+        "checks": [
+          {
+            "argv": [
+              "python3",
+              "-m",
+              "unittest",
+              "-v"
+            ],
+            "passed": true,
+            "exit_code": 0,
+            "output_sha256": "a1d049516ebbb1496f59797d3e46a4c81a9fd75f7cbfd689f9078a4c5fe1f53e",
+            "output_tail": "test_add (test_calculator.CalculatorTest.test_add) ... ok\ntest_negative (test_calculator.CalculatorTest.test_negative) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+          },
+          {
+            "path": "calculator.py",
+            "passed": true,
+            "sha256": "ba1a531f581d2e6094e978ed6f7aca7a8d92eeb62c6e7ad73ee692f7f18bc772"
+          }
+        ],
+        "finished": 1792773547.5077388
+      }
+    },
+    {
+      "phase": "worker_interrupted",
+      "exit_code": -15
+    },
+    {
+      "phase": "bad_output_rejected",
+      "acceptance": {
+        "schema": "dot.acceptance-result.v1",
+        "passed": false,
+        "configured": true,
+        "checks": [
+          {
+            "argv": [
+              "python3",
+              "-m",
+              "unittest",
+              "-v"
+            ],
+            "passed": false,
+            "exit_code": 1,
+            "output_sha256": "bb0d47aa4efe567b295a0a20c5c8561c37d4a87bb633d0a5692c30f53271ebfe",
+            "output_tail": "test_add (test_calculator.CalculatorTest.test_add) ... FAIL\ntest_negative (test_calculator.CalculatorTest.test_negative) ... FAIL\n\n======================================================================\nFAIL: test_add (test_calculator.CalculatorTest.test_add)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/52509b03104d/validation-recovery-0.3/workspace/test_calculator.py\", line 4, in test_add\n    def test_add(self): self.assertEqual(add(3, 4), 7)\n                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 999 != 7\n\n======================================================================\nFAIL: test_negative (test_calculator.CalculatorTest.test_negative)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/workspace/scratch/52509b03104d/validation-recovery-0.3/workspace/test_calculator.py\", line 5, in test_negative\n    def test_negative(self): self.assertEqual(add(-5, 2), -3)\n                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nAssertionError: 999 != -3\n\n----------------------------------------------------------------------\nRan 2 tests in 0.006s\n\nFAILED (failures=2)\n"
+          },
+          {
+            "path": "calculator.py",
+            "passed": false,
+            "sha256": "5c156139a7d9f9f3ad892a4f05c3b554b451b5236ab06df4a0d88b0cb4e2a7ae"
+          }
+        ],
+        "finished": 1792773547.851826
+      }
+    },
+    {
+      "phase": "restored_and_resumed",
+      "restore": {
+        "restored": "298b4a9770574ee3825d35633b90fe65",
+        "undo_checkpoint": "9f2b1ad094a44131bd8786bb36c895e7",
+        "files": 4
+      },
+      "acceptance": {
+        "schema": "dot.acceptance-result.v1",
+        "passed": true,
+        "configured": true,
+        "checks": [
+          {
+            "argv": [
+              "python3",
+              "-m",
+              "unittest",
+              "-v"
+            ],
+            "passed": true,
+            "exit_code": 0,
+            "output_sha256": "a1d049516ebbb1496f59797d3e46a4c81a9fd75f7cbfd689f9078a4c5fe1f53e",
+            "output_tail": "test_add (test_calculator.CalculatorTest.test_add) ... ok\ntest_negative (test_calculator.CalculatorTest.test_negative) ... ok\n\n----------------------------------------------------------------------\nRan 2 tests in 0.000s\n\nOK\n"
+          },
+          {
+            "path": "calculator.py",
+            "passed": true,
+            "sha256": "a9a0d9de385dd0756c16a29c598f07e5983a625c48bbbc039ce89cb9695520aa"
+          }
+        ],
+        "finished": 1792773548.0393286
+      }
+    }
+  ],
+  "status": "local_recovery_verified",
+  "artifacts": [
+    {
+      "path": "calculator.py",
+      "sha256": "a9a0d9de385dd0756c16a29c598f07e5983a625c48bbbc039ce89cb9695520aa"
+    },
+    {
+      "path": "test_calculator.py",
+      "sha256": "8090e0df84a618889272a33c36e96c716e6d443b587b08aac41907f0068c4a26"
+    }
+  ]
+}

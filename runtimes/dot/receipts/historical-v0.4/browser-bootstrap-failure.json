@@ -1,0 +1,9 @@
+{
+  "status": "failed_bootstrap_preserved",
+  "stage": "browser initialization",
+  "kernel_booted": true,
+  "browser_render_verified": false,
+  "error": "EACCES creating Playwright artifacts under /tmp; archive directory mode was 0755",
+  "serial_log_sha256": "440692f4dee2e12513f93433c7d7892c7ca58e74aa540dc8e6809f5f450228b4",
+  "repair": "Emit /tmp as mode 01777 in newc and explicitly chmod 1777 /tmp during guest init"
+}
