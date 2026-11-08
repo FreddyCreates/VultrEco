@@ -10,7 +10,7 @@ import uuid
 from pathlib import Path
 import pytest
 from fastapi import HTTPException
-from test_api_v2 import c, auth
+from tests.test_api_v2 import c, auth
 from capsula.api import app
 from capsula.agents import computers
 from capsula.agents import learning

@@ -8,7 +8,7 @@ from fastapi import HTTPException
 from capsula.execution import browser_task
 from capsula.execution import worker_runtime
 from capsula.intelligence import vision
-from test_api_v2 import c,auth
+from tests.test_api_v2 import c,auth
 
 
 @pytest.mark.parametrize('url',[

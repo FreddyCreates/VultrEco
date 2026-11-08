@@ -7,7 +7,7 @@ from capsula.integrations.federation import WorkerRegistration, FinanceIntent, G
 from capsula.intelligence.inference import InferenceInput
 from capsula.security.policy import evaluate
 from types import SimpleNamespace
-from test_api_v2 import c,auth
+from tests.test_api_v2 import c,auth
 from capsula.api import app
 
 

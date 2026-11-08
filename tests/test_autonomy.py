@@ -4,7 +4,7 @@ import uuid
 import datetime as dt
 import pytest
 from pydantic import ValidationError
-from test_api_v2 import c,auth
+from tests.test_api_v2 import c,auth
 from capsula.api import app
 from capsula.intelligence import inference
 from capsula.agents.autonomy import GoalInput, ChildInput

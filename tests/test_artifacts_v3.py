@@ -1,4 +1,4 @@
-from test_api_v2 import c,auth
+from tests.test_api_v2 import c,auth
 from capsula.api import app
 import json
 import pytest

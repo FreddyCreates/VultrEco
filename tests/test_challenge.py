@@ -4,7 +4,7 @@ These tests DO NOT constitute a deployed containment demonstration.
 import json
 import pytest
 from fastapi.testclient import TestClient
-from test_api_v2 import c, auth
+from tests.test_api_v2 import c, auth
 from capsula.api import app
 from capsula.agents.challenge import SAMPLE_CSV, PROCUREMENT_SCRIPT
 from capsula.intelligence.inference import InferenceInput

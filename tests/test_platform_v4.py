@@ -2,7 +2,7 @@
 import json,pytest
 from pydantic import ValidationError
 from fastapi.testclient import TestClient
-from test_api_v2 import c,auth
+from tests.test_api_v2 import c,auth
 from capsula.workspace.platform_core import ProjectFile,AgentInput,Step,AgentRunInput
 from capsula.api import app
 from capsula.intelligence import inference

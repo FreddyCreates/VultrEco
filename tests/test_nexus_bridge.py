@@ -1,7 +1,7 @@
 import pytest
 from pydantic import ValidationError
 from capsula.integrations.nexus_bridge import NexusTask,Budget,compile_handoff
-from test_api_v2 import c,auth
+from tests.test_api_v2 import c,auth
 
 def payload():
     return {'protocol':'nexus.task.v1','correlation_id':'corr-123456789','tenant':'single-admin','principal':'operator','workspace':'nexus-testing','action':'execute.python','title':'Run contained task','code':'print(42)','budget':{'seconds':5,'cpu':.2,'memory_mb':128}}
