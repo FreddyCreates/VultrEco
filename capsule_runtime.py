@@ -67,7 +67,7 @@ def execute_capsule(code,inputs,*,bounded_process,run=None,env=None):
         base=pathlib.Path(scratch);base.chmod(0o711)
         task=base/'task.py';task.write_text(code,encoding='utf-8');task.chmod(0o644)
         inp=base/'inputs';inp.mkdir(mode=0o755)
-        output=base/'outputs';output.mkdir(mode=0o777)
+        output=base/'outputs';output.mkdir(mode=0o777);output.chmod(0o777)  # umask must not block UID 65534
         for relative,data in decoded.items():
             dest=inp/relative;dest.parent.mkdir(parents=True,exist_ok=True)
             dest.parent.chmod(0o755);dest.write_bytes(data);dest.chmod(0o644)

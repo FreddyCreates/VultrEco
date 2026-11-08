@@ -90,8 +90,8 @@
     },
     {
       "path": "capsule_runtime.py",
-      "bytes": 6055,
-      "sha256": "d007c34ff39d266d1ac6ef0ac2e91a3d17fe66e208c33faa0a8065ce56ac9fe6"
+      "bytes": 6109,
+      "sha256": "4d525dd5de21d7e8a54b243e852bc1f06698d2d03b13fa418b156fb8a1853797"
     },
     {
       "path": "challenge.py",
@@ -915,8 +915,8 @@
     },
     {
       "path": "test_capsula_v08.py",
-      "bytes": 7591,
-      "sha256": "c8d544de0985d219dceaee35fae5c4f8fb740849dd66563c75128a452d31d646"
+      "bytes": 7657,
+      "sha256": "f22c2846daf511d8576ca1433b46b8587c7a873c2b5445178017674aa941239c"
     },
     {
       "path": "test_challenge.py",

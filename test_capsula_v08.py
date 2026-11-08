@@ -37,6 +37,7 @@ def test_capsule_removes_container_before_return(tmp_path):
         assert '--read-only' in args and '--cap-drop' in args
         folder=next(root.glob('capsula-job-*'))
         assert (folder/'inputs'/'q.csv').read_bytes()==b'a,b\n1,2\n'
+        assert ((folder/'outputs').stat().st_mode & 0o777)==0o777
         (folder/'outputs'/'result.csv').write_bytes(b'total\n3\n')
         launched.append(True)
         return {'status':'completed','stdout':'wrote file','stderr':'','exit_code':0}
