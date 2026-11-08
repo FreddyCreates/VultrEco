@@ -3,7 +3,8 @@
 This is a live container regression on a CI host, NOT evidence of Vultr VM
 or hypervisor isolation. It must fail if the container, limits, or cleanup fail.
 """
-import base64,hashlib,json,pathlib,tempfile
+import base64,hashlib,json,pathlib,tempfile,sys
+sys.path.insert(0,str(pathlib.Path(__file__).resolve().parents[1]))
 from capsule_runtime import execute_capsule
 from worker_runtime import bounded_process
 

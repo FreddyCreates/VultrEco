@@ -840,8 +840,8 @@
     },
     {
       "path": "scripts/smoke_capsule_docker.py",
-      "bytes": 3077,
-      "sha256": "348edd7a3a9356b08b5ca8fede4572228e9903bc35ccb6ba515cf488dd83262a"
+      "bytes": 3149,
+      "sha256": "9cd10153f44bcfdf7fe9dd7e544d56097201b86dd9764577c04ea85949ffb876"
     },
     {
       "path": "scripts/verify_clean_worker.py",
