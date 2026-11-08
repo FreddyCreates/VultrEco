@@ -32,7 +32,12 @@ jobs:
       - run: pytest -q
       - run: python -m compileall -q .
       - run: node --check static/app.js
+      - run: node --check static/capsules_ui.js
       - run: python smoke_worker.py
+      - name: Execute a real disposable Docker file-processing capsule
+        run: |
+          docker pull python:3.12-alpine
+          python scripts/smoke_capsule_docker.py
       - run: python release_validate.py
       - run: python scripts/verify_release_manifest.py
       - name: Dedicated VM runtime source contracts

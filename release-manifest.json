@@ -1,6 +1,6 @@
 {
   "protocol": "capsula.release-manifest.v1",
-  "version": "0.7.0-alpha.1",
+  "version": "0.8.0-alpha.1",
   "algorithm": "sha256",
   "files": [
     {
@@ -15,8 +15,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 1662,
-      "sha256": "0934792f529b31cdc5af11de05cdf4f9850a51fc775505b3c017bb563c75f398"
+      "bytes": 1886,
+      "sha256": "34687fbe30ce5a1f222c3fe1d48e18ff00f9b270b6c34a9c366a1d54daa6f8d7"
     },
     {
       "path": ".github/workflows/vultr-existing-deploy.yml",
@@ -45,8 +45,8 @@
     },
     {
       "path": "app.py",
-      "bytes": 46434,
-      "sha256": "c2e48c7c722e3b40dc2067d7d3aa57c2bea33cbc2636ee5d1d2916f283a08475"
+      "bytes": 46679,
+      "sha256": "6c85d991b244bbfc8a4287e4147513333f393cf1daf254dda11f251537799988"
     },
     {
       "path": "ARCHITECTURE.md",
@@ -84,19 +84,29 @@
       "sha256": "e695cf8a2e12fced069a7acc72273b05113466a21ba412e9ae42c87928091b25"
     },
     {
+      "path": "capsule_api.py",
+      "bytes": 11169,
+      "sha256": "987446db1d3448b473f8eb2c1bedaa58eff74004fd16fa7b805d34dbbb10cb04"
+    },
+    {
+      "path": "capsule_runtime.py",
+      "bytes": 6109,
+      "sha256": "4d525dd5de21d7e8a54b243e852bc1f06698d2d03b13fa418b156fb8a1853797"
+    },
+    {
       "path": "challenge.py",
       "bytes": 10640,
       "sha256": "9daa45e01e8f41885bea0ba0aeacb7cf6b7253ab02ae8af53e7e9401b58efbb3"
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 5314,
-      "sha256": "81f470066182e81f4e677d183f2f7914ba05b845b4a340286dbf06f72264860f"
+      "bytes": 6059,
+      "sha256": "45fcbd72ed6ee71c07cc30cfecad63b39c691874e650ec0bb3d1261d2d39dfaa"
     },
     {
       "path": "cluster_api.py",
-      "bytes": 5181,
-      "sha256": "687f99565dd4f3617eeef65d2416b8be9e06eaef43768715f615c5abaf258175"
+      "bytes": 6555,
+      "sha256": "433b45d672d84fcbcf8bedd34def3e5e745e7d6949d45a49e6980c8e9255adc8"
     },
     {
       "path": "cluster_auth.py",
@@ -110,8 +120,8 @@
     },
     {
       "path": "cluster_runner.py",
-      "bytes": 3856,
-      "sha256": "7c1aaabee7faa52876a49c2aeebfc0f1082e6908245252bca8ee014e389195ff"
+      "bytes": 4174,
+      "sha256": "99d9b7283568b6ff0f7672cf8ba6129832381d6f677ac4995f57a258fedb8abb"
     },
     {
       "path": "computers.py",
@@ -125,8 +135,8 @@
     },
     {
       "path": "DEPLOYMENT.md",
-      "bytes": 9245,
-      "sha256": "8785f66742e5f32db0d251c88b94bc26b6c0b4d3caf4c2f7766887eb4ad05b39"
+      "bytes": 10165,
+      "sha256": "ad049290a91e0316a9ccd08f5353b538159b21cf102fefe2176d8cb522138934"
     },
     {
       "path": "docker-compose.autonomy.yml",
@@ -170,8 +180,8 @@
     },
     {
       "path": "Dockerfile.production",
-      "bytes": 812,
-      "sha256": "cebeca007d615dbc006322efecee87f1c5bec11bc0d60bed532de76b7c821ff6"
+      "bytes": 886,
+      "sha256": "c4a046957f136f01580acb5438c4bd4148a87ad4d6eed7f84b5ea8cf8c330f99"
     },
     {
       "path": "docs/ACCEPTANCE.md",
@@ -259,6 +269,16 @@
       "sha256": "d69e831a24b72053837426210189b074826e39a0c0d4ded28afb8ef2c66a89ef"
     },
     {
+      "path": "finance_api.py",
+      "bytes": 2939,
+      "sha256": "45582f2c0ab175f79759dc2938980d077c949e3cb725a5be702fb9567dd4b9f7"
+    },
+    {
+      "path": "finance_rails.py",
+      "bytes": 10006,
+      "sha256": "dca317b7eec840c4a10c9f182939f7bbdf79a2b11293a5219ff69fa93c368a4f"
+    },
+    {
       "path": "fleet_provider.py",
       "bytes": 6647,
       "sha256": "ac1a1586edcaf063840442e2d1806aa0547ea5f48630a0dfc5dc24f4efc6e593"
@@ -285,13 +305,13 @@
     },
     {
       "path": "hackathon/RELEASE_GATE.md",
-      "bytes": 2092,
-      "sha256": "6a25f9eef3eeb6100d2450e80778e41c8c881d4e293576c58a7f9948bd944a0f"
+      "bytes": 2756,
+      "sha256": "c64c92354518e155fc02648873a2b6ae55309196f20bc5ae5f8a274877ae6a88"
     },
     {
       "path": "hackathon/SUBMISSION.md",
-      "bytes": 4288,
-      "sha256": "533fc55087b53139116ea1144862e7a816edcdfd0ecbf6a44e512ccbf598d8c6"
+      "bytes": 4974,
+      "sha256": "e1a60907d8edc6af4782aa574a043f39dfe32a0d66ad2af820cdbf6e6eb1b6b2"
     },
     {
       "path": "hackathon/validation.json",
@@ -355,13 +375,13 @@
     },
     {
       "path": "pyproject.toml",
-      "bytes": 693,
-      "sha256": "ce6425a245df131ac57a5c41695a1aefbddd656b6826629ba1ec09a169801b83"
+      "bytes": 747,
+      "sha256": "5f1b9f2ad057d2cb6e0dcfe3f55dc82b1fea5783425e10f4dfbc158b8b3c8824"
     },
     {
       "path": "README.md",
-      "bytes": 13010,
-      "sha256": "f579742db36f0afdd59a7f1595cac2ea2b212e5a5876a8a56fecfb23de653330"
+      "bytes": 15574,
+      "sha256": "1ac01974b6ad7c7154a03340f123a6cbe093041369b2c09bc58b8036af5a7064"
     },
     {
       "path": "receipts/clean-worker.json",
@@ -385,8 +405,8 @@
     },
     {
       "path": "release_validate.py",
-      "bytes": 2528,
-      "sha256": "fe27007b987a109ed073de1eac23ed0a831923e441ea9c0f6745936f22e7c6c5"
+      "bytes": 2720,
+      "sha256": "46616281f602c5ae213ce31842dd9daa4fe8986a0f34e73431924743de9d82a3"
     },
     {
       "path": "requirements-worker.txt",
@@ -810,13 +830,18 @@
     },
     {
       "path": "scripts/migrate_cluster.py",
-      "bytes": 317,
-      "sha256": "eb8692c57aab6fc91a962293dc98184dc832cc89a6df657b39f9cee77fdb4eb6"
+      "bytes": 408,
+      "sha256": "3bd50f623dc647f82a6c803b71763debf20c27706f44b73908cd5292ab8235fd"
     },
     {
       "path": "scripts/provision_vultr.py",
       "bytes": 5446,
       "sha256": "f2a962a231d429544340c3e4f639ab095d93ac79d1c1edb9b511d43f24267132"
+    },
+    {
+      "path": "scripts/smoke_capsule_docker.py",
+      "bytes": 3149,
+      "sha256": "9cd10153f44bcfdf7fe9dd7e544d56097201b86dd9764577c04ea85949ffb876"
     },
     {
       "path": "scripts/verify_clean_worker.py",
@@ -850,8 +875,8 @@
     },
     {
       "path": "static/app.js",
-      "bytes": 37376,
-      "sha256": "39f95307a89c20fdf01bd703a1d139550487bb69ae52e68cf14fe555d5f3d8ee"
+      "bytes": 37420,
+      "sha256": "ecd8ebf05b331f164f9eca7af29dddfb40bea99b308dacfcce946aed186bd59d"
     },
     {
       "path": "static/capsula-icon.svg",
@@ -859,14 +884,19 @@
       "sha256": "cd8a5b0d5a2cd1964b5f735b3dcf9813225fea4591df14e8e40c27478ceeb952"
     },
     {
+      "path": "static/capsules_ui.js",
+      "bytes": 5483,
+      "sha256": "0f551af3cbaaa663f7bb27ee24a684738d30b8206c68b05bc1dc24df87dc1a98"
+    },
+    {
       "path": "static/index.html",
-      "bytes": 33888,
-      "sha256": "1b21ca1165f0e281cb667bdd2c47d8b982a7fd0263d73a3e187bae03172a5f89"
+      "bytes": 36012,
+      "sha256": "d76ca4b0f171582c087c7ceb3c487a7693ecf5c5157c22d1c654b00fbbb8afc4"
     },
     {
       "path": "test_api_v2.py",
       "bytes": 2812,
-      "sha256": "d4e46acdd83b846a6ac57b84fc4e8ec29c5eb399751f12a1a63dc3ac18622399"
+      "sha256": "3a3f0cc350db8700ea97f039746a7213bd568b3121809714c3ddaf085d748deb"
     },
     {
       "path": "test_artifacts_v3.py",
@@ -884,6 +914,11 @@
       "sha256": "4b26f297298f8cd681dd86fe98a924c2bf18fec23c80f51c71be9ece9bee8155"
     },
     {
+      "path": "test_capsula_v08.py",
+      "bytes": 7657,
+      "sha256": "f22c2846daf511d8576ca1433b46b8587c7a873c2b5445178017674aa941239c"
+    },
+    {
       "path": "test_challenge.py",
       "bytes": 6913,
       "sha256": "9e41090c40ee6d5b9364c0fb7372aacc398fba77a905fbb52b2e80b5b3c62178"
@@ -897,6 +932,11 @@
       "path": "test_federation_v3.py",
       "bytes": 7963,
       "sha256": "6896deb81616ae02c64351442b269fec43e778dcb248f69f9e8001bb964135c5"
+    },
+    {
+      "path": "test_finance_cluster_v08.py",
+      "bytes": 4555,
+      "sha256": "1e729946fb3122ab7b84fbc0532ac006fbbc8f7183f2a36348fab4ebbb84b4df"
     },
     {
       "path": "test_fleet.py",
@@ -921,7 +961,7 @@
     {
       "path": "test_platform_v4.py",
       "bytes": 15678,
-      "sha256": "389161ba3f417bca6f31009ea41386ba51ea5bcd68ab184c683a705041665141"
+      "sha256": "22761e663882973a0d9a7da3d589afee7ba29dd17615f7058cebe69b40043e20"
     },
     {
       "path": "test_proof.py",
@@ -976,7 +1016,7 @@
     {
       "path": "VERSION",
       "bytes": 14,
-      "sha256": "3c3600321fbcb297b36a7a16a330ab2753108e59662fcb7ca56681743072208c"
+      "sha256": "91822462d8b749d3b4548f49ef4178f8acf9bf384bd6326cd3eea3885d6b8fc5"
     },
     {
       "path": "vision.py",
@@ -990,8 +1030,8 @@
     },
     {
       "path": "worker_runtime.py",
-      "bytes": 10810,
-      "sha256": "49f3231f7a8fe7d1ab05b048de9e10f8e73d4a2d1bcbcb3b969f97d618a61a20"
+      "bytes": 11675,
+      "sha256": "dc83d7f33ad8aa8ee72bbad1c5e0ca822e7f1f33231f1240571e03a7f0c9c868"
     },
     {
       "path": "WORKER_SECURITY.md",
@@ -1000,8 +1040,8 @@
     },
     {
       "path": "worker.Dockerfile",
-      "bytes": 462,
-      "sha256": "f2b49cea0117ea46b703c8119824f98fa617dcc7f9c7136825bc30b1cd202a64"
+      "bytes": 488,
+      "sha256": "d79df5fb69ef4fecbf46551055eb4d4a71f3752a225b6bb4aaf06a501e83ac4b"
     },
     {
       "path": "workspaces.py",

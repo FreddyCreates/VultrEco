@@ -19,9 +19,9 @@ function formBody(form){return Object.fromEntries(new FormData(form).entries())}
 function submitForm(id,fn){$(id).addEventListener('submit',async e=>{e.preventDefault();let b=e.currentTarget.querySelector('button[type=submit]');const old=b?.textContent;if(b)b.disabled=true;try{await fn(e.currentTarget)}catch(err){notify(err.message,true)}finally{if(b){b.disabled=false;b.textContent=old}}})}
 function setPage(name){
  currentPage=name;$$('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));$$('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
- $('#crumb-title').textContent=({'overview':'Overview','projects':'Projects & Files','agents':'Agents','autonomy':'Autonomous missions','runs':'Workflows','missions':'Missions','computers':'Computers','models':'Models','vault':'Memory & Artifacts','finance':'Finance','approvals':'Approvals','security':'Security & Evidence','rah':'RAH missions','learning':'Agent evolution'})[name]||name;
+ $('#crumb-title').textContent=({'capsules':'Capsules','overview':'Overview','projects':'Projects & Files','agents':'Agents','autonomy':'Autonomous missions','runs':'Workflows','missions':'Missions','computers':'Computers','models':'Models','vault':'Memory & Artifacts','finance':'Finance','approvals':'Approvals','security':'Security & Evidence','rah':'RAH missions','learning':'Agent evolution'})[name]||name;
  history.replaceState(null,'','#'+name);window.scrollTo({top:0,behavior:'instant'});
- const load=({overview:loadOverview,projects:loadProjects,agents:loadAgents,autonomy:loadAutonomy,runs:loadRuns,missions:loadMissions,computers:loadComputers,models:loadModels,vault:loadVault,finance:loadFinance,approvals:loadApprovals,security:loadSecurity,rah:loadRah,learning:loadLearning})[name];if(apiKey&&load)load().catch(e=>notify(e.message,true));
+ const load=({capsules:loadCapsules,overview:loadOverview,projects:loadProjects,agents:loadAgents,autonomy:loadAutonomy,runs:loadRuns,missions:loadMissions,computers:loadComputers,models:loadModels,vault:loadVault,finance:loadFinance,approvals:loadApprovals,security:loadSecurity,rah:loadRah,learning:loadLearning})[name];if(apiKey&&load)load().catch(e=>notify(e.message,true));
 }
 async function unlock(){
  const value=$('#auth-key').value.trim();if(!value)return;

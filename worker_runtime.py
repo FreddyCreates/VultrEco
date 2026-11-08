@@ -4,7 +4,7 @@ from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field
 from typing import Literal
 
-app=FastAPI(title='CAPSULA bounded worker',version='0.6.0-alpha.1')
+app=FastAPI(title='CAPSULA bounded worker',version='0.8.0-alpha.1')
 TOKEN=os.getenv('CAPSULA_WORKER_TOKEN','')
 MAX_BYTES=24_000
 
@@ -153,7 +153,7 @@ def run_browser(url,selector):
                     'stdout':'','stderr':'','exit_code':None}
 
 @app.get('/health')
-def health():return {'role':'isolated-worker','node_id':os.getenv('CAPSULA_WORKER_NODE_ID','unconfigured'),'version':'0.6.0-alpha.1','configured':bool(TOKEN),'browser_egress_policy':'allowlist-and-network-firewall-required','python_mode':'unsafe-loopback-smoke' if os.getenv('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED')=='1' else 'per-job-docker-or-deny'}
+def health():return {'role':'isolated-worker','node_id':os.getenv('CAPSULA_WORKER_NODE_ID','unconfigured'),'version':'0.8.0-alpha.1','configured':bool(TOKEN),'browser_egress_policy':'allowlist-and-network-firewall-required','python_mode':'unsafe-loopback-smoke' if os.getenv('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED')=='1' else 'per-job-docker-or-deny'}
 
 @app.post('/execute')
 def execute(job:Job,authorization:str|None=Header(None)):
@@ -162,3 +162,19 @@ def execute(job:Job,authorization:str|None=Header(None)):
     else:result=run_browser(job.url,job.selector)
     data=json.dumps(result,sort_keys=True,separators=(',',':')).encode()
     return {'result':result,'digest':'sha256:'+hashlib.sha256(data).hexdigest(),'worker_claim':'process-observed-within-deployed-worker-container','attestation':'not-hardware-attested'}
+
+# Real files: the controller supplies validated, bounded project-file payloads.
+# Code and output files stay inside a disposable container on the worker VM.
+from capsule_runtime import execute_capsule,MAX_INPUT_FILES
+class CapsuleJob(BaseModel):
+    code:str=Field(min_length=1,max_length=16000)
+    inputs:dict[str,str]=Field(default_factory=dict,max_length=MAX_INPUT_FILES)
+
+@app.post('/capsules/execute')
+def execute_file_capsule(job:CapsuleJob,authorization:str|None=Header(None)):
+    auth(authorization)
+    result=execute_capsule(job.code,job.inputs,bounded_process=bounded_process)
+    data=json.dumps(result,sort_keys=True,separators=(',',':')).encode()
+    return {'result':result,'digest':'sha256:'+hashlib.sha256(data).hexdigest(),
+            'worker_claim':'disposable-container-with-file-harvest',
+            'attestation':'not-hardware-attested'}

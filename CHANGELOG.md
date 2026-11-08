@@ -1,3 +1,15 @@
+## v0.8.0-alpha.1 — real user capsules, finance rails and Vultr work execution
+
+- Added file-capable disposable Docker capsules, bounded inputs and verified output
+  collection, destruction receipts, encrypted records and authenticated downloads.
+- Added working operator UI for capsule creation, execution, results and discard.
+- Distributed PostgreSQL runner can dispatch file-capable jobs; tenant-scoped
+  API supports integrity-checked output download.
+- Added real Stripe Checkout receivables, tenant OIDC role gates, HMAC webhooks,
+  exact reconciliation and replay-resistant provider events.
+- Preserved Vultr Cloud Compute deployment and multi-host worker architecture;
+  no fabricated live payment, VM isolation or inference claims.
+
 ## v0.7.0-alpha.1 — Vultr Agent Rush release integration
 
 - Reposition CAPSULA as a Vultr-powered **autonomous agent computer cloud**

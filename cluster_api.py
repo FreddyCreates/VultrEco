@@ -4,6 +4,8 @@ Legacy APIs use a single-admin key and are *not* multi-tenant. In enterprise
 mode the legacy privileged APIs are disabled by app.authed().
 """
 from fastapi import APIRouter,Header,HTTPException
+from fastapi.responses import Response
+import base64,hashlib
 from pydantic import BaseModel,Field
 from typing import Literal
 import cluster_auth
@@ -77,6 +79,26 @@ def job(tenant:str,job_id:str,authorization:str|None=Header(None)):
     value=get_queue().job(tenant,job_id)
     if value is None:raise HTTPException(404,"Task not found in tenant")
     return value
+
+@router.get("/{tenant}/jobs/{job_id}/outputs/{filename:path}")
+def output(tenant:str,job_id:str,filename:str,authorization:str|None=Header(None)):
+    gated(authorization,tenant,"viewer")
+    from capsule_runtime import safe_name
+    if not safe_name(filename):raise HTTPException(404,"Output unavailable")
+    job=get_queue().job(tenant,job_id)
+    if not job or job["state"]!="completed":raise HTTPException(404,"Output unavailable")
+    stored=job.get("result") or {}
+    item=(stored.get("artifacts") or {}).get(filename)
+    if not isinstance(item,dict):raise HTTPException(404,"Output unavailable")
+    try:data=base64.b64decode(item["base64"],validate=True)
+    except (ValueError,KeyError) as exc:raise HTTPException(409,"Output encoding invalid") from exc
+    if len(data)>256000 or hashlib.sha256(data).hexdigest()!=item.get("sha256") or item.get("bytes")!=len(data):
+        raise HTTPException(409,"Output integrity mismatch")
+    return Response(content=data,media_type="application/octet-stream",
+                    headers={"Content-Disposition":'attachment; filename="'+filename.split("/")[-1]+'"',
+                             "Cache-Control":"private, no-store",
+                             "X-Content-Type-Options":"nosniff",
+                             "X-Capsula-SHA256":item["sha256"]})
 
 @router.get("/{tenant}/status")
 def status(tenant:str,authorization:str|None=Header(None)):
