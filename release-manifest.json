@@ -14,6 +14,11 @@
       "sha256": "c886174f5b9a7228bd74ff65ed7bfb2117abca964a164e6e4e2461710de34196"
     },
     {
+      "path": ".github/workflows/capsula-live-launch.yml",
+      "bytes": 2421,
+      "sha256": "9a677e2fd2b14a68c86659f4b9a9e8eb0601ce8f5b421bb506fb12593382427f"
+    },
+    {
       "path": ".github/workflows/ci.yml",
       "bytes": 1886,
       "sha256": "34687fbe30ce5a1f222c3fe1d48e18ff00f9b270b6c34a9c366a1d54daa6f8d7"
@@ -820,8 +825,8 @@
     },
     {
       "path": "scripts/deploy_existing_vultr.py",
-      "bytes": 9476,
-      "sha256": "5874ed8d1899e48837665292202d81c3485256bf0e4765cadcb09a1f8a3fd376"
+      "bytes": 10063,
+      "sha256": "e175723c1cce13a0ef83e92a4e1b4771a519345c010e97dd95617cbc5917dcbf"
     },
     {
       "path": "scripts/fleet_cli.py",
@@ -980,8 +985,8 @@
     },
     {
       "path": "test_vultr_deploy_v07.py",
-      "bytes": 2181,
-      "sha256": "b7ce891303631c9f367b5da52bcc01b3a1701acd740492f20e940772ed8cb7d4"
+      "bytes": 2587,
+      "sha256": "d9a9c093a8b685c95e6869acc615cca9470aaf4c7957800e786f07079d93ed9c"
     },
     {
       "path": "test_worker_limits.py",

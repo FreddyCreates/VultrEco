@@ -55,3 +55,13 @@ def test_deploy_rejects_carriage_return_and_nul():
             e[key] += marker
             with pytest.raises(DeploymentBlocked):
                 config(e)
+
+def test_release_deployment_script_verifies_v08():
+    from pathlib import Path
+    code=Path("scripts/deploy_existing_vultr.py").read_text()
+    assert "0.8.0-alpha.1" in code
+    assert "0.7.0-alpha.1" not in code
+
+def test_autodomain_not_created_without_operator_flag(monkeypatch):
+    monkeypatch.delenv("CAPSULA_AUTO_PUBLIC_TLS",raising=False)
+    assert config(env())["fqdn"]=="capsula.example.com"
