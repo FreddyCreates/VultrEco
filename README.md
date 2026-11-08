@@ -133,3 +133,13 @@ potentially still-running process.
 The product also integrates the canonical `ItsNotAILABS/CAPSULA` engine with
 NEXUS, Loom Cluster, POCKET Agent, NOVA Runtime, LiveVault, PARRALAX and
 Triple-MCP by explicit contracts—not by pretending all providers are online.
+
+## Real multi-VM acceptance harness
+
+Run `python scripts/benchmark_multi_vm.py` **only** with two or more actual
+independent HTTPS worker endpoints, per-host bearer credentials supplied through
+environment variables, `CAPSULA_WORKER_NODE_ID` set on each worker and explicit
+`CAPSULA_LIVE_VM_TEST_APPROVED=1`. The harness invokes disposable code
+containers, checks failed network/root writes and credential absence, and
+records latency and cgroup limits. Endpoint behavior alone does not prove
+hypervisor separation or hardware attestation. Details: [measurements](docs/MEASUREMENTS.md).

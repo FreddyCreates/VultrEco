@@ -175,8 +175,8 @@
     },
     {
       "path": "docs/MEASUREMENTS.md",
-      "bytes": 1330,
-      "sha256": "c74e7c743c906219e0396020e7821435296f2b96d808be7ecd8bada3c9aa4cba"
+      "bytes": 2372,
+      "sha256": "276fe3cb85c0d998977538eec812a02dae9462e116b1718d4be0cb7fbe302cfa"
     },
     {
       "path": "docs/RAH_PLATFORM.md",
@@ -340,13 +340,13 @@
     },
     {
       "path": "pyproject.toml",
-      "bytes": 637,
-      "sha256": "21296358307b57179df4dd43320ae88a4c380f180ef0a28420de300c37f02455"
+      "bytes": 665,
+      "sha256": "d8e440815a575acd180bac76cbb9429108135fb19cc71cca1e2d995017bce9c7"
     },
     {
       "path": "README.md",
-      "bytes": 7687,
-      "sha256": "056a0f7a5c944564cdcf0f2253cfcc064879082193d0da6e32e3924a46e06b8c"
+      "bytes": 8275,
+      "sha256": "68ab1e3d52452712396567d567cb562d0bf49bf664da64c10d9ed63973aba43b"
     },
     {
       "path": "receipts/clean-worker.json",
@@ -370,8 +370,8 @@
     },
     {
       "path": "release_validate.py",
-      "bytes": 2356,
-      "sha256": "fd2e72a5e4868968afb17544f3b627b70e289feb3cea8e59bca2592100b64232"
+      "bytes": 2417,
+      "sha256": "c7c86932869b8081c1e2e90f8b9bb8e1d85b67e521b310e862891d7bf863bece"
     },
     {
       "path": "requirements-worker.txt",
@@ -769,6 +769,11 @@
       "sha256": "64a87b2a3e7a63f91a9a3b5606ce71908fb3493755a48206183953d7e33d368e"
     },
     {
+      "path": "scripts/benchmark_multi_vm.py",
+      "bytes": 7103,
+      "sha256": "8ff917b8e5e3c759876c411e9b8dc1d011d7a411efc52072b06881b8a02b6916"
+    },
+    {
       "path": "scripts/build_worker_probe.py",
       "bytes": 8066,
       "sha256": "8f82cdf72b1c854e4e5fc41c8c2a2e95d0d9b1fe6a12d70df23767a968ed09aa"
@@ -810,8 +815,8 @@
     },
     {
       "path": "scripts/vultr_preflight.py",
-      "bytes": 1369,
-      "sha256": "0efae058e28c29fbeb2d6fef37c26cdedafd4f7262a10c7698c51220946e87ce"
+      "bytes": 1806,
+      "sha256": "36d49bce00c05e84adba13aa1606cc7a6cb23199a15b98f3d8d185e0e3c59d96"
     },
     {
       "path": "smoke_worker.py",
@@ -877,6 +882,11 @@
       "path": "test_fleet.py",
       "bytes": 3954,
       "sha256": "95dd0e36a6acbbaac6699dc0964fa455f67aff967eb7755ba300cb27363f52ce"
+    },
+    {
+      "path": "test_multi_vm_harness.py",
+      "bytes": 1864,
+      "sha256": "0126002baf09e82035300211544afa6d56c25519f0b2d647f634854da286f464"
     },
     {
       "path": "test_nexus_bridge.py",
@@ -955,8 +965,8 @@
     },
     {
       "path": "worker_runtime.py",
-      "bytes": 10749,
-      "sha256": "dd1fb6e41374a9d079d3f54d19a9b2c6a550b107d13a66ee5b8c34564346eb6f"
+      "bytes": 10810,
+      "sha256": "49f3231f7a8fe7d1ab05b048de9e10f8e73d4a2d1bcbcb3b969f97d618a61a20"
     },
     {
       "path": "WORKER_SECURITY.md",

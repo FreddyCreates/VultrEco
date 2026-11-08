@@ -153,7 +153,7 @@ def run_browser(url,selector):
                     'stdout':'','stderr':'','exit_code':None}
 
 @app.get('/health')
-def health():return {'role':'isolated-worker','version':'0.6.0-alpha.1','configured':bool(TOKEN),'browser_egress_policy':'allowlist-and-network-firewall-required','python_mode':'unsafe-loopback-smoke' if os.getenv('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED')=='1' else 'per-job-docker-or-deny'}
+def health():return {'role':'isolated-worker','node_id':os.getenv('CAPSULA_WORKER_NODE_ID','unconfigured'),'version':'0.6.0-alpha.1','configured':bool(TOKEN),'browser_egress_policy':'allowlist-and-network-firewall-required','python_mode':'unsafe-loopback-smoke' if os.getenv('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED')=='1' else 'per-job-docker-or-deny'}
 
 @app.post('/execute')
 def execute(job:Job,authorization:str|None=Header(None)):
