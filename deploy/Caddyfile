@@ -1,0 +1,6 @@
+{$CAPSULA_PUBLIC_FQDN} {
+  encode gzip
+  reverse_proxy capsula:8080
+  header X-Content-Type-Options nosniff
+  header Referrer-Policy no-referrer
+}

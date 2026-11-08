@@ -82,3 +82,20 @@ Local application source and GitHub CI exercise the contracts. The independent
 PostgreSQL benchmark measures queue throughput, not VM or container isolation.
 Live Vultr bootstrap, external TLS, multi-VM load and verified provider inference
 must have their own signed receipts before publication.
+
+## Existing Vultr control VM deployment
+
+Use `.github/workflows/vultr-existing-deploy.yml` under the protected
+`capsula-deploy` GitHub environment. It reads `VULTR_API_KEY` solely to
+select the exact active `capsula-control` VM in `dfw`, then uses a pinned
+SSH private key and verified `known_hosts` entry to install the exact GitHub
+commit. It requires a strong `CAPSULA_ADMIN_API_KEY`, explicit SSH user, and
+operator approval. Inference credentials are optional and remain absent if no
+separate Vultr Serverless Inference key is configured.
+
+The controller's Docker socket remains unmounted. Without a configured
+`CAPSULA_PUBLIC_FQDN` and matching DNS, the service stays private at VM
+loopback. With a configured domain, the Caddy edge service acquires HTTPS and
+the workflow verifies public `/api/health`. A healthy API is **not** worker
+isolation certification. Deploy worker VMs separately, with their own daemon,
+network policy, TLS and cluster enrollment.

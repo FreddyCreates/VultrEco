@@ -1,28 +1,25 @@
-# CAPSULA 0.6.0-alpha.1 | submission gates, November 8, 2026
+# CAPSULA v0.7.0-alpha.1 — Vultr Agent Rush acceptance
 
-This platform is broader than procurement or finance. Engineering, browser use,
-research, documents, data analysis, support, sales, recruiting, finance and
-procurement are optional capability playbooks. The application runs provider
-independently; the hackathon submission requires real Vultr deployment evidence.
+CAPSULA is a broad agent computing platform. Vultr Cloud Compute, fleet APIs
+and Serverless Inference are the intended central challenge infrastructure.
 
-| Gate | Status | Reproducible proof |
-| --- | --- | --- |
-| Full application source | PASS | Integrated v0.6 source; see the release manifest and merged commit |
-| Complete local Python tests | PASS (local) | `pytest -q`: 317 passed |
-| Syntax + version + release gate | PASS (local) | `compileall`, `node --check`, `release_validate.py` |
-| Signed worker loopback | PASS (non-isolated smoke) | `python smoke_worker.py`: result 42, signed receipt |
-| Operator-authorized recursive capsules | PASS (API tests) | mission contract, scoped child authority, pause/cancel, scheduler |
-| Model-to-code, policy, retry | PASS (contract tests) | Challenge API, bounded worker path; real model requires configuration |
-| Disposable browser and vision | PASS (contract tests) | worker image, egress preconditions, screenshot vision adapter |
-| Actual local container isolation in separate Linux VM | PASS (QEMU TCG) | `receipts/clean-worker.json`; not live Vultr acceptance |
-| Live Vultr worker containment | NOT VERIFIED | Retain the probe on the deployed worker VM |
-| Actual browser network egress gateway | NOT VERIFIED | Run private-IP, DNS rebinding, subresource escape tests |
-| Live Vultr Serverless Inference | NOT VERIFIED | Configuration, trace and a real model response needed |
-| Public HTTPS Vultr application | NOT VERIFIED | Public URL and independent login/use test needed |
-| Real recorded demo with containment moment | NOT PROVIDED | Video link + actual worker logs needed |
-| External Loom / Pocket Agent / NOVA / LiveVault | NOT VERIFIED | These remain integration contracts, not connected executions |
-| Payment execution / enterprise multi-tenant SSO | NOT IMPLEMENTED | No spend/signing or enterprise RBAC claims |
-| LabLab final submission | NOT SUBMITTED | Confirmation screenshot/link required |
+| Requirement | Status | Evidence / next acceptance |
+|---|---|---|
+| Complete, versioned GitHub source | PASS | v0.7 on main; release manifest and CI |
+| Full GitHub regression tests | PASS | 334/334 on prior v0.7 CI; updated deployment PR is subject to recheck |
+| PostgreSQL distributed jobs/fencing | PASS (CI) | PostgreSQL 16 integration, no duplicate completion in 40-job/4-client benchmark |
+| Multi-host Vultr provisioning | IMPLEMENTED, not executed | Provider price validation, idempotent labels, budget approval, SSH bootstrap |
+| Vultr Cloud API connection | PASS | HTTP 200 for account + instances through GitHub Actions |
+| Existing Vultr control VM | DISCOVERED | `capsula-control` active in DFW; not an app health check |
+| Application installed on Vultr VM | NOT VERIFIED | Pinned SSH workflow with required credentials; inspect `/api/health` |
+| Live dedicated worker VMs | NOT VERIFIED | Enroll at least two distinct VM workers and pin identities |
+| Real containment: isolation/secrets/limits/teardown | NOT VERIFIED | Run multi-VM probe and record refusals/worker cleanup |
+| Vultr Serverless Inference response | NOT VERIFIED | Add separate inference credential and record actual response/trace |
+| Public HTTPS app and enterprise login | NOT VERIFIED | Domain/host key, Caddy TLS, public end-to-end login and scoped mission |
+| Recorded demonstration | NOT PROVIDED | Show code + browser task, real output, denial and receipts |
+| LabLab final entry | NOT SUBMITTED | Verify public URL, repo, video, project summary and submission |
+| External memory/agent federation | PARTIAL | Internal adapters; NEXUS, Loom and others require integration validation |
 
-Do not represent local tests as deployment, live containment, external attestations,
-or verified market/financial activity. A model asserting success is not evidence.
+**Do not confuse a signed controller record with trustworthy host isolation or
+a database latency benchmark with actual multi-VM work.** Publish measured
+evidence at each security and deployment gate.

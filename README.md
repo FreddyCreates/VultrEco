@@ -1,12 +1,66 @@
-# CAPSULA — Autonomous Computer Cloud
+# CAPSULA — Autonomous Agent Computer Cloud
 
 **Intelligence has a place to work.**  
-Medina Labs · **v0.7.0-alpha.1** · Provider-independent agent infrastructure
+**Medina Labs · v0.7.0-alpha.1 · Vultr Agent Rush 2026 · Blast Radius Zero + Future of Work**
 
-CAPSULA is a computing platform where humans, applications and autonomous agents
-create durable workspaces, provision dedicated computers, delegate bounded work
-to fleets of isolated executors, preserve verifiable evidence and learn from
-measured outcomes. It is not a single worker, a finance app or a Vultr wrapper.
+CAPSULA is a full-stack **agent computing platform powered by Vultr** for this
+competition: a mission control plane, persistent Linux computers for agents,
+disposable code/browser sandboxes, recursive agent delegation, multi-host
+execution queues, encrypted memory and artifacts, approvals, and verifiable
+signed results. Agents can write and run code, work in browsers, analyze data,
+create files, coordinate workflows, and improve tested procedures within bounded
+authority. The product is intentionally broad—not one workflow, one worker, or
+one industry.
+
+**Vultr is central to the competition build:** Vultr Cloud Compute supplies the
+control-plane and isolated worker/agent-VM hosts; the Vultr API supplies fleet
+inventory, provisioning and capacity management; Vultr Serverless Inference is
+the designated challenge model lane. The underlying interfaces can also run on
+other infrastructure without changing CAPSULA's product model.
+
+**What is verified today:** authenticated Vultr account and instance APIs (HTTP
+200); one active `capsula-control` instance in the DFW region; a PostgreSQL
+distributed queue tested in GitHub Actions; and a repository with testable,
+versioned infrastructure. **What is not yet verified:** application deployment
+on that VM, separate live worker VMs, a Serverless Inference response, public
+HTTPS, a recorded containment demonstration, or final submission.
+
+> **v0.7 alpha, not v1.0.** Source, tests, and provider account access are
+> evidence of implementation; they are not proof of a deployed, isolated,
+> publicly reachable multi-tenant production service.
+
+## The two challenge tracks
+
+| Blast Radius Zero | Future of Work |
+|---|---|
+| Model plans/writes code → disposable Docker capsule → real output and evidence | Agents coordinate multi-step work across computers, documents, research, and services |
+| Browser goals → isolated Playwright worker → screenshot → approved vision review | Engineering, data, sales, recruitment, finance, procurement, support, operations and more |
+| Network, CPU, memory, time, secret, and lifecycle constraints | Durable missions, human approval, replayable work, encrypted state and audit |
+| Vultr VM controller and VM workers, Vultr Serverless Inference | Vultr-hosted application, distributed job orchestration and enterprise identity |
+
+One hackathon submission may choose a primary track; the platform supports
+both without shrinking its capabilities.
+
+## Vultr integration status
+
+| Component | Current evidence | Release gate |
+|---|---|---|
+| Cloud API | Account and VM inventory requests returned HTTP 200 | **Connected** |
+| Control VM | `capsula-control`, DFW, reported active by Vultr | CAPSULA installation and health pending |
+| Multi-host provisioning | `fleet_provider.py` and approved GitHub Actions workflow | Paid creation not executed |
+| Distributed control plane | PostgreSQL claims, retries, fencing and OIDC-scoped cluster API | GitHub CI passed; production DB not provisioned |
+| Execution workers | Dedicated worker code and disposable Docker sandboxes | Real worker VM/container containment pending |
+| Serverless Inference | Vultr OpenAI-compatible model integration implemented | Separate inference secret absent at last preflight |
+| HTTPS public app | Pinned SSH deploy and optional Caddy edge workflow | Domain, host credentials and public response pending |
+| Evidence | Ed25519, AES-256-GCM, Merkle receipts and offline verifiers | External witness/hardware attestation pending |
+
+**Review and deploy:** [main source](https://github.com/FreddyCreates/VultrEco),
+[CI runs](https://github.com/FreddyCreates/VultrEco/actions),
+[Vultr preflight](https://github.com/FreddyCreates/VultrEco/actions/workflows/vultr-preflight.yml),
+[deploy existing Vultr VM](https://github.com/FreddyCreates/VultrEco/actions/workflows/vultr-existing-deploy.yml),
+[full submission gate](hackathon/RELEASE_GATE.md).
+
+
 
 > **Release status:** source-implemented alpha, NOT certified public SaaS.
 > Existing single-admin APIs are disabled when enterprise mode is enabled.
@@ -24,9 +78,9 @@ measured outcomes. It is not a single worker, a finance app or a Vultr wrapper.
 | Shared compute | Multiple registered worker hosts, capacity, draining, utilization-aware placement | SQLite single-authority fleet implemented |
 | **Cluster scheduling** | **PostgreSQL transactions, SKIP LOCKED claims, retry/dead-letter, lease epochs + fencing** | **v0.7 integration tests; not global consensus** |
 | **Cluster runner** | **A separate host pulls DB jobs and sends work only to its local isolated executor** | **v0.7 runner; requires private network and real worker deployment** |
-| **Cloud fleet** | **Vultr planned multi-host creation, idempotency, cost ceilings and SSH-only bootstrap** | **v0.7 provider adapter; no automatic paid action** |
+| **Cloud fleet** | **Vultr Cloud Compute fleet creation, idempotency, budget ceilings and SSH-only bootstrap** | **v0.7 provider adapter; no automatic paid action** |
 | **Enterprise identity** | **OIDC RS256 issuer/audience/JWKS pinning, tenant claim, operator/admin/viewer roles** | **New cluster APIs only; legacy routes disabled in enterprise mode** |
-| Intelligence | Local/remote inference, model-generated plans, vision, optional Vultr Serverless Inference | Requires authorized real provider |
+| Intelligence | Local/remote inference, model-generated plans, vision, Vultr Serverless Inference for challenge; local models optional | Requires authorized real provider |
 | Evidence & memory | Encrypted memory/artifacts, signed execution/governance receipts, offline verification | Source/tests; no external TEE/witness |
 | Improvement lab | Repeatable baseline/candidate experiments, versioned skill proposals, rollback | Source/tests, scoped to owned projects |
 
@@ -48,7 +102,7 @@ PostgreSQL durable queue  ──────↔  distributed controllers
 Artifacts, memory, audit, rollback and next bounded mission
 ```
 
-## Run CAPSULA locally — no cloud dependency
+## Local development lane — mirrors the Vultr runtime
 
 ```bash
 python3 -m venv .venv
@@ -84,12 +138,13 @@ The legacy single-admin surface is not a multi-tenant SaaS.
 See [docs/CLUSTER_OPERATIONS.md](docs/CLUSTER_OPERATIONS.md) for API enrollment,
 separate worker provisioning and recovery.
 
-## Vultr is pluggable—not the product
+## Vultr infrastructure — the competition deployment
 
-Vultr Cloud Compute can host multiple controllers and worker VMs, and Vultr
-Serverless Inference can provide models. A separate provider adapter plans
-instances against Vultr's live price catalog and enforces an explicit total
-monthly budget. No API token is placed in cloud-init; admission occurs after
+The Vultr API is connected for verified account/instance discovery.
+Vultr Cloud Compute is the target infrastructure for controller, worker and
+agent-computer VMs; Vultr Serverless Inference is the target model provider.
+The `fleet_provider.py` adapter plans multiple Vultr instances against the
+live price catalog and enforces an explicit monthly budget. No API token is placed in cloud-init; admission occurs after
 secure host bootstrap. Do not run paid provisioning from a model-generated
 goal or from the public cluster API.
 
@@ -130,7 +185,7 @@ enforcement, Vultr deployment URL, live Serverless Inference receipts and
 recorded containment demonstration. A database lease does not terminate a
 potentially still-running process.
 
-The product also integrates the canonical `ItsNotAILABS/CAPSULA` engine with
+The platform can federate with the canonical `ItsNotAILABS/CAPSULA` engine with
 NEXUS, Loom Cluster, POCKET Agent, NOVA Runtime, LiveVault, PARRALAX and
 Triple-MCP by explicit contracts—not by pretending all providers are online.
 
@@ -143,3 +198,18 @@ environment variables, `CAPSULA_WORKER_NODE_ID` set on each worker and explicit
 containers, checks failed network/root writes and credential absence, and
 records latency and cgroup limits. Endpoint behavior alone does not prove
 hypervisor separation or hardware attestation. Details: [measurements](docs/MEASUREMENTS.md).
+
+## Deploy onto the existing capsula-control VM
+
+CAPSULA detected an **active `capsula-control` VM in Vultr DFW** through a
+read-only GitHub Actions preflight. This is a provider instance fact, **not** a
+verified application deployment. To install the reviewed main commit, use the
+manual [existing-VM deployment workflow](.github/workflows/vultr-existing-deploy.yml)
+with environment protection and pinned SSH host identity. Required GitHub
+secrets: `CAPSULA_DEPLOY_SSH_KEY`, `CAPSULA_SSH_KNOWN_HOSTS`, and
+`CAPSULA_ADMIN_API_KEY`. Set repository variable
+`CAPSULA_DEPLOY_SSH_USER` and optionally `CAPSULA_PUBLIC_FQDN` after DNS is
+configured. No cloud token is injected onto the VM, and Docker Compose keeps
+the controller bound to loopback unless TLS Caddy ingress is deliberately enabled.
+The workflow verifies the exact Git commit and the running CAPSULA health
+endpoint; a public URL is claimed only after HTTPS health verification.

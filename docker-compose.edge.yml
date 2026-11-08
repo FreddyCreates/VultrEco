@@ -1,0 +1,23 @@
+# Optional public edge. Requires DNS A record resolving to Vultr control VM.
+# Only activate through explicit pinned SSH deployment with CAPSULA_PUBLIC_FQDN.
+services:
+  caddy:
+    image: caddy:2.9
+    restart: unless-stopped
+    environment:
+      CAPSULA_PUBLIC_FQDN: ${CAPSULA_PUBLIC_FQDN:?Set a verified public hostname}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    depends_on:
+      - capsula
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+volumes:
+  caddy-data:
+  caddy-config:
