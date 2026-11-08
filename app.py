@@ -380,7 +380,7 @@ def list_payment_intents(authorization:str|None=Header(None)):
 @app.get('/api/security/posture')
 def security_posture(authorization:str|None=Header(None)):
     authed(authorization)
-    return {'version':'0.6.0-alpha.1','execution_attested':False,'remote_workers_enforced':bool(WORKER_ALLOWED and WORKER_TOKEN),'external_witness':False,'finance_signing_enabled':False,'key_management':'local encrypted private key; not external KMS','tenancy':'single-admin','browser_status':'requires separately isolated Playwright worker and network-level egress policy','deployment_verified':False}
+    return {'version':'0.7.0-alpha.1','execution_attested':False,'remote_workers_enforced':bool(WORKER_ALLOWED and WORKER_TOKEN),'external_witness':False,'finance_signing_enabled':False,'key_management':'local encrypted private key; not external KMS','tenancy':'single-admin','browser_status':'requires separately isolated Playwright worker and network-level egress policy','deployment_verified':False}
 
 from artifacts import ArtifactInput
 from inference import InferenceInput, infer
@@ -478,7 +478,7 @@ def platform_status(authorization:str|None=Header(None)):
     from inference import public_config
     with conn() as db:
         counts={k:db.execute(f'SELECT COUNT(*) n FROM {k}').fetchone()['n'] for k in ('workspaces','project_files','agent_profiles','agent_runs','missions','workers','approvals','artifact_blobs','memory')}
-    return {'name':'CAPSULA','version':'0.6.0-alpha.1','counts':counts,'models':public_config(),
+    return {'name':'CAPSULA','version':'0.7.0-alpha.1','counts':counts,'models':public_config(),
             'execution_backends':['docker-worker','remote-worker'],'default_runtime':'deny-without-isolation',
             'provider_policy':'no dependency on Vultr','tenancy':'single-admin','payment_execution':'disabled'}
 
