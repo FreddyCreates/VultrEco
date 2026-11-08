@@ -128,3 +128,21 @@ workers on separate disposable Vultr VMs, and wire Vultr Serverless Inference
 using `CAPSULA_MODEL_PROVIDER`, `CAPSULA_MODEL_URL`, and model allowlisting.
 Collect real logs and containment probe outputs. Do not call local loopback tests
 a production isolation pass.
+
+## v0.8 execution and finance service
+
+Deploy the CAPSULA controller separately from worker VMs. Rebuild both
+`Dockerfile.production` and `worker.Dockerfile`: they now include
+`capsule_api.py`, `capsule_runtime.py` and the finance adapters. Run
+`python scripts/migrate_cluster.py` against your private PostgreSQL
+database before activating enterprise routes. The worker Docker daemon
+remains exclusively on dedicated workers, with per-job `--rm` and explicit
+post-run destruction checks.
+
+For hosted payments, add `CAPSULA_STRIPE_SECRET_KEY`,
+`CAPSULA_STRIPE_WEBHOOK_SECRET` and
+`CAPSULA_FINANCE_PUBLIC_ORIGIN` only to the controller's secure environment.
+Configure the provider webhook to POST
+`/api/v1/finance/stripe/webhook` over HTTPS. Never send merchant credentials
+to capsules, PostgreSQL task payloads or browser clients. The current Vultr
+VM installation and a live payment-provider webhook remain unverified.

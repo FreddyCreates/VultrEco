@@ -1,4 +1,4 @@
-# CAPSULA v0.7.0-alpha.1 — Vultr Agent Rush acceptance
+# CAPSULA v0.8.0-alpha.1 — Vultr Agent Rush acceptance
 
 CAPSULA is a broad agent computing platform. Vultr Cloud Compute, fleet APIs
 and Serverless Inference are the intended central challenge infrastructure.
@@ -23,3 +23,14 @@ and Serverless Inference are the intended central challenge infrastructure.
 **Do not confuse a signed controller record with trustworthy host isolation or
 a database latency benchmark with actual multi-VM work.** Publish measured
 evidence at each security and deployment gate.
+
+## v0.8 additional release acceptance
+
+- User-file → disposable worker → verified output download: implemented and tested
+  against a deterministic worker response; live Vultr container proof pending.
+- Worker enforces bounded mounts, cleanup verification, file path restrictions,
+  and artifact digests: covered by alpha test suite, VM acceptance pending.
+- Enterprise finance: tenant OIDC, Stripe Checkout requests and exact HMAC
+  webhook reconciliation: PostgreSQL tests, merchant credentials pending.
+- No payouts, bank debits, custody or exchange APIs are represented as live.
+- No additional paid Vultr hosts are automatically created by this release.

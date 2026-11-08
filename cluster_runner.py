@@ -41,9 +41,18 @@ def execute(client,endpoint,token,job):
     health.raise_for_status()
     if health.json().get("python_mode")!="per-job-docker-or-deny":
         raise RuntimeError("Unsafe or unavailable worker execution mode")
-    reply=client.post(endpoint+"/execute",
+    inputs=job["payload"].get("inputs")
+    if inputs is not None:
+        if not isinstance(inputs,dict) or len(inputs)>12:
+            raise ValueError("Invalid bounded file input envelope")
+        route="/capsules/execute"
+        task={"code":code,"inputs":inputs}
+    else:
+        route="/execute"
+        task={"kind":"python","code":code}
+    reply=client.post(endpoint+route,
         headers={"Authorization":"Bearer "+token},
-        json={"kind":"python","code":code},timeout=90)
+        json=task,timeout=90)
     reply.raise_for_status()
     data=reply.json()
     result=data.get("result")

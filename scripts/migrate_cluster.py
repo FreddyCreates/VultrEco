@@ -5,5 +5,8 @@ sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
 from cluster_queue import Queue
 
 if __name__=="__main__":
-    Queue().migrate()
+    queue=Queue()
+    queue.migrate()
+    from finance_rails import Receivables
+    Receivables(queue).migrate()
     print("CAPSULA cluster PostgreSQL schema installed")

@@ -11,7 +11,7 @@ def create(kind='browser',code=''):
     return x.json()['id']
 
 def test_release_identity():
-    h=c.get('/api/health').json();assert h['version']=='0.7.0-alpha.1';assert h['proof_protocol']=='capsula.proof.v2'
+    h=c.get('/api/health').json();assert h['version']=='0.8.0-alpha.1';assert h['proof_protocol']=='capsula.proof.v2'
     pk=c.get('/api/proof/public-key').json();assert pk['algorithm']=='Ed25519';assert pk['key_id']==h['signing_key_id']
 
 def test_evidence_integrity():

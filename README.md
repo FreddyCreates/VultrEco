@@ -1,7 +1,7 @@
 # CAPSULA — Autonomous Agent Computer Cloud
 
 **Intelligence has a place to work.**  
-**Medina Labs · v0.7.0-alpha.1 · Vultr Agent Rush 2026 · Blast Radius Zero + Future of Work**
+**Medina Labs · v0.8.0-alpha.1 · Vultr Agent Rush 2026 · Blast Radius Zero + Future of Work**
 
 CAPSULA is a full-stack **agent computing platform powered by Vultr** for this
 competition: a mission control plane, persistent Linux computers for agents,
@@ -25,7 +25,7 @@ versioned infrastructure. **What is not yet verified:** application deployment
 on that VM, separate live worker VMs, a Serverless Inference response, public
 HTTPS, a recorded containment demonstration, or final submission.
 
-> **v0.7 alpha, not v1.0.** Source, tests, and provider account access are
+> **v0.8 alpha, not v1.0.** Source, tests, and provider account access are
 > evidence of implementation; they are not proof of a deployed, isolated,
 > publicly reachable multi-tenant production service.
 
@@ -66,6 +66,42 @@ both without shrinking its capabilities.
 > Existing single-admin APIs are disabled when enterprise mode is enabled.
 > PostgreSQL cluster APIs require properly configured OIDC. Real multi-host
 > deployment and VM-isolation claims require separate operator evidence.
+
+
+## Real work, real computers, real deliverables
+
+From the **Capsules & Deliverables** tab, a workspace owner selects actual
+project files, writes or reviews a Python task, and launches it on an approved
+isolated worker. A disposable container receives only those read-only files
+under `/inputs`; it runs with no network, no controller/provider credentials,
+limited CPU/memory/PIDs and read-only root. The task writes results to
+`/outputs`. CAPSULA verifies artifact digests, records the worker's teardown
+report, encrypts results at rest, provides authenticated file downloads, and
+supports discarding the capsule record. If no remote worker is available, it
+**fails closed rather than simulating execution**.
+
+The same Python/file envelope is accepted by the tenant-scoped distributed
+cluster API and its PostgreSQL worker runner (128 KiB queued payload and
+bounded output size in this alpha). This lets external applications build
+real engineering, file-fixing, analytics, quality-control and research
+workflows without changing CAPSULA's core platform.
+
+## Real-world finance API (operator-controlled, no fake money)
+
+The new `/api/v1/finance` API provides organization-scoped USD receivables
+and **Stripe-hosted Checkout**. OIDC `operator` can create an invoice;
+OIDC `viewer` can inspect it; only OIDC `admin` can create its payment
+session. Payment completion is recorded **only** from a verified Stripe HMAC
+webhook with exact invoice, tenant, session, amount, currency and paid status
+matching. Idempotency and replay rejection are durable in PostgreSQL. The
+Stripe secret stays in the controller, not in a worker, agent, model or UI.
+
+Provide `CAPSULA_STRIPE_SECRET_KEY`,
+`CAPSULA_STRIPE_WEBHOOK_SECRET`, and a pinned HTTPS
+`CAPSULA_FINANCE_PUBLIC_ORIGIN` to activate merchant collection. Without
+them, payment collection fails closed. **Payouts, custody, card issuing,
+wallet signing, bank transfers and on-chain settlement are NOT enabled** by
+this integration. Consult your provider's onboarding and regulatory terms.
 
 ## Platform planes
 

@@ -4,7 +4,7 @@
 **By Medina Labs**  
 **Tagline:** Intelligence has a place to work.  
 **Repository:** https://github.com/FreddyCreates/VultrEco  
-**Release:** v0.7.0-alpha.1
+**Release:** v0.8.0-alpha.1
 
 ## The product
 
@@ -83,3 +83,16 @@ Final LabLab submission: **not submitted**
 Do not publish fabricated demo results or substitute provider inventory for
 live working application proof. Use [RELEASE_GATE.md](RELEASE_GATE.md) to close
 the remaining deployment gates.
+
+## v0.8 execution evidence for both tracks
+
+CAPSULA now accepts user-selected project files and a bounded code task,
+creates a disposable worker capsule, verifies cleanup and returns authenticated
+output files. Enterprises can submit the same task through an OIDC-scoped
+PostgreSQL queue. This is a reusable execution engine for engineering, data,
+research, customer operations, document transformation and more—not a finance
+vertical. Real Stripe Checkout invoice collection is an additional, separately
+governed finance capability.
+
+CI validates worker boundaries and payment anti-replay contracts. A live
+Vultr multi-VM containment film and real merchant payment are not claimed.
