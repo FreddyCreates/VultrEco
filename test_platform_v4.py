@@ -20,7 +20,7 @@ def agent(caps=None,model=''):
 
 def test_platform_status_and_provider_independence():
     x=api('get','/api/platform');assert x.status_code==200
-    d=x.json();assert d['version']=='0.6.0-alpha.1';assert d['provider_policy']=='no dependency on Vultr'
+    d=x.json();assert d['version']=='0.7.0-alpha.1';assert d['provider_policy']=='no dependency on Vultr'
     for key in ('workspaces','project_files','agent_profiles','agent_runs','missions','workers','approvals','artifact_blobs','memory'):assert key in d['counts']
     y=api('get','/api/providers');assert y.status_code==200
     for provider in ('local-docker','remote-worker','model-compatible','vultr','phantom'):assert provider in [p['id'] for p in y.json()]

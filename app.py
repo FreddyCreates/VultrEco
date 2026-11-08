@@ -25,7 +25,7 @@ API_KEY=os.environ.get('CAPSULA_API_KEY','')
 DOCKER_IMAGE=os.environ.get('CAPSULA_SANDBOX_IMAGE','python:3.12-alpine')
 ALLOWED_IMAGE=re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._/:@-]{1,127}$')
 if not ALLOWED_IMAGE.fullmatch(DOCKER_IMAGE): raise RuntimeError('Invalid sandbox image')
-app=FastAPI(title='CAPSULA Mission Control',version='0.6.0-alpha.1')
+app=FastAPI(title='CAPSULA Mission Control',version='0.7.0-alpha.1')
 signer=Signer(DATA/'keys'/'ed25519.pem')
 vault=Vault(DATA/'keys'/'vault.key')
 
@@ -77,6 +77,8 @@ def event(db,mid,kind,data):
     return hashval
 
 def authed(authorization):
+    if os.getenv("CAPSULA_ENTERPRISE_MODE")=="1":
+        raise HTTPException(403,"Legacy single-admin API disabled in enterprise mode")
     if not API_KEY: raise HTTPException(503,'Set CAPSULA_API_KEY before use')
     if not authorization or not hmac.compare_digest(authorization, 'Bearer '+API_KEY): raise HTTPException(401,'Invalid API key')
 
@@ -102,7 +104,7 @@ def health():
         r=subprocess.run(['docker','info','--format','{{.ServerVersion}}'],capture_output=True,timeout=3)
         docker_ready=r.returncode==0
     except (FileNotFoundError,subprocess.TimeoutExpired):pass
-    return {'service':'capsula','version':'0.6.0-alpha.1','auth_configured':bool(API_KEY),'sandbox_ready':docker_ready,'execution_mode':'docker-or-worker' if docker_ready else 'worker-required-or-deny','proof_protocol':'capsula.proof.v2','signing_key_id':signer.key_id,'inference_configured':__import__('inference').config()['configured']}
+    return {'service':'capsula','version':'0.7.0-alpha.1','auth_configured':bool(API_KEY),'sandbox_ready':docker_ready,'execution_mode':'docker-or-worker' if docker_ready else 'worker-required-or-deny','proof_protocol':'capsula.proof.v2','signing_key_id':signer.key_id,'inference_configured':__import__('inference').config()['configured']}
 
 @app.get('/api/overview')
 def overview(authorization:str|None=Header(None)):
@@ -689,3 +691,7 @@ bind_autonomy(app)
 
 from fleet_routes import bind as bind_fleet
 bind_fleet(_sys.modules[__name__])
+
+# Separate OIDC-verified, organization-scoped cluster API.
+from cluster_api import bind as bind_cluster_api
+bind_cluster_api(app)

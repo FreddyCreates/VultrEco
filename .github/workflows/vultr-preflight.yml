@@ -1,0 +1,23 @@
+name: Vultr account preflight — read only
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/vultr_preflight.py'
+      - '.github/workflows/vultr-preflight.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  provider-check:
+    runs-on: ubuntu-latest
+    env:
+      VULTR_API_KEY: ${{ secrets.VULTR_API_KEY }}
+      VULTR_INFERENCE_API_KEY: ${{ secrets.VULTR_INFERENCE_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install httpx==0.28.1
+      - run: python scripts/vultr_preflight.py

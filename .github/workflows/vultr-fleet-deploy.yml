@@ -1,0 +1,64 @@
+name: CAPSULA paid fleet provisioning — manual approval
+on:
+  workflow_dispatch:
+    inputs:
+      role:
+        required: true
+        type: choice
+        options: [controller, worker, agent-host]
+      region:
+        required: true
+        type: string
+        default: ewr
+      plan:
+        required: true
+        type: string
+        default: vc2-1c-2gb
+      os_id:
+        description: Verified Ubuntu image ID from Vultr
+        required: true
+        type: number
+      ssh_key_id:
+        description: Existing trusted Vultr SSH key ID
+        required: true
+        type: string
+      count:
+        required: true
+        type: number
+        default: 2
+      max_monthly_usd:
+        required: true
+        type: number
+        default: 100
+      approve_paid_action:
+        description: Explicitly accept this bounded paid creation
+        type: boolean
+        required: true
+        default: false
+permissions:
+  contents: read
+jobs:
+  provision:
+    if: ${{ inputs.approve_paid_action == true }}
+    runs-on: ubuntu-latest
+    environment: capsula-deploy
+    env:
+      VULTR_API_KEY: ${{ secrets.VULTR_API_KEY }}
+      CAPSULA_DEPLOY_APPROVED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install httpx==0.28.1
+      - name: Validate cost and provision approved instances
+        env:
+          ROLE: ${{ inputs.role }}
+          REGION: ${{ inputs.region }}
+          PLAN: ${{ inputs.plan }}
+          OS_ID: ${{ inputs.os_id }}
+          SSH_KEY_ID: ${{ inputs.ssh_key_id }}
+          COUNT: ${{ inputs.count }}
+          CAP_USD: ${{ inputs.max_monthly_usd }}
+        run: |
+          python scripts/fleet_cli.py apply --prefix capsula --role "$ROLE" --region "$REGION" --plan "$PLAN" --os-id "$OS_ID" --ssh-key-id "$SSH_KEY_ID" --count "$COUNT" --max-monthly-usd "$CAP_USD" --approve-paid-action
