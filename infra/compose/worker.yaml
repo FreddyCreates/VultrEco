@@ -1,0 +1,29 @@
+# Dedicated, private worker VM only. Docker socket is HOST-ADMIN authority on this worker VM.
+# Never deploy this daemon on the control-plane VM or a host with unrelated workloads.
+services:
+  worker-python:
+    build:
+      context: .
+      dockerfile: infra/docker/worker.Dockerfile
+    restart: unless-stopped
+    environment:
+      CAPSULA_WORKER_TOKEN: ${CAPSULA_WORKER_TOKEN:?set a unique worker token}
+      CAPSULA_WORKER_HOST_RUN_PATH: ${CAPSULA_WORKER_HOST_RUN_PATH:?set absolute host task directory}
+      CAPSULA_WORKER_CONTAINER_RUN_PATH: /work/runs
+      CAPSULA_WORKER_SANDBOX_IMAGE: python:3.12-alpine
+    volumes:
+      - ${CAPSULA_WORKER_HOST_RUN_PATH}:/work/runs
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add:
+      - ${DOCKER_GID:?set worker VM docker socket group id}
+    ports:
+      - "127.0.0.1:8081:8081"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 64
+    mem_limit: 256m
+    cpus: 0.5
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m

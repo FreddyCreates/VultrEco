@@ -16,7 +16,7 @@ import time
 from urllib.parse import urlsplit
 
 import httpx
-from proof import canon
+from capsula.evidence.proof import canon
 
 PROBE = """import json,os,socket
 uid=os.geteuid()

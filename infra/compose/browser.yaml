@@ -1,0 +1,33 @@
+# Dedicated browser-worker VM only. Build the disposable image first:
+# docker build -f infra/docker/browser.Dockerfile -t capsula-browser:local .
+# The Docker socket gives control of THIS disposable worker host; never run on controller.
+# CAPSULA_BROWSER_NETWORK MUST be enforced by an outbound HTTPS allowlist gateway.
+services:
+  worker-browser:
+    build:
+      context: .
+      dockerfile: infra/docker/worker.Dockerfile
+    restart: unless-stopped
+    environment:
+      CAPSULA_WORKER_TOKEN: ${CAPSULA_WORKER_TOKEN:?worker credential required}
+      CAPSULA_BROWSER_ALLOWLIST: ${CAPSULA_BROWSER_ALLOWLIST:?approved domains required}
+      CAPSULA_BROWSER_NETWORK: ${CAPSULA_BROWSER_NETWORK:?egress-controlled Docker network required}
+      CAPSULA_BROWSER_EGRESS_ENFORCED: ${CAPSULA_BROWSER_EGRESS_ENFORCED:?operator egress firewall confirmation required}
+      CAPSULA_BROWSER_SANDBOX_IMAGE: capsula-browser:local
+      CAPSULA_WORKER_HOST_RUN_PATH: ${CAPSULA_WORKER_HOST_RUN_PATH:?dedicated task mount required}
+      CAPSULA_WORKER_CONTAINER_RUN_PATH: /work/runs
+    volumes:
+      - ${CAPSULA_WORKER_HOST_RUN_PATH}:/work/runs
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add:
+      - ${DOCKER_GID:?Docker socket group on isolated host}
+    ports:
+      - "127.0.0.1:8082:8081"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 128
+    mem_limit: 384m
+    cpus: 0.75
+    tmpfs:
+      - /tmp:rw,nosuid,noexec,size=32m

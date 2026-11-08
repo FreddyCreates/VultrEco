@@ -1,0 +1,1 @@
+"""CAPSULA test suite."""

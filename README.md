@@ -1,261 +1,192 @@
-# CAPSULA — Autonomous Agent Computer Cloud
+<div align="center">
 
-**Intelligence has a place to work.**  
-**Medina Labs · v0.8.0-alpha.1 · Vultr Agent Rush 2026 · Blast Radius Zero + Future of Work**
+# CAPSULA
 
-CAPSULA is a full-stack **agent computing platform powered by Vultr** for this
-competition: a mission control plane, persistent Linux computers for agents,
-disposable code/browser sandboxes, recursive agent delegation, multi-host
-execution queues, encrypted memory and artifacts, approvals, and verifiable
-signed results. Agents can write and run code, work in browsers, analyze data,
-create files, coordinate workflows, and improve tested procedures within bounded
-authority. The product is intentionally broad—not one workflow, one worker, or
-one industry.
+### Give intelligence a place to work.
 
-**Vultr is central to the competition build:** Vultr Cloud Compute supplies the
-control-plane and isolated worker/agent-VM hosts; the Vultr API supplies fleet
-inventory, provisioning and capacity management; Vultr Serverless Inference is
-the designated challenge model lane. The underlying interfaces can also run on
-other infrastructure without changing CAPSULA's product model.
+**A computer for every agent. A capsule for every task. Proof for every result.**
 
-**What is verified today:** authenticated Vultr account and instance APIs (HTTP
-200); one active `capsula-control` instance in the DFW region; a PostgreSQL
-distributed queue tested in GitHub Actions; and a repository with testable,
-versioned infrastructure. **What is not yet verified:** application deployment
-on that VM, separate live worker VMs, a Serverless Inference response, public
-HTTPS, a recorded containment demonstration, or final submission.
+*The agent computer cloud — powered by Vultr.*
 
-> **v0.8 alpha, not v1.0.** Source, tests, and provider account access are
-> evidence of implementation; they are not proof of a deployed, isolated,
-> publicly reachable multi-tenant production service.
+[Explore the platform](#one-place-to-make-things-happen) · [How it works](#from-intent-to-outcome) · [Architecture](#the-platform) · [Build with CAPSULA](#start-building)
 
-## The two challenge tracks
+</div>
 
-| Blast Radius Zero | Future of Work |
+---
+
+## Intelligence should do more than answer.
+
+An idea arrives. A project begins. A deadline approaches.
+
+You should be able to say what needs to happen, give that work the right tools, and watch it move from intention to completion.
+
+**CAPSULA gives humans and AI agents the computers, workspaces, permissions and infrastructure to get real work done.** An agent can plan a task, open a project, use a temporary computer, write code, work with files, return a deliverable and leave an auditable record. The computer used for the task can then be destroyed.
+
+Not a chat window pretending to execute. Not an endless collection of disconnected automations.
+
+A place where work actually happens.
+
+## One place to make things happen.
+
+| Your world | What CAPSULA provides |
 |---|---|
-| Model plans/writes code → disposable Docker capsule → real output and evidence | Agents coordinate multi-step work across computers, documents, research, and services |
-| Browser goals → isolated Playwright worker → screenshot → approved vision review | Engineering, data, sales, recruitment, finance, procurement, support, operations and more |
-| Network, CPU, memory, time, secret, and lifecycle constraints | Durable missions, human approval, replayable work, encrypted state and audit |
-| Vultr VM controller and VM workers, Vultr Serverless Inference | Vultr-hosted application, distributed job orchestration and enterprise identity |
+| **Mission Control** | Turn an outcome into bounded plans, delegated tasks, checkpoints, approvals and visible progress. |
+| **Agent Computers** | Persistent work environments and dedicated-computer architecture for agents that need continuity across projects. |
+| **Disposable Capsules** | Run bounded code or browser work in isolated task environments, then collect results and destroy the environment. |
+| **Projects & Workspaces** | Keep files, revisions, context, encrypted memory and team work organized around the work itself. |
+| **Intelligence & Perception** | Connect inference providers, including Vultr Serverless Inference, for planning, interpretation and guided tool use. |
+| **Evidence & Trust** | Signed execution receipts, cryptographic hashes, audit trails, access controls and explicit approval boundaries. |
+| **Connected Operations** | Reusable APIs for engineering, research, analysis, operations and provider-governed financial workflows. |
 
-One hackathon submission may choose a primary track; the platform supports
-both without shrinking its capabilities.
+CAPSULA is designed to move with the user — from one task on one computer to a coordinated network of agents, each with its own responsibilities and limits.
 
-## Vultr integration status
-
-| Component | Current evidence | Release gate |
-|---|---|---|
-| Cloud API | Account and VM inventory requests returned HTTP 200 | **Connected** |
-| Control VM | `capsula-control`, DFW, reported active by Vultr | CAPSULA installation and health pending |
-| Multi-host provisioning | `fleet_provider.py` and approved GitHub Actions workflow | Paid creation not executed |
-| Distributed control plane | PostgreSQL claims, retries, fencing and OIDC-scoped cluster API | GitHub CI passed; production DB not provisioned |
-| Execution workers | Dedicated worker code and disposable Docker sandboxes | Real worker VM/container containment pending |
-| Serverless Inference | Vultr OpenAI-compatible model integration implemented | Separate inference secret absent at last preflight |
-| HTTPS public app | Pinned SSH deploy and optional Caddy edge workflow | Domain, host credentials and public response pending |
-| Evidence | Ed25519, AES-256-GCM, Merkle receipts and offline verifiers | External witness/hardware attestation pending |
-
-**Review and deploy:** [main source](https://github.com/FreddyCreates/VultrEco),
-[CI runs](https://github.com/FreddyCreates/VultrEco/actions),
-[Vultr preflight](https://github.com/FreddyCreates/VultrEco/actions/workflows/vultr-preflight.yml),
-[deploy existing Vultr VM](https://github.com/FreddyCreates/VultrEco/actions/workflows/vultr-existing-deploy.yml),
-[full submission gate](hackathon/RELEASE_GATE.md).
-
-
-
-> **Release status:** source-implemented alpha, NOT certified public SaaS.
-> Existing single-admin APIs are disabled when enterprise mode is enabled.
-> PostgreSQL cluster APIs require properly configured OIDC. Real multi-host
-> deployment and VM-isolation claims require separate operator evidence.
-
-
-## Real Docker acceptance evidence
-
-GitHub CI runs `scripts/smoke_capsule_docker.py`: a real Docker
-container reads a CSV under `/inputs`, denies writes to container root,
-denies public network access, checks absence of protected environment keys,
-writes a result under `/outputs`, verifies the SHA-256 digest and confirms
-container destruction. This is **GitHub-runner Docker evidence**, not Vultr
-VM isolation or independent hypervisor attestation. Repeat on your deployed
-Vultr worker VMs using `scripts/benchmark_multi_vm.py`.
-
-## Real work, real computers, real deliverables
-
-From the **Capsules & Deliverables** tab, a workspace owner selects actual
-project files, writes or reviews a Python task, and launches it on an approved
-isolated worker. A disposable container receives only those read-only files
-under `/inputs`; it runs with no network, no controller/provider credentials,
-limited CPU/memory/PIDs and read-only root. The task writes results to
-`/outputs`. CAPSULA verifies artifact digests, records the worker's teardown
-report, encrypts results at rest, provides authenticated file downloads, and
-supports discarding the capsule record. If no remote worker is available, it
-**fails closed rather than simulating execution**.
-
-The same Python/file envelope is accepted by the tenant-scoped distributed
-cluster API and its PostgreSQL worker runner (128 KiB queued payload and
-bounded output size in this alpha). This lets external applications build
-real engineering, file-fixing, analytics, quality-control and research
-workflows without changing CAPSULA's core platform.
-
-## Real-world finance API (operator-controlled, no fake money)
-
-The new `/api/v1/finance` API provides organization-scoped USD receivables
-and **Stripe-hosted Checkout**. OIDC `operator` can create an invoice;
-OIDC `viewer` can inspect it; only OIDC `admin` can create its payment
-session. Payment completion is recorded **only** from a verified Stripe HMAC
-webhook with exact invoice, tenant, session, amount, currency and paid status
-matching. Idempotency and replay rejection are durable in PostgreSQL. The
-Stripe secret stays in the controller, not in a worker, agent, model or UI.
-
-Provide `CAPSULA_STRIPE_SECRET_KEY`,
-`CAPSULA_STRIPE_WEBHOOK_SECRET`, and a pinned HTTPS
-`CAPSULA_FINANCE_PUBLIC_ORIGIN` to activate merchant collection. Without
-them, payment collection fails closed. **Payouts, custody, card issuing,
-wallet signing, bank transfers and on-chain settlement are NOT enabled** by
-this integration. Consult your provider's onboarding and regulatory terms.
-
-## Platform planes
-
-| Plane | What CAPSULA has | v0.7 status |
-|---|---|---|
-| Human & agent work | Projects, encrypted revisions, persistent goals, agent profiles | Implemented / locally tested |
-| Dedicated computers | Each Dot agent may bind a unique KVM/libvirt VM and credential store | Source integrated; hardware host acceptance outstanding |
-| Recursive Agentic Hierarchy | Bounded mission tree, distinct VM grants, checkpoints, handoffs | Source contracts and tests |
-| Disposable capsules | Per-job Docker Python and read-only Playwright browser agents | Local containment receipts; external worker proof required |
-| Shared compute | Multiple registered worker hosts, capacity, draining, utilization-aware placement | SQLite single-authority fleet implemented |
-| **Cluster scheduling** | **PostgreSQL transactions, SKIP LOCKED claims, retry/dead-letter, lease epochs + fencing** | **v0.7 integration tests; not global consensus** |
-| **Cluster runner** | **A separate host pulls DB jobs and sends work only to its local isolated executor** | **v0.7 runner; requires private network and real worker deployment** |
-| **Cloud fleet** | **Vultr Cloud Compute fleet creation, idempotency, budget ceilings and SSH-only bootstrap** | **v0.7 provider adapter; no automatic paid action** |
-| **Enterprise identity** | **OIDC RS256 issuer/audience/JWKS pinning, tenant claim, operator/admin/viewer roles** | **New cluster APIs only; legacy routes disabled in enterprise mode** |
-| Intelligence | Local/remote inference, model-generated plans, vision, Vultr Serverless Inference for challenge; local models optional | Requires authorized real provider |
-| Evidence & memory | Encrypted memory/artifacts, signed execution/governance receipts, offline verification | Source/tests; no external TEE/witness |
-| Improvement lab | Repeatable baseline/candidate experiments, versioned skill proposals, rollback | Source/tests, scoped to owned projects |
-
-## Real work flow
+## From intent to outcome.
 
 ```text
-Owner / connected application / authorized service
-       ↓ identity + workspace permission + mission grant
-CAPSULA mission control — planning, budgets, durable memory and approval
-       ↓ RAH / workflows / queue
-PostgreSQL durable queue  ──────↔  distributed controllers
-       ↓ row-locked admission + per-worker lease/fencing token
-┌──────────────────────────────────────────────────┐
-│ Worker Host A      Worker Host B      Host C      │
-│ ├─ disposable OCI  ├─ browser OCI     ├─ Dot VM    │
-│ └─ code artifacts  └─ screenshots     └─ agent OS │
-└──────────────────────────────────────────────────┘
-       ↓ results + acceptance + signed CAPSULA evidence
-Artifacts, memory, audit, rollback and next bounded mission
+You describe the outcome
+        │
+        ▼
+CAPSULA Mission Control
+Plan · Permissions · Budget · Human approval when needed
+        │
+        ▼
+Assign an agent or a dedicated computer
+        │
+        ▼
+Create a disposable capsule
+Real code · Files · Browser tasks · Bounded resources
+        │
+        ▼
+Run the work on an isolated worker
+CPU & memory limits · Credential separation · Lifecycle control
+        │
+        ▼
+Return the result
+Outputs · Screenshots · Artifacts · Receipts
+        │
+        ▼
+Verify, preserve, learn — and destroy the disposable environment
 ```
 
-## Local development lane — mirrors the Vultr runtime
+A capsule is a **temporary computing environment**, not a renamed prompt. It has a defined task, bounded resources, isolated input files and a teardown requirement. A durable agent computer is a different thing: it preserves state when persistence is authorized.
+
+That distinction is central to the product.
+
+## CAPSULA × Vultr
+
+CAPSULA is the experience. **Vultr provides the computing foundation that lets it exist beyond a single machine.**
+
+| Layer | How they work together |
+|---|---|
+| **Vultr Cloud Compute** | Hosts CAPSULA's controller, dedicated execution workers and agent-computer infrastructure. |
+| **Vultr infrastructure APIs** | Discover machines, plan new capacity, provision hosts within approved budgets and manage the fleet. |
+| **Vultr Serverless Inference** | Supplies an inference lane for model-assisted planning and task interpretation when the service is configured. |
+| **CAPSULA Control Plane** | Coordinates workspaces, mission authority, agents, queues, execution leases and result acceptance. |
+| **CAPSULA Execution Plane** | Runs disposable task containers on separate worker machines and returns artifacts with cleanup evidence. |
+| **CAPSULA Evidence Plane** | Keeps encrypted project data, Ed25519 receipts, AES-256-GCM records and verifiable result hashes. |
+
+**Why this matters:** users experience one coherent product while the infrastructure can expand underneath it. More work can be placed across more computers. Independent worker hosts provide a stronger boundary than running arbitrary tasks in the web application itself. Each task has its own grant, resource limits and recorded outcome.
+
+The architecture keeps Vultr central to the integrated cloud experience while allowing future infrastructure adapters without rewriting what CAPSULA is.
+
+CAPSULA also exposes explicit federation contracts for NEXUS, Loom Cluster, POCKET Agent, LiveVault, PARRALAX and Triple-MCP. These are integration surfaces—not claims that every external service is connected today.
+
+## Built for the real world.
+
+**Build.** Let an agent inspect a codebase, generate a file, run a check, and return the changes for review.
+
+**Understand.** Give CAPSULA a dataset. Run actual analysis, create outputs, and keep the evidence alongside the project.
+
+**Operate.** Coordinate multi-step work across teams, documents, support, procurement, research, engineering and service APIs.
+
+**Delegate.** Give specialized agents bounded missions. Allow recursive execution inside approved tools, workspace, budget and deadline — with human oversight for sensitive actions.
+
+**Protect.** Keep ephemeral jobs separate from account credentials. Require approvals for consequential actions and verify the artifacts returned.
+
+**Move money responsibly.** CAPSULA contains organization-scoped receivables and Stripe-hosted Checkout integration. Payment sessions and settlement require a configured real processor, signed webhooks and authorized users; CAPSULA does not claim custody, payouts or bank transfers.
+
+## The platform
+
+```text
+CAPSULA/
+├── apps/
+│   └── web/                 First-party product interface
+├── src/capsula/
+│   ├── api/                 Web API, workspaces, capsules, finance, cluster
+│   ├── agents/              Mission control, RAH, learning, agent computers
+│   ├── workspace/           Projects, files and persistent state
+│   ├── execution/           Capsules, isolated workers, distributed queues
+│   ├── intelligence/        Inference and vision
+│   ├── evidence/            Signed receipts, audit and encrypted artifacts
+│   ├── security/            Identity, access and policy
+│   ├── finance/             Governed provider-backed payments
+│   ├── integrations/        Federation and NEXUS bridges
+│   └── providers/vultr/     Vultr fleet and cloud integrations
+├── runtimes/dot/            Independent Dot computer runtime
+├── infra/
+│   ├── compose/             Control plane, workers, browser, edge, cluster
+│   ├── docker/              Reproducible service images
+│   ├── edge/                HTTPS gateway
+│   └── env/                 Configuration examples
+├── tests/                   Automated contracts and adversarial tests
+├── scripts/                 Provisioning, measurements and verification
+├── tools/                   Release integrity and workspace utilities
+├── docs/                    Architecture, operation, security and vision
+└── receipts/                Collected verification and release evidence
+```
+
+<details>
+<summary><strong>Engineering architecture</strong></summary>
+
+CAPSULA is intentionally separated into a user-facing **control plane**, a disposable **execution plane**, and an **evidence plane**. The distributed scheduler supports PostgreSQL transactions, worker leases, retry/dead-letter handling and fencing tokens. Enterprise APIs use signed tenant identity and role checks; the legacy operator surface is not represented as multi-tenant.
+
+A worker can execute code in a disposable Docker container with bounded CPU, memory and processes, no task-level cloud credentials, blocked networking and read-only system mounts. It returns actual outputs after cleanup verification. For hostile browsing, independent worker VMs and network-level egress enforcement are additional requirements.
+
+The governing rule is simple: **an agent may act only within its authorized mission.** It cannot obtain broader authority just by writing a more ambitious plan.
+
+[Technical architecture](docs/architecture/OVERVIEW.md) · [Agent system](docs/architecture/AGENTS.md) · [Operations](docs/operations/DEPLOYMENT.md) · [Security](docs/security/WORKER_SECURITY.md)
+
+</details>
+
+## Start building.
+
+Requirements: Python 3.11+, a strong operator API key, and dedicated workers if you intend to execute untrusted code.
 
 ```bash
+git clone https://github.com/FreddyCreates/VultrEco.git
+cd VultrEco
 python3 -m venv .venv
 source .venv/bin/activate
-python -m pip install -r requirements.txt
-export CAPSULA_API_KEY="$(python -c 'import secrets;print(secrets.token_urlsafe(48))')"
+pip install -r requirements.txt
+export CAPSULA_API_KEY="$(python -c 'import secrets; print(secrets.token_urlsafe(48))')"
 export CAPSULA_DATA="$PWD/data"
-uvicorn app:app --host 127.0.0.1 --port 8080
+PYTHONPATH=src uvicorn capsula.api.app:app --host 127.0.0.1 --port 8080
 ```
 
-Launch [http://127.0.0.1:8080](http://127.0.0.1:8080).
-Local setup supports projects, plans, memory, artifacts and proofs;
-actual code/browser execution fails closed without isolated workers.
+Open **http://127.0.0.1:8080** and enter your operator key. Project management, memory and planning can run locally. Untrusted code execution **fails closed** without an approved isolated worker.
 
-## Cluster setup — PostgreSQL and OIDC
-
-CAPSULA runs a **separate multi-user cluster API** at `/api/v1/cluster`.
-A shared PostgreSQL instance is required for multi-controller admission:
+To run the containerized controller:
 
 ```bash
-export CAPSULA_CLUSTER_DATABASE_URL='postgresql://user:password@db-host:5432/capsula?sslmode=verify-full'
-python scripts/migrate_cluster.py
+docker compose --project-directory . -f infra/compose/production.yaml up -d --build
 ```
 
-Configure `CAPSULA_ENTERPRISE_MODE=1`, `CAPSULA_OIDC_ISSUER`,
-`CAPSULA_OIDC_AUDIENCE`, and `CAPSULA_OIDC_JWKS_URL` on the controller.
-Use an OIDC provider that issues the signed `capsula_tenant` and
-`capsula_role` claims. Cluster APIs enforce tenant ownership on every query.
-**Do not enable enterprise mode before configuring OIDC and PostgreSQL.**
-There is no local-email/password shortcut or mock identity in this mode.
-The legacy single-admin surface is not a multi-tenant SaaS.
+The controller is bound to loopback by default. Worker nodes are configured separately using `infra/compose/worker.yaml`. Never mount the Docker socket on a CAPSULA controller or expose an unauthenticated worker on the public internet.
 
-See [docs/CLUSTER_OPERATIONS.md](docs/CLUSTER_OPERATIONS.md) for API enrollment,
-separate worker provisioning and recovery.
+For more, see [Deployment](docs/operations/DEPLOYMENT.md), [Cluster operations](docs/operations/CLUSTER.md), [Environment configuration](infra/env/) and [Release checks](tools/release_validate.py).
 
-## Vultr infrastructure — the competition deployment
+## Where we are. Where we're going.
 
-The Vultr API is connected for verified account/instance discovery.
-Vultr Cloud Compute is the target infrastructure for controller, worker and
-agent-computer VMs; Vultr Serverless Inference is the target model provider.
-The `fleet_provider.py` adapter plans multiple Vultr instances against the
-live price catalog and enforces an explicit monthly budget. No API token is placed in cloud-init; admission occurs after
-secure host bootstrap. Do not run paid provisioning from a model-generated
-goal or from the public cluster API.
+**Available in the v0.8 alpha source:** workspaces, mission governance, encrypted artifacts, agent-computer contracts, distributed worker scheduling, file-capable disposable capsules, real Docker execution tests, signed evidence, OIDC tenant APIs and finance-provider integration surfaces.
 
-```bash
-# Read-only preflight (uses GitHub Actions secret if run in CI)
-python scripts/vultr_preflight.py
-# Plan only; never creates anything
-python scripts/fleet_cli.py plan --prefix capsula --region ewr \
-  --plan vc2-1c-2gb --os-id 2284 --ssh-key-id YOUR_EXISTING_ID \
-  --role worker --count 3 --max-monthly-usd 100
-```
+**Verified:** automated regression and PostgreSQL queue tests; an actual disposable Docker file-processing run on a GitHub runner with output digest and teardown checks; Vultr API account and instance discovery.
 
-The plan validates instance count, current provider prices and existing labels.
-Paid `apply` requires a human-run workflow with budget confirmation and
-`CAPSULA_DEPLOY_APPROVED=1`. Cloud-init installs host prerequisites; it does
-**not** claim a service is ready or smuggle keys onto a public VM.
+**Still to be verified on the live cloud:** the installed public CAPSULA application, independently provisioned Vultr worker VMs, end-to-end Serverless Inference calls, multi-VM containment, and real merchant-provider payment operations. Code presence is not deployment evidence.
 
+The direction is bigger than executing a script. CAPSULA is becoming a computing layer for human and artificial work: agents that have continuity when they need it, temporary machines when they don't, tools they can trust, and results people can own, inspect and use.
 
-## Cryptographic provenance
+**The future of work should feel less like managing software — and more like making things happen.**
 
-CAPSULA's execution and governance records use **Ed25519** signatures; encrypted project memory and artifacts use **AES-256-GCM**. This provides local-key provenance and authenticated confidentiality, not external attestation or proof against a compromised host.
+---
 
-## Acceptance gates
-
-Run `pytest -q`, `python release_validate.py`,
-`python scripts/verify_release_manifest.py`, and
-`python scripts/benchmark_cluster.py` with an actual PostgreSQL service.
-The last benchmark measures **database-backed queue admission only**.
-Real KVM guests, Vultr VMs, workload isolation, app HTTPS access and inference
-are separate tests. See [docs/CLUSTER_OPERATIONS.md](docs/CLUSTER_OPERATIONS.md),
-[docs/MEASUREMENTS.md](docs/MEASUREMENTS.md),
-[docs/ACCEPTANCE.md](docs/ACCEPTANCE.md) and
-[hackathon/RELEASE_GATE.md](hackathon/RELEASE_GATE.md).
-
-**Release gates still open:** public TLS/RBAC review, DB HA/backups, fencing
-of remote *execution* after a lost lease, real multi-VM throughput, egress
-enforcement, Vultr deployment URL, live Serverless Inference receipts and
-recorded containment demonstration. A database lease does not terminate a
-potentially still-running process.
-
-The platform can federate with the canonical `ItsNotAILABS/CAPSULA` engine with
-NEXUS, Loom Cluster, POCKET Agent, NOVA Runtime, LiveVault, PARRALAX and
-Triple-MCP by explicit contracts—not by pretending all providers are online.
-
-## Real multi-VM acceptance harness
-
-Run `python scripts/benchmark_multi_vm.py` **only** with two or more actual
-independent HTTPS worker endpoints, per-host bearer credentials supplied through
-environment variables, `CAPSULA_WORKER_NODE_ID` set on each worker and explicit
-`CAPSULA_LIVE_VM_TEST_APPROVED=1`. The harness invokes disposable code
-containers, checks failed network/root writes and credential absence, and
-records latency and cgroup limits. Endpoint behavior alone does not prove
-hypervisor separation or hardware attestation. Details: [measurements](docs/MEASUREMENTS.md).
-
-## Deploy onto the existing capsula-control VM
-
-CAPSULA detected an **active `capsula-control` VM in Vultr DFW** through a
-read-only GitHub Actions preflight. This is a provider instance fact, **not** a
-verified application deployment. To install the reviewed main commit, use the
-manual [existing-VM deployment workflow](.github/workflows/vultr-existing-deploy.yml)
-with environment protection and pinned SSH host identity. Required GitHub
-secrets: `CAPSULA_DEPLOY_SSH_KEY`, `CAPSULA_SSH_KNOWN_HOSTS`, and
-`CAPSULA_ADMIN_API_KEY`. Set repository variable
-`CAPSULA_DEPLOY_SSH_USER` and optionally `CAPSULA_PUBLIC_FQDN` after DNS is
-configured. No cloud token is injected onto the VM, and Docker Compose keeps
-the controller bound to loopback unless TLS Caddy ingress is deliberately enabled.
-The workflow verifies the exact Git commit and the running CAPSULA health
-endpoint; a public URL is claimed only after HTTPS health verification.
+<sub>CAPSULA · Medina Labs · Alpha v0.8.0 · Apache-2.0 · [Changelog](docs/releases/CHANGELOG.md) · [Source layout](tools/layout.json)</sub>

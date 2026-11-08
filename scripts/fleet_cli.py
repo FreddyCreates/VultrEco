@@ -3,8 +3,8 @@ import argparse
 import json
 import sys
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from fleet_provider import VultrFleet
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
+from capsula.providers.vultr.fleet_provider import VultrFleet
 
 def main():
     p=argparse.ArgumentParser()
