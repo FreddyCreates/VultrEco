@@ -1,0 +1,57 @@
+name: CAPSULA live Vultr launch
+on:
+  push:
+    branches: [main]
+    paths:
+      - scripts/deploy_existing_vultr.py
+      - .github/workflows/capsula-live-launch.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: capsula-live-vultr-controller
+  cancel-in-progress: false
+jobs:
+  launch:
+    runs-on: ubuntu-latest
+    environment: capsula-deploy
+    timeout-minutes: 30
+    env:
+      VULTR_API_KEY: ${{ secrets.VULTR_API_KEY }}
+      VULTR_INFERENCE_API_KEY: ${{ secrets.VULTR_INFERENCE_API_KEY }}
+      CAPSULA_DEPLOY_SSH_KEY: ${{ secrets.CAPSULA_DEPLOY_SSH_KEY }}
+      CAPSULA_SSH_KNOWN_HOSTS: ${{ secrets.CAPSULA_SSH_KNOWN_HOSTS }}
+      CAPSULA_DEPLOY_SSH_USER: ${{ vars.CAPSULA_DEPLOY_SSH_USER }}
+      CAPSULA_ADMIN_API_KEY: ${{ secrets.CAPSULA_ADMIN_API_KEY }}
+      CAPSULA_PUBLIC_FQDN: ${{ vars.CAPSULA_PUBLIC_FQDN }}
+      CAPSULA_DEPLOY_APPROVED: '1'
+      CAPSULA_AUTO_PUBLIC_TLS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Identify missing installation access without revealing secrets
+        shell: bash
+        run: |
+          missing=0
+          for variable in VULTR_API_KEY CAPSULA_DEPLOY_SSH_KEY CAPSULA_SSH_KNOWN_HOSTS CAPSULA_DEPLOY_SSH_USER CAPSULA_ADMIN_API_KEY; do
+            if [ -z "${!variable}" ]; then
+              echo "::error title=Deployment credential missing::$variable is not configured in GitHub deployment secrets/variables"
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo "CAPSULA deployment blocked: configure the named SSH access and admin credentials." >> "$GITHUB_STEP_SUMMARY"
+            exit 1
+          fi
+          echo "Credential presence checks passed; launching on existing capsula-control VM." >> "$GITHUB_STEP_SUMMARY"
+      - name: Install deployment dependencies
+        run: python -m pip install httpx==0.28.1
+      - name: Deploy exact commit to existing DFW Vultr VM and verify public HTTPS
+        run: python scripts/deploy_existing_vultr.py
+      - name: Capture successful launch evidence
+        if: success()
+        run: |
+          echo "CAPSULA deployment command succeeded at this commit: $GITHUB_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "Live application and TLS verification were performed by the deployment script." >> "$GITHUB_STEP_SUMMARY"

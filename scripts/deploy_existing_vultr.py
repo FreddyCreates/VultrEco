@@ -124,6 +124,8 @@ def public_dns_matches(domain,ip):
 def deploy(conf=None):
     conf=conf or config()
     vm=instance(conf["key"])
+    if not conf["fqdn"] and os.getenv("CAPSULA_AUTO_PUBLIC_TLS")=="1":
+        conf={**conf,"fqdn":"capsula."+vm["ip"]+".sslip.io"}
     if conf["fqdn"] and not public_dns_matches(conf["fqdn"],vm["ip"]):
         raise DeploymentBlocked("Public domain does not resolve to the approved control VM")
     with tempfile.TemporaryDirectory(prefix="capsula-deploy-") as t:
@@ -140,7 +142,7 @@ def deploy(conf=None):
         def run(command,input=None):
             try:
                 response=subprocess.run(ssh+["sh -c "+shlex.quote(command)],input=input,
-                   capture_output=True,timeout=180,check=False)
+                   capture_output=True,timeout=600,check=False)
             except (subprocess.TimeoutExpired,OSError) as exc:
                 raise DeploymentBlocked("SSH command timed out or cannot start") from exc
             if response.returncode:
@@ -156,18 +158,28 @@ def deploy(conf=None):
             input=runtime_environment(conf))
         extra=" -f docker-compose.edge.yml" if conf["fqdn"] else ""
         run("cd \"$HOME/capsula/src\" && docker compose -f docker-compose.production.yml"+extra+" up -d --build")
-        raw=run("curl -fsS --connect-timeout 5 --max-time 10 http://127.0.0.1:8080/api/health")
+        raw=run("for i in $(seq 1 24); do curl -fsS --connect-timeout 2 --max-time 5 http://127.0.0.1:8080/api/health && exit 0; sleep 2; done; exit 1")
         try:status=json.loads(raw)
         except ValueError as exc:raise DeploymentBlocked("Control-plane health is not JSON") from exc
-        if status.get("service")!="capsula" or status.get("version")!="0.7.0-alpha.1":
+        if status.get("service")!="capsula" or status.get("version")!="0.8.0-alpha.1":
             raise DeploymentBlocked("CAPSULA health version mismatch")
         public=None
         if conf["fqdn"]:
             public="https://"+conf["fqdn"]
             try:
-                with httpx.Client(timeout=15,follow_redirects=False,trust_env=False) as client:
-                    answer=client.get(public+"/api/health")
-                if answer.status_code!=200 or answer.json().get("version")!="0.7.0-alpha.1":
+                import time
+                verified=False
+                with httpx.Client(timeout=12,follow_redirects=False,trust_env=False) as client:
+                    for _ in range(18):
+                        try:
+                            answer=client.get(public+"/api/health")
+                            if answer.status_code==200 and answer.json().get("version")=="0.8.0-alpha.1":
+                                verified=True
+                                break
+                        except (httpx.HTTPError,ValueError):
+                            pass
+                        time.sleep(5)
+                if not verified:
                     raise DeploymentBlocked("Public TLS endpoint health failed")
             except (httpx.HTTPError,ValueError) as exc:
                 raise DeploymentBlocked("Public HTTPS verification failed") from exc
