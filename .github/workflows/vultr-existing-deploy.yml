@@ -1,0 +1,33 @@
+name: Deploy CAPSULA to existing verified Vultr VM
+on:
+  workflow_dispatch:
+    inputs:
+      approve_deployment:
+        description: Explicitly authorize Git checkout and Docker Compose restart on the existing capsula-control VM
+        required: true
+        type: boolean
+        default: false
+permissions:
+  contents: read
+jobs:
+  install-existing:
+    if: ${{ inputs.approve_deployment == true }}
+    environment: capsula-deploy
+    runs-on: ubuntu-latest
+    env:
+      VULTR_API_KEY: ${{ secrets.VULTR_API_KEY }}
+      VULTR_INFERENCE_API_KEY: ${{ secrets.VULTR_INFERENCE_API_KEY }}
+      CAPSULA_DEPLOY_SSH_KEY: ${{ secrets.CAPSULA_DEPLOY_SSH_KEY }}
+      CAPSULA_SSH_KNOWN_HOSTS: ${{ secrets.CAPSULA_SSH_KNOWN_HOSTS }}
+      CAPSULA_DEPLOY_SSH_USER: ${{ vars.CAPSULA_DEPLOY_SSH_USER }}
+      CAPSULA_ADMIN_API_KEY: ${{ secrets.CAPSULA_ADMIN_API_KEY }}
+      CAPSULA_PUBLIC_FQDN: ${{ vars.CAPSULA_PUBLIC_FQDN }}
+      CAPSULA_DEPLOY_APPROVED: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install httpx==0.28.1
+      - name: Pin instance, SSH host identity, release commit and verify app
+        run: python scripts/deploy_existing_vultr.py

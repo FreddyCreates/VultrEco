@@ -143,3 +143,18 @@ environment variables, `CAPSULA_WORKER_NODE_ID` set on each worker and explicit
 containers, checks failed network/root writes and credential absence, and
 records latency and cgroup limits. Endpoint behavior alone does not prove
 hypervisor separation or hardware attestation. Details: [measurements](docs/MEASUREMENTS.md).
+
+## Deploy onto the existing capsula-control VM
+
+CAPSULA detected an **active `capsula-control` VM in Vultr DFW** through a
+read-only GitHub Actions preflight. This is a provider instance fact, **not** a
+verified application deployment. To install the reviewed main commit, use the
+manual [existing-VM deployment workflow](.github/workflows/vultr-existing-deploy.yml)
+with environment protection and pinned SSH host identity. Required GitHub
+secrets: `CAPSULA_DEPLOY_SSH_KEY`, `CAPSULA_SSH_KNOWN_HOSTS`, and
+`CAPSULA_ADMIN_API_KEY`. Set repository variable
+`CAPSULA_DEPLOY_SSH_USER` and optionally `CAPSULA_PUBLIC_FQDN` after DNS is
+configured. No cloud token is injected onto the VM, and Docker Compose keeps
+the controller bound to loopback unless TLS Caddy ingress is deliberately enabled.
+The workflow verifies the exact Git commit and the running CAPSULA health
+endpoint; a public URL is claimed only after HTTPS health verification.
