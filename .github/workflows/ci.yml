@@ -20,3 +20,6 @@ jobs:
       - run: python smoke_worker.py
       - run: python release_validate.py
       - run: python scripts/verify_release_manifest.py
+      - name: Dedicated VM runtime source contracts
+        run: python scripts/validate.py
+        working-directory: runtimes/dot

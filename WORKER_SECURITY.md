@@ -24,6 +24,12 @@
 Default worker execution now **fails closed** unless `CAPSULA_WORKER_HOST_RUN_PATH` and a Docker worker daemon are provisioned on a **separate dedicated worker VM**. Each code mission launches an ephemeral Docker container with no network, dropped capabilities, read-only filesystem, unprivileged UID, and bounded resources. The long-lived worker service itself can access the worker VM Docker daemon: that is host-admin authority and must be physically separated from the control plane and from all unrelated tenants. A hardened VM boundary, Docker daemon access controls, and external evidence are still required. The direct subprocess path is only accessible when the explicit `CAPSULA_WORKER_DEV_ALLOW_UNISOLATED=1` flag is set for a trusted loopback smoke test. That flag must never be used with arbitrary input or in deployment.
 
 
+## Improvement execution separation
+
+The lab never executes candidate source with Python on the controller. Candidate programs go to a leased, operator-allowlisted worker in a separate per-job container. The unsafe development subprocess flag is explicitly rejected. Fixed input cases are sent to workers; expected outputs stay in the encrypted controller record and comparison occurs outside candidate execution. Credentials for the controller, Dot host, models and wallet must not be baked into worker images or supplied as job environment variables.
+
+Docker daemon access remains worker-VM administrator authority. A signed worker report is not hardware attestation. Owner acceptance cases can be overfit and do not establish general capability gains. Personal/enterprise labels are not tenant isolation; keep this alpha private to a trusted operator. Default browser workers still require the independent VM and network-level egress boundary described above.
+
 ## Autonomous delegation and browser images (v0.5)
 
 A root autonomous mission requires operator approval. Delegated child goals inherit

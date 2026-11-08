@@ -1,4 +1,4 @@
-# CAPSULA alpha release scope: v0.5.0-alpha.1
+# CAPSULA alpha release scope: v0.6.0-alpha.1
 
 ## Product, not a single use case
 

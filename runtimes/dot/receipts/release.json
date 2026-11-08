@@ -1,0 +1,14 @@
+{
+  "product": "Dot runtime integrated with CAPSULA",
+  "version": "0.4.1",
+  "status": "PARTIAL production acceptance",
+  "source_repository_modified": true,
+  "source_tests": "see source-validation.json",
+  "historical_evidence": "historical-v0.4/; previous kernel/VM/browser tests do not cover the new bridge changes",
+  "live_capsula_dot_host_verified": false,
+  "changes": [
+    "idempotent RAH graph admission",
+    "checkpointed project import",
+    "hashed dependency artifact handoffs charged to child budgets"
+  ]
+}

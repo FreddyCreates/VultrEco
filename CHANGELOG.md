@@ -1,3 +1,15 @@
+# 0.6.0-alpha.1 — RAH and agent evolution
+
+- Reconciled the standalone Work OS source with current main and retained the distinct Vultr challenge materials.
+- Integrated dedicated Dot VM bindings, official subscription login instructions, retry-safe provisioning, project sync/checkpoints and actual VM task dispatch.
+- Added signed bounded RAH grants, idempotent graph transport, controlled recursion and explicit hash-checked dependency artifact handoffs charged to child budgets.
+- Added durable objectives, notes and outcome continuity; automatic procedure drafts; curiosity proposals; exact verified skill activation.
+- Added encrypted improvement capsules with expected answers held outside candidate execution, separate worker-only trials, negative history, attempt/deadline/change limits, atomic promotion, stale-source denial and rollback.
+- Added RAH and Agent evolution UI sections, upgraded deployment image copies and expanded source/bridge validation.
+- Fixed the custom kernel profile to include BPF syscall/cgroup device enforcement, rebuilt it and verified actual credential-free Docker jobs in a separate ext4-root Linux guest.
+- Bounded worker pipe capture during execution to prevent untrusted stdout from becoming an unbounded host buffer.
+- Fixed smoke-test reliance on ambient proxy settings and a globally named Python executable. Agent disable now blocks previously approved workflows and remaining steps.
+
 # CAPSULA Changelog
 
 ## 0.5.0-alpha.1 — 2026-11-08

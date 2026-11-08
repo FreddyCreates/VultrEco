@@ -1,12 +1,45 @@
 """Remote disposable worker. Requires separate network/VM identity; no host Docker socket."""
-import os, subprocess, tempfile, pathlib, uuid, json, hmac, hashlib, time
+import os, subprocess, tempfile, pathlib, uuid, json, hmac, hashlib, time, sys, selectors
 from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field
 from typing import Literal
 
-app=FastAPI(title='CAPSULA bounded worker',version='0.5.0-alpha.1')
+app=FastAPI(title='CAPSULA bounded worker',version='0.6.0-alpha.1')
 TOKEN=os.getenv('CAPSULA_WORKER_TOKEN','')
 MAX_BYTES=24_000
+
+
+def bounded_process(argv,timeout=18,output_limit=1024*1024):
+    """Bound pipe memory while the process is running, not after capture_output."""
+    proc=subprocess.Popen(argv,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+    output={'stdout':bytearray(),'stderr':bytearray()};total=0;reason=''
+    deadline=time.monotonic()+timeout
+    try:
+        with selectors.DefaultSelector() as selector:
+            selector.register(proc.stdout,selectors.EVENT_READ,'stdout');selector.register(proc.stderr,selectors.EVENT_READ,'stderr')
+            while selector.get_map():
+                if time.monotonic()>=deadline:reason='Execution timed out';break
+                for key,_ in selector.select(timeout=.05):
+                    data=os.read(key.fileobj.fileno(),32768)
+                    if not data:selector.unregister(key.fileobj);continue
+                    total+=len(data)
+                    remaining=max(0,MAX_BYTES-len(output[key.data]))
+                    output[key.data].extend(data[:remaining])
+                    if total>output_limit:reason='Execution output limit exceeded';break
+                if reason:break
+        if reason:
+            proc.kill();proc.wait(timeout=5)
+        else:
+            proc.wait(timeout=max(.01,deadline-time.monotonic()))
+    except BaseException:
+        if proc.poll() is None:proc.kill();proc.wait(timeout=5)
+        raise
+    finally:
+        proc.stdout.close();proc.stderr.close()
+    return {'status':'failed' if reason or proc.returncode else 'completed',
+        'exit_code':124 if reason=='Execution timed out' else 125 if reason else proc.returncode,
+        'stdout':output['stdout'].decode(errors='replace'),'stderr':output['stderr'].decode(errors='replace'),
+        **({'reason':reason} if reason else {})}
 class Job(BaseModel):
     kind:Literal['python','browser']
     code:str=Field(default='',max_length=16_000)
@@ -32,7 +65,7 @@ def run_python_dev(code):
                 resource.setrlimit(resource.RLIMIT_NOFILE,(32,32))
             preexec=limits
         try:
-            result=subprocess.run(['python','-I','-B',str(p)],cwd=tmp,env={'PATH':'/usr/local/bin:/usr/bin:/bin','HOME':tmp,'PYTHONNOUSERSITE':'1'},capture_output=True,text=True,timeout=9,preexec_fn=preexec)
+            result=subprocess.run([sys.executable,'-I','-B',str(p)],cwd=tmp,env={'PATH':'/usr/local/bin:/usr/bin:/bin','HOME':tmp,'PYTHONNOUSERSITE':'1'},capture_output=True,text=True,timeout=9,preexec_fn=preexec)
             return {'status':'completed' if result.returncode==0 else 'failed','exit_code':result.returncode,'stdout':result.stdout[:MAX_BYTES],'stderr':result.stderr[:MAX_BYTES]}
         except subprocess.TimeoutExpired:
             return {'status':'failed','exit_code':124,'stdout':'','stderr':'Execution timed out'}
@@ -61,8 +94,10 @@ def run_python(code):
              '--tmpfs','/tmp:rw,noexec,nosuid,size=16m','--mount',f'type=bind,src={host_file},dst=/work/task.py,readonly',
              '--workdir','/work',image,'python','-B','/work/task.py']
         try:
-            run=subprocess.run(cmd,capture_output=True,text=True,timeout=18)
-            return {'status':'completed' if run.returncode==0 else 'failed','stdout':run.stdout[:MAX_BYTES],'stderr':run.stderr[:MAX_BYTES],'exit_code':run.returncode}
+            result=bounded_process(cmd)
+            if result.get('reason'):
+                subprocess.run(['docker','rm','-f',name],capture_output=True,timeout=5,check=False)
+            return result
         except subprocess.TimeoutExpired:
             subprocess.run(['docker','rm','-f',name],capture_output=True,timeout=5,check=False)
             return {'status':'failed','reason':'Sandbox timeout; terminated','stdout':'','stderr':'','exit_code':124}
@@ -118,7 +153,7 @@ def run_browser(url,selector):
                     'stdout':'','stderr':'','exit_code':None}
 
 @app.get('/health')
-def health():return {'role':'isolated-worker','version':'0.5.0-alpha.1','configured':bool(TOKEN),'browser_egress_policy':'allowlist-and-network-firewall-required','python_mode':'unsafe-loopback-smoke' if os.getenv('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED')=='1' else 'per-job-docker-or-deny'}
+def health():return {'role':'isolated-worker','version':'0.6.0-alpha.1','configured':bool(TOKEN),'browser_egress_policy':'allowlist-and-network-firewall-required','python_mode':'unsafe-loopback-smoke' if os.getenv('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED')=='1' else 'per-job-docker-or-deny'}
 
 @app.post('/execute')
 def execute(job:Job,authorization:str|None=Header(None)):

@@ -8,3 +8,21 @@ node_modules/
 dist/
 *.pem
 *.key
+
+# Local credentials, environments and runtime state
+.env
+.env.*.local
+.venv/
+**/__pycache__/
+**/.pytest_cache/
+data/
+*.pem
+*.raw
+*.qcow2
+*.cpio.gz
+**/bzImage
+*.key
+**/controller-data/
+*.cpio
+*.tar.xz
+*.tgz

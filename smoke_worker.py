@@ -14,7 +14,7 @@ try:
     import httpx
     for _ in range(40):
         try:
-            if httpx.get(url+'/health',timeout=.2).status_code==200:break
+            if httpx.get(url+'/health',timeout=.2,trust_env=False).status_code==200:break
         except httpx.HTTPError:pass
         time.sleep(.1)
     else:raise RuntimeError('Worker failed to boot')

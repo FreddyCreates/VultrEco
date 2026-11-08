@@ -1,0 +1,8 @@
+{
+  "url": "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.162.tar.xz",
+  "checksum_source": "https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc",
+  "sha256": "4aa89f3652fc131e5d39990f3bcd4b9e131028af3f315dbe83f3a8557dc06f06",
+  "archive": "/workspace/scratch/52509b03104d/kernel-work/downloads/linux-6.6.162.tar.xz",
+  "release": "6.6.162",
+  "verification": "TLS download and publisher SHA-256 match; PGP signature not verified"
+}

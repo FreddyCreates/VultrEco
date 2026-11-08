@@ -1,0 +1,21 @@
+{
+  "schema": "dot.real-qemu-acceptance.v1",
+  "acceleration": "TCG (CPU emulation)",
+  "hardware_kvm_verified": false,
+  "libvirt_provisioning_verified": false,
+  "provider_inference_verified": false,
+  "browser_render_verified": false,
+  "kernel_sha256": "86f82e44cab3c4902f6d7704357e979f375371f764ec58349d51590244a6ec07",
+  "initramfs_sha256": "7a2896065ee78f4d6189d7ed8e87e3c885d52bdfa505a0ed1e52c166f42a04fe",
+  "boots": [
+    {
+      "vm": "agent-a",
+      "uuid": "7c6d74ba-3b31-40f9-87a6-7552d61c34ab",
+      "boot": 1,
+      "exit_code": 0,
+      "proof": null,
+      "serial_log_sha256": "6ffc7f35512f72551a534f9ca786cb4b11eba2fd5f847412be88d589f21d9550"
+    }
+  ],
+  "status": "in_progress"
+}

@@ -1,15 +1,31 @@
 {
-  "protocol": "capsula.local-test-receipt.v1",
-  "version": "0.5.0-alpha.1",
-  "timestamp_utc": "2026-11-08T18:54:16.380686+00:00",
-  "tests": 279,
-  "tests_status": "PASS",
-  "syntax": "PASS",
-  "release_validate": "PASS",
-  "loopback_worker": "PASS",
-  "external_vm_containment": "NOT VERIFIED",
-  "browser_firewall": "NOT VERIFIED",
-  "vultr_inference": "NOT VERIFIED",
-  "demo": "NOT VERIFIED",
-  "attestation": "NO hardware or external attestation"
+  "protocol": "capsula.test-receipt.v3",
+  "version": "0.6.0-alpha.1",
+  "recorded_at": "2026-11-08T19:13:49.160150+00:00",
+  "pytest": {
+    "passed": 317,
+    "failed": 0
+  },
+  "dot_runtime": {
+    "tests": 106,
+    "status": "source_tests_passed",
+    "assertion_calls": 918
+  },
+  "python_compile": "PASS",
+  "js_syntax": "PASS",
+  "worker_loopback": {
+    "smoke": "PASS",
+    "mission_id": "2f296bef80d946c4",
+    "worker_execution": "loopback-real-process",
+    "result": "42",
+    "signed_receipt_valid": true,
+    "sandbox_attested": false,
+    "production_isolation_verified": false
+  },
+  "clean_worker": "PASS: actual Docker containers inside a separate ext4-root Linux QEMU guest",
+  "provider_inference_verified": false,
+  "live_vultr_deployment_verified": false,
+  "hardware_attestation": false,
+  "clean_worker_receipt": "receipts/clean-worker.json",
+  "integrated_from_main": "5ffe42b598a101d982cd8b331f5419a0f247d30b"
 }

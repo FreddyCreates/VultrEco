@@ -45,6 +45,31 @@ The smoke is **not** an isolation proof: it explicitly uses a development-only, 
 
 Back up `/app/data/capsula.sqlite3` and `/app/data/keys` together, with encrypted offline backups and restrictive file permissions. Encryption keys are local and currently lack automated rotation/recovery. Losing the AES-GCM key makes encrypted records unrecoverable. Keep `CAPSULA_API_KEY` and worker tokens out of the repository.
 
+
+## Dedicated agent computers and RAH
+
+Host `runtimes/dot` on a separate Linux KVM/libvirt machine following its deployment instructions. Create its owner token and configuration on that host. Point `CAPSULA_DOT_URL` and `CAPSULA_DOT_TOKEN` at its private management transport. The Dot service is loopback-bound; use a same-port SSH tunnel (`8787` to `8787`) or an operator-controlled HTTPS proxy that forwards the expected loopback Host header. Never put this token into JavaScript, a worker, or a provider prompt.
+
+In Agent evolution, choose an agent, create or inspect its dedicated computer, sign in using the official CLI inside that VM, save its objective and sync project files. ChatGPT/Gemini authentication is interactive in the VM; no API-key substitution is performed. In RAH missions, select distinct provisioned computers, define the objective/dependencies, optional file handoffs, child pool and limits, then grant the mission once.
+
+API sync is limited to visible, noncredential text files totaling 96 KiB; use SCP for larger projects. Import creates an undo checkpoint and refuses active work. Handoffs have the same size boundary and additionally reserve from the target branch's change budget.
+
+## Clean improvement workers
+
+Deploy the Python worker on a dedicated worker VM with per-job Docker configured. Register and heartbeat its allowlisted endpoint as documented above. Agent evolution can freeze a small text project (10 KB baseline / 12 KB candidate), entrypoint, exact writable paths, regression cases and distinguishing new cases. Every case runs in a new network-none, read-only, unprivileged container; expected outputs remain on the controller. The lab rejects direct controller execution and the unsafe loopback smoke mode. Owner-authored acceptance cases measure those cases, not a general intelligence benchmark.
+
+Use `scripts/verify_clean_worker.py --endpoint YOUR_PRIVATE_WORKER --token-file /secure/worker-token --out /private/new-acceptance` for actual worker acceptance. `scripts/build_worker_probe.py` can prepare a disposable local Linux test VM with operator-supplied static Docker binaries and QEMU/BusyBox. This is a test recipe, not automatic paid cloud provisioning or a production Docker distribution. Keep its generated image/token outside Git.
+
+New controller images copy the continuity, RAH and improvement modules plus the pure Dot contract validators. They do not gain the Dot host's privileges or a Docker socket. The Vultr profile still requires actual Vultr hosting, network containment and Serverless Inference evidence before submission.
+
+For an independently running local VM acceptance probe, after building the private worker initramfs, run:
+
+```bash
+python3 scripts/verify_vm_worker.py --kernel /path/bzImage --initrd /private/worker.cpio.gz --toolchain /path/extracted-tools --token-file /private/disposable-worker-token --out /private/new-vm-proof
+```
+
+The command creates a new disk, binds the worker port to host loopback, uses actual QEMU/Docker and shuts the guest down after acceptance. Only its sanitized receipt is suitable for publication; its controller data, raw disk, generated initramfs and disposable token stay private.
+
 ## 6. Autonomous scheduler, providers and browser workers
 
 Operator authorizes mission contracts in the web UI. The scheduler is a separate

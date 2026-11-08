@@ -1,0 +1,28 @@
+{
+  "schema": "dot.kernel-build.v1",
+  "status": "built",
+  "source": {
+    "url": "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.162.tar.xz",
+    "checksum_source": "https://cdn.kernel.org/pub/linux/kernel/v6.x/sha256sums.asc",
+    "sha256": "4aa89f3652fc131e5d39990f3bcd4b9e131028af3f315dbe83f3a8557dc06f06",
+    "archive": "/workspace/scratch/52509b03104d/kernel-work/downloads/linux-6.6.162.tar.xz",
+    "release": "6.6.162",
+    "verification": "TLS download and publisher SHA-256 match; PGP signature not verified"
+  },
+  "kernel_release": "6.6.162-itsnotai-dot",
+  "duration_seconds": 222.97659945487976,
+  "target": "bzImage",
+  "debian_package_build_verified": false,
+  "boot_verified": true,
+  "image": "/workspace/scratch/52509b03104d/kernel-work/source/linux-6.6.162/arch/x86/boot/bzImage",
+  "image_sha256": "86f82e44cab3c4902f6d7704357e979f375371f764ec58349d51590244a6ec07",
+  "config_sha256": "d83641d89579aa367c8f8b00afed06b80875d27f2cda7101434f2182b61d4b54",
+  "commands": [
+    "make x86_64_defconfig",
+    "merge kernel/dot.config",
+    "disable DRM SOUND WIRELESS WLAN MEDIA_SUPPORT USB_SUPPORT",
+    "make olddefconfig",
+    "make -j6 bzImage"
+  ],
+  "boot_receipt": "receipts/qemu-acceptance.json"
+}

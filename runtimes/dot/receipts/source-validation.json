@@ -1,0 +1,53 @@
+{
+  "status": "source_tests_passed",
+  "tests": 106,
+  "assertion_calls": 918,
+  "failures": 0,
+  "errors": 0,
+  "duration_seconds": 7.345244646072388,
+  "checks": [
+    {
+      "command": [
+        "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/bin/python3",
+        "-m",
+        "compileall",
+        "-q",
+        "dot",
+        "scripts"
+      ],
+      "passed": true,
+      "error": ""
+    },
+    {
+      "command": [
+        "node",
+        "--check",
+        "dot/static/app.js"
+      ],
+      "passed": true,
+      "error": ""
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/install_host.sh"
+      ],
+      "passed": true,
+      "error": ""
+    },
+    {
+      "command": [
+        "bash",
+        "-n",
+        "scripts/install_guest_browser.sh"
+      ],
+      "passed": true,
+      "error": ""
+    }
+  ],
+  "vm_boot": "not_verified",
+  "custom_linux_kernel_build": "not_executed",
+  "subscription_inference": "not_verified",
+  "hypervisor_in_tests": "test fixtures only; production has no fixture backend"
+}

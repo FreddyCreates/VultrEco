@@ -1,0 +1,18 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "itsnotai-dot"
+version = "0.4.1"
+description = "Medina Capability Kernel and persistent Linux VM agents"
+requires-python = ">=3.12"
+
+[project.scripts]
+itsnotai-dot = "dot.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["dot*"]
+
+[tool.setuptools.package-data]
+dot = ["static/*", "vendor/*.json", "vendor/*.txt"]

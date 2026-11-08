@@ -1,0 +1,17 @@
+{
+  "schema": "capsula.kernel-build.v1",
+  "status": "built",
+  "kernel_release": "6.6.162-itsnotai-dot",
+  "source_url": "https://cdn.kernel.org/pub/linux/kernel/v6.x/linux-6.6.162.tar.xz",
+  "source_sha256": "4aa89f3652fc131e5d39990f3bcd4b9e131028af3f315dbe83f3a8557dc06f06",
+  "image_sha256": "a9d5e22ed4a43200fc4f0c81bc54e0bf01890b9d1a2c8c5f7fb13b8205e75652",
+  "config_sha256": "9a632f5f653eebcd63005986f0a935569d07d9cc0d60763ec7504c8402c99b63",
+  "duration_seconds": 213.77041697502136,
+  "target": "bzImage",
+  "debian_package_verified": false,
+  "required_device_controls": [
+    "CONFIG_BPF_SYSCALL=y",
+    "CONFIG_CGROUP_BPF=y",
+    "CONFIG_BPF_JIT=y"
+  ]
+}

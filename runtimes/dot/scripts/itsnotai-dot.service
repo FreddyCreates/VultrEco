@@ -1,0 +1,19 @@
+[Unit]
+Description=ITSNotAI Dot Linux VM agent control plane
+After=network-online.target libvirtd.service
+Wants=network-online.target
+Requires=libvirtd.service
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/opt/itsnotai-dot
+ExecStart=/usr/bin/python3 -m dot serve --config /etc/itsnotai-dot/config.json
+Restart=on-failure
+RestartSec=5
+UMask=0077
+# This is a privileged single-owner host orchestrator. VM agents run as non-root.
+# Isolate the entire host for this workload; do not publish this service publicly.
+
+[Install]
+WantedBy=multi-user.target

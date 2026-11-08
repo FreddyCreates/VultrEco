@@ -1,0 +1,199 @@
+{
+  "schema": "dot.real-qemu-acceptance.v1",
+  "acceleration": "TCG (CPU emulation)",
+  "hardware_kvm_verified": false,
+  "libvirt_provisioning_verified": false,
+  "provider_inference_verified": false,
+  "browser_render_verified": false,
+  "kernel_sha256": "86f82e44cab3c4902f6d7704357e979f375371f764ec58349d51590244a6ec07",
+  "initramfs_sha256": "fc4bd8ebffffa8315b5d5aef99936fe598cfdaffcf09a94611af6f9132a4caaa",
+  "boots": [
+    {
+      "vm": "agent-a",
+      "uuid": "a7b9af12-a17b-491f-9fdc-952002dcb954",
+      "boot": 1,
+      "exit_code": 0,
+      "proof": {
+        "schema": "dot.guest-improvement-proof.v1",
+        "vm_id": "agent-a",
+        "boot_id": "e732a97c-3674-40f7-b15c-6a61d8413650",
+        "kernel_release": "6.6.162-itsnotai-dot",
+        "uid": 1000,
+        "unix_socket_verified": true,
+        "provider_inference_verified": false,
+        "browser_render_verified": false,
+        "execution": "actual QEMU Linux guest; CPU emulation, not hardware KVM",
+        "guest_tests": 26,
+        "phase": "promoted_before_reboot",
+        "capsule_id": "ebcd5c7c5bc44544a7e65d3114f1e91d",
+        "trials": [
+          {
+            "at": 1794156468.1783972,
+            "candidate_hash": "75cee8e525d5cce478e97c53aecc44ee55536841b7998d61dcec3f1c7cf0fa96",
+            "checks": {
+              "baseline_regression": {
+                "passed": true,
+                "exit_code": 0,
+                "budget_exhausted": false,
+                "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "duration_seconds": 2.0728095999999994
+              },
+              "baseline_holdout": {
+                "passed": false,
+                "exit_code": 1,
+                "budget_exhausted": false,
+                "output_sha256": "606c03d157eeff70e16177f10a5f969965335cd517b6afcd4444445772242695",
+                "duration_seconds": 1.8717805200000015
+              },
+              "candidate_regression": {
+                "passed": true,
+                "exit_code": 0,
+                "budget_exhausted": false,
+                "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "duration_seconds": 2.0945516700000013
+              },
+              "candidate_holdout": {
+                "passed": true,
+                "exit_code": 0,
+                "budget_exhausted": false,
+                "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "duration_seconds": 1.9800121000000104
+              }
+            },
+            "status": "verified"
+          }
+        ],
+        "candidate_hash": "75cee8e525d5cce478e97c53aecc44ee55536841b7998d61dcec3f1c7cf0fa96"
+      },
+      "serial_log_sha256": "c27910f054f4a312d386e349bdf6dbd3eb57c9731ff3ad875fd0fd079dac2f09"
+    },
+    {
+      "vm": "agent-a",
+      "uuid": "a7b9af12-a17b-491f-9fdc-952002dcb954",
+      "boot": 2,
+      "exit_code": 0,
+      "proof": {
+        "schema": "dot.guest-improvement-proof.v1",
+        "vm_id": "agent-a",
+        "boot_id": "ef9dd64e-6a40-4576-bcbb-e2b8c95e96c9",
+        "kernel_release": "6.6.162-itsnotai-dot",
+        "uid": 1000,
+        "unix_socket_verified": true,
+        "provider_inference_verified": false,
+        "browser_render_verified": false,
+        "execution": "actual QEMU Linux guest; CPU emulation, not hardware KVM",
+        "phase": "reboot_persistence_and_rollback_verified",
+        "capsule_id": "ebcd5c7c5bc44544a7e65d3114f1e91d",
+        "rollback_status": "rolled_back",
+        "previous_boot_id": "e732a97c-3674-40f7-b15c-6a61d8413650"
+      },
+      "serial_log_sha256": "1242c0b7b9c77a2859739014d9d7553b0b67c830bc8e9acc77beda95c560a37c"
+    },
+    {
+      "vm": "agent-b",
+      "uuid": "c8b29e6c-bbc9-44a8-8788-943be1fe48a2",
+      "boot": 1,
+      "exit_code": 0,
+      "proof": {
+        "schema": "dot.guest-improvement-proof.v1",
+        "vm_id": "agent-b",
+        "boot_id": "f40db964-73df-40a4-9c6c-8eecf2f54d56",
+        "kernel_release": "6.6.162-itsnotai-dot",
+        "uid": 1000,
+        "unix_socket_verified": true,
+        "provider_inference_verified": false,
+        "browser_render_verified": false,
+        "execution": "actual QEMU Linux guest; CPU emulation, not hardware KVM",
+        "guest_tests": 26,
+        "phase": "promoted_before_reboot",
+        "capsule_id": "28338527c029413c8e360dd01d1a2637",
+        "trials": [
+          {
+            "at": 1794156609.2490666,
+            "candidate_hash": "75cee8e525d5cce478e97c53aecc44ee55536841b7998d61dcec3f1c7cf0fa96",
+            "checks": {
+              "baseline_regression": {
+                "passed": true,
+                "exit_code": 0,
+                "budget_exhausted": false,
+                "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "duration_seconds": 2.0564157900000026
+              },
+              "baseline_holdout": {
+                "passed": false,
+                "exit_code": 1,
+                "budget_exhausted": false,
+                "output_sha256": "c4cb0eada54236fc891343ad5efd22479fd9fc060228aec7b342d02dcbf2e1b3",
+                "duration_seconds": 2.2700547099999966
+              },
+              "candidate_regression": {
+                "passed": true,
+                "exit_code": 0,
+                "budget_exhausted": false,
+                "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "duration_seconds": 2.124955540000016
+              },
+              "candidate_holdout": {
+                "passed": true,
+                "exit_code": 0,
+                "budget_exhausted": false,
+                "output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+                "duration_seconds": 2.1530672299999765
+              }
+            },
+            "status": "verified"
+          }
+        ],
+        "candidate_hash": "75cee8e525d5cce478e97c53aecc44ee55536841b7998d61dcec3f1c7cf0fa96"
+      },
+      "serial_log_sha256": "49c7fff17d80a3458e082307475a553f61ddfe0e1c92c7e0035ec9ca0637f561"
+    },
+    {
+      "vm": "agent-b",
+      "uuid": "c8b29e6c-bbc9-44a8-8788-943be1fe48a2",
+      "boot": 2,
+      "exit_code": 0,
+      "proof": {
+        "schema": "dot.guest-improvement-proof.v1",
+        "vm_id": "agent-b",
+        "boot_id": "23d7b6de-11f7-4ad7-9d19-fd710d352fbc",
+        "kernel_release": "6.6.162-itsnotai-dot",
+        "uid": 1000,
+        "unix_socket_verified": true,
+        "provider_inference_verified": false,
+        "browser_render_verified": false,
+        "execution": "actual QEMU Linux guest; CPU emulation, not hardware KVM",
+        "phase": "reboot_persistence_and_rollback_verified",
+        "capsule_id": "28338527c029413c8e360dd01d1a2637",
+        "rollback_status": "rolled_back",
+        "previous_boot_id": "f40db964-73df-40a4-9c6c-8eecf2f54d56"
+      },
+      "serial_log_sha256": "4a8f1fb903054f5ab24364a4de7069ec03862801af4d3852dc8128e2a919c07c"
+    }
+  ],
+  "status": "two_vms_reboot_and_improvement_verified",
+  "guest_runtime_source_sha256": {
+    "dot/__init__.py": "46ee06042c524b8493ce09bd92d98ca0aa725c184cf0574074611b36aa2905be",
+    "dot/__main__.py": "47aedc4110e61e124cb9870d068f3666aa86a4dab0c4849f676030c10e04aca3",
+    "dot/checkpoint.py": "5ea7c3bdb96b08735006fd886af594ccdeab03c8a08684dfd00dd1070dfa65c2",
+    "dot/computer.py": "97db1c1e46e4cb9f703d410164263fb95d0b754ce64656b8ff2747783a580545",
+    "dot/core.py": "ec8e75484d240dbb9ba0556dbb4d8741b0128a2a0681bfc534a410947ded1e64",
+    "dot/delegation.py": "96b130e39879251feb1300571035752498fd9737d584331599815b83012344fb",
+    "dot/guest.py": "1a63c1d6633d26136a323749c9a9832f1b0fba26ed85988b63549947923a23c3",
+    "dot/improvement.py": "ddf05f9bf37f55d27d36112afe7b5f9c6a6af8121c8c48a08cc51e699598cf51",
+    "dot/kernel.py": "8c326d9de336371ec85aa7d9fd643293b9280c6e2b4ada52b45696798ac9b14b",
+    "dot/missions.py": "1c3ed7d9273c93346ff1e17daaff7c461101c04481d1ab1dce685f5aa9a35a58",
+    "dot/outcomes.py": "f5c73f6044d8f9e05de0bf3e124a279b5c30a054acbc7ddb8406dedf949cc663",
+    "dot/server.py": "f0be686467f0f6b5338db10aeb36858ec7a858021521bebca74a6540e8f7cd13",
+    "dot/static/app.js": "4df41ae95985e98412e56da4eacfe134a5b48d8347e9609130d0780128762fd7",
+    "dot/static/index.html": "a8b16625da4ecd5446d47efa565db1fd76be634683b06c052e156969a104a8d1",
+    "dot/static/style.css": "c6e6b213bbc50c6d9d65d2dd9dd144fe56b31e24763171d33cb5c99dcfd55f3c",
+    "dot/vendor/CAPSULA-LICENSE.txt": "7095d6d605ee5e6f4e35013b3c1abec5a1edee7406f01f622d7e49fa5c28fa98",
+    "dot/vendor/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "dot/vendor/capsula_ecosystem.py": "e8e6c32fd414808fc1269c1ff7bcfdda524498690e8a5340637cf22fb6bbf76d",
+    "dot/vendor/capsula_portable.py": "6ac134b782ea60c4642cd5ac06197e813252a439ea11911347ef2f9cc8edd302",
+    "dot/vendor/capsule-contract.v1.json": "20a0c838d60ad93ab3eb852b8d82d5ee17b4e90c7789a8e66f721d9dc86692a8",
+    "dot/verification.py": "4f0f9060ff75f6e27b12ad4585b283ac14c4c02e13e0e1807199aa931c9e5bc4",
+    "dot/vm.py": "da9e3be7ca0d0d9d0f5ef18eb1ae55dab90cee6027609637c5eec1c36dce81ba"
+  }
+}
