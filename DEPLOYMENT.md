@@ -1,4 +1,40 @@
-# CAPSULA self-hosted deployment (no required cloud)
+# CAPSULA deployment — Vultr Agent Rush infrastructure
+
+**Primary challenge topology:** Vultr Cloud Compute controller in DFW,
+separate Vultr worker and dedicated-agent VMs, PostgreSQL queue, approved
+Vultr Serverless Inference, signed receipts and optional public HTTPS edge.
+The repository's existing `capsula-control` VM was detected as active via
+the Vultr API, **not yet validated as an installed CAPSULA application**.
+
+**Step 1 — Use existing control VM:** Configure GitHub environment
+`capsula-deploy`, SSH private-key secret `CAPSULA_DEPLOY_SSH_KEY`,
+verified `CAPSULA_SSH_KNOWN_HOSTS`, `CAPSULA_ADMIN_API_KEY`, and variable
+`CAPSULA_DEPLOY_SSH_USER`. Optionally point `CAPSULA_PUBLIC_FQDN` to the VM
+before enabling Caddy. Run the manual workflow
+`vultr-existing-deploy.yml`. It pins the specific Vultr VM and exact git commit
+before verifying CAPSULA's health. It does not provision additional paid VMs.
+
+**Step 2 — Capacity:** Use the separate `vultr-fleet-deploy.yml` workflow,
+with monthly budget cap, existing SSH key and explicit paid approval, to
+provision dedicated worker/agent hosts. Deploy the worker runtime and
+`cluster_runner.py` there with scoped tokens and secure private PostgreSQL
+connectivity. Never send cloud, model or vault keys to job containers.
+
+**Step 3 — Inference:** Add `VULTR_INFERENCE_API_KEY` to GitHub deployment
+secrets, then verify an actual authorized Serverless Inference request from
+the deployed controller. Do not claim it connected solely from an env setting.
+
+**Step 4 — Certification:** Run
+`scripts/benchmark_multi_vm.py` against at least two independent HTTPS
+worker hosts, with direct identity and containment checks; verify public
+HTTPS, login, model response and record a real demo.
+
+See [the full release gate](hackathon/RELEASE_GATE.md) and
+[cluster operations](docs/CLUSTER_OPERATIONS.md).
+
+---
+
+# Alternative self-hosted deployment
 
 ## 1. Create a controller
 

@@ -40,8 +40,8 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 2095,
-      "sha256": "e3f328d3200e9f6563c706ce92ffa5765dfd18db6c3083d0399683d0919873ed"
+      "bytes": 3125,
+      "sha256": "e799d22898298648701bef55476e44df3b36a494802ab93ffa18358eabda7995"
     },
     {
       "path": "app.py",
@@ -90,8 +90,8 @@
     },
     {
       "path": "CHANGELOG.md",
-      "bytes": 4613,
-      "sha256": "f0f7490a102a485142d17a664fb1142023a10ec20a9f4b8ab2197fc66bfce1ec"
+      "bytes": 5314,
+      "sha256": "81f470066182e81f4e677d183f2f7914ba05b845b4a340286dbf06f72264860f"
     },
     {
       "path": "cluster_api.py",
@@ -125,8 +125,8 @@
     },
     {
       "path": "DEPLOYMENT.md",
-      "bytes": 7394,
-      "sha256": "379c56917767e13f7193658d63e85e050e99e8f596bd60e2bf581555c200291d"
+      "bytes": 9245,
+      "sha256": "8785f66742e5f32db0d251c88b94bc26b6c0b4d3caf4c2f7766887eb4ad05b39"
     },
     {
       "path": "docker-compose.autonomy.yml",
@@ -285,13 +285,13 @@
     },
     {
       "path": "hackathon/RELEASE_GATE.md",
-      "bytes": 2359,
-      "sha256": "1cb9b8f34d355a77dd9cf8eda88db4ccd33cd3192167e1ab42a4c137b1aba451"
+      "bytes": 2092,
+      "sha256": "6a25f9eef3eeb6100d2450e80778e41c8c881d4e293576c58a7f9948bd944a0f"
     },
     {
       "path": "hackathon/SUBMISSION.md",
-      "bytes": 4363,
-      "sha256": "f3bb70910d86d776fbf6e301eab89eb62f721f1617309e66c51d6ab1f89b2302"
+      "bytes": 4288,
+      "sha256": "533fc55087b53139116ea1144862e7a816edcdfd0ecbf6a44e512ccbf598d8c6"
     },
     {
       "path": "hackathon/validation.json",
@@ -360,8 +360,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 9214,
-      "sha256": "c180fb479ffdaef0258c6ac8980b02b4c61acb59e43153d8002caca8baeb588f"
+      "bytes": 13010,
+      "sha256": "f579742db36f0afdd59a7f1595cac2ea2b212e5a5876a8a56fecfb23de653330"
     },
     {
       "path": "receipts/clean-worker.json",
@@ -800,8 +800,8 @@
     },
     {
       "path": "scripts/deploy_existing_vultr.py",
-      "bytes": 8318,
-      "sha256": "e8dc970ea2dbf5e10cf9af749216c23b48b36f0ccd90bdf33cb653d81f3f90e6"
+      "bytes": 9476,
+      "sha256": "5874ed8d1899e48837665292202d81c3485256bf0e4765cadcb09a1f8a3fd376"
     },
     {
       "path": "scripts/fleet_cli.py",
@@ -940,8 +940,8 @@
     },
     {
       "path": "test_vultr_deploy_v07.py",
-      "bytes": 1579,
-      "sha256": "1d2595fec50f877bbf8f9f20929a6c295d9f65b319ac79d9d4ab3cdf603fd98e"
+      "bytes": 2181,
+      "sha256": "b7ce891303631c9f367b5da52bcc01b3a1701acd740492f20e940772ed8cb7d4"
     },
     {
       "path": "test_worker_limits.py",

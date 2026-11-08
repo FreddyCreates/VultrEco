@@ -1,46 +1,85 @@
-# CAPSULA — Vultr Agent Rush 2026
+# CAPSULA — Vultr Agent Rush 2026 | Alpha submission
 
-Challenge: **Blast Radius Zero** (Challenge 1)
-Product: **CAPSULA by Medina Labs**
-Tagline: **Intelligence has a place to work.**
-Repository: https://github.com/FreddyCreates/VultrEco (public repository; v0.5 release in progress)
+**CAPSULA · Autonomous Agent Computer Cloud**  
+**By Medina Labs**  
+**Tagline:** Intelligence has a place to work.  
+**Repository:** https://github.com/FreddyCreates/VultrEco  
+**Release:** v0.7.0-alpha.1
 
-## Short description
+## The product
 
-CAPSULA gives autonomous AI agents governed places to work: isolated execution environments, durable missions, encrypted workspace memory, verifiable signed receipts, policy approvals, and inspectable artifacts. Its control plane dispatches bounded work to isolated workers and refuses unsupported capabilities. Built to run on Vultr Cloud Compute with Vultr Serverless Inference, CAPSULA is designed to make agent execution useful, auditable, and contained.
+CAPSULA is a scalable autonomous-computing platform on Vultr. Each agent gets
+a durable identity, persistent workspace, bounded mission and access to
+controlled computers. Agents write and execute code, operate isolated browsers,
+coordinate subagents, work with files and data, and produce verifiable
+cryptographic execution evidence. Project teams can create workflows spanning
+engineering, sales, support, recruitment, research, procurement, operations,
+finance and other industries—not a single-purpose demo.
 
-## Long description
+Vultr Cloud Compute is the central compute layer for the controller and
+separately isolated worker/agent VMs. The Vultr API exposes live instance
+inventory and budget-capped fleet creation, and Vultr Serverless Inference is
+the designated model lane for challenge execution. CAPSULA's PostgreSQL
+control plane coordinates concurrent jobs with SKIP LOCKED, durable leases,
+idempotency, retries, dead letters, and fencing epochs.
 
-CAPSULA is a governed agent-computing platform from Medina Labs. Instead of pretending to execute tasks inside a chat, CAPSULA treats each mission as an authorized computing job. The control plane records the scope, budget, policy decision, worker assignment, execution state, results, and evidence. A worker performs the task in a disposable sandbox with CPU, memory, time and network restrictions, and an auditable result is returned to the user.
+## Challenge 1 — Blast Radius Zero
 
-The product combines authenticated mission dispatch, worker leases, encrypted persistence, Ed25519-signed execution and governance records, Merkle inclusion proofs, and artifact provenance. Its broader architecture includes persistent model-planned goals, operator-authorized recursive capsule missions, pause/cancel and deadlines, NEXUS federation contracts, Loom Cluster integration surfaces, POCKET Agent contracts, memory and vault lanes, and unsigned wallet-native financial proposals. These are distinct from completed integrations: local NEXUS-compatible protocol adapters exist, but full external Loom, Pocket Agent, LiveVault, and finance integrations are not yet activated. Wallet proposals cannot spend or broadcast funds.
+**Pattern A:** User goal → model-generated Python → approval/policy →
+job-specific disposable container on worker VM → constrained CPU/memory,
+network denied, no task credentials → real stdout/stderr → signed result →
+model explanation/retry where authorized.
 
-The present v0.5 alpha has passed 279 local tests across API, governance, bounded autonomous delegation and browser/vision contract checks, plus a loopback worker smoke test. Running on a real Vultr VM, enforcing sandbox isolation, and demonstrating Vultr inference are mandatory live proof gates, not accomplishments claimed by the package alone.
+**Pattern B:** User goal → model plan → isolated Playwright container →
+screenshots and bounded browser evidence → authorized vision review →
+human approval for sensitive final actions.
 
-## Technology tags
+To prove containment on Vultr, demonstrate a task trying to write outside its
+workspace, access network, read forbidden secrets, or exceed resource bounds;
+record the actual VM/container denial and cleanup. Existing CI results do not
+replace that live demonstration.
 
-Vultr Cloud Compute (deployment pending), Vultr Serverless Inference (connection pending), Python, FastAPI, Docker, SQLite, Playwright (experimental), Ed25519, AES-256-GCM, Merkle proofs, autonomous agents, secure sandboxing, workflow orchestration, agent governance.
+## Challenge 2 — Future of Work
 
-## Why this is different
+CAPSULA's governed workflows combine code, browsers, documents, search, data,
+persistent memory, artifacts, independently delegated agents and approvals.
+Example end-to-end trajectories: engineer fixes repo and opens a reviewed PR;
+analyst turns raw CSV into checks and charts; support agent researches a ticket
+and drafts resolution; recruiter coordinates screening and scheduling;
+operations agent checks vendor options and follows up. Real external service
+connections must be configured before describing these as completed actions.
 
-- Mission-level authorization and bounded execution, not merely conversational tool use.
-- Separate control and worker trust boundaries; fail-closed when isolation is unavailable.
-- Encrypted memory, signed receipts, verifiable event lineage and artifact custody.
-- A generalized computing product with independently represented integration maturity.
-- Noncustodial wallet authorization and invoice proposals, without giving sandboxes private keys.
+## Live integration evidence
 
-## Required links and assets
+- **Vultr Cloud API:** HTTP 200 account and instance inventory, verified through
+  GitHub Actions using the repository secret.
+- **Vultr VM:** one provider-reported active `capsula-control` host in DFW.
+  This is not confirmation the Work OS is running on the VM.
+- **PostgreSQL control plane:** real GitHub Actions database service; distributed
+  queue and fencing tests; 40 jobs with four concurrent DB clients completed
+  without duplicates. Not a multi-VM execution result.
+- **Inference:** adapter code exists; separate Serverless Inference credential
+  was absent in the last documented preflight. No live response yet.
+- **Live app / worker isolation / video / LabLab final submission:** pending.
 
-- Public repository: https://github.com/FreddyCreates/VultrEco — **v0.4 source merged; v0.5 extends autonomy and browser controls**.
-- Public live Vultr URL: produced by `python scripts/provision_vultr.py`. Do not paste a URL until that command prints `main_ip`.
-- Recorded demo video: **NOT YET RECORDED**.
-- Slide presentation: **NOT YET PRODUCED**.
-- Cover image: existing CAPSULA image supplied in this conversation; attach directly when submitting.
+## Evidence and architecture
 
-## Submission truthfulness
+- Ed25519-signed receipts and Merkle event commitments, encrypted AES-256-GCM
+  memory and artifacts, versioned manifests, operator-approved recursive RAH.
+- Persistent Dot/KVM computers and job-specific disposable Docker execution
+  environments are distinct trust boundaries.
+- PostgreSQL queue is shared control-plane state, not hypervisor attestation.
+- OIDC-scoped tenant APIs exist; legacy admin routes are disabled in enterprise
+  mode rather than misrepresented as tenant-safe.
 
-Do not mark the entry complete unless the required public link, live execution, recorded containment moment and video exist. Do not describe the local unsafe subprocess smoke mode as an isolated sandbox. Do not describe signing as independently trusted host attestation. Show actual enforcement evidence instead.
+## Submission assets and URLs
 
-## Broad work-platform capabilities
+GitHub: https://github.com/FreddyCreates/VultrEco  
+Public Vultr application: **not yet verified**  
+Recorded product/containment demo: **not yet available**  
+Presentation: **not yet available**  
+Final LabLab submission: **not submitted**
 
-CAPSULA is not restricted to procurement or finance: capabilities span code testing and repair, CSV and chart work, site QA, document assembly, evidence-driven research, customer support, recruitment, sales, operations, vendor evaluation, finance proposals and isolated self-improvement experiments. These are playbook / bounded execution lanes, not claims that third-party CRM, HRIS or accounting systems have been connected.
+Do not publish fabricated demo results or substitute provider inventory for
+live working application proof. Use [RELEASE_GATE.md](RELEASE_GATE.md) to close
+the remaining deployment gates.

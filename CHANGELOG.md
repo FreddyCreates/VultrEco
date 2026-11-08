@@ -1,3 +1,15 @@
+## v0.7.0-alpha.1 — Vultr Agent Rush release integration
+
+- Reposition CAPSULA as a Vultr-powered **autonomous agent computer cloud**
+  competing in Blast Radius Zero / Future of Work, while preserving broad
+  platform scope and portable control/worker interfaces.
+- Maintain verified Vultr Cloud Compute API and DFW `capsula-control` discovery
+  distinct from the unverified deployment and Serverless Inference lanes.
+- Add pinned SSH deployment workflow, optional HTTPS edge, multi-host acceptance
+  harness, and fixed multiline SSH key/known-host validation.
+- Align README, operator contract, hackathon submission copy, and release gates
+  with tested v0.7 and current infrastructure evidence.
+
 # 0.6.0-alpha.1 — RAH and agent evolution
 
 - Reconciled the standalone Work OS source with current main and retained the distinct Vultr challenge materials.

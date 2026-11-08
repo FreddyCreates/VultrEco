@@ -29,6 +29,28 @@ def allowed_value(name,value,minlength=0):
         raise DeploymentBlocked("Missing or invalid "+name)
     return value
 
+def ssh_private_key_value(value):
+    if not isinstance(value,str) or len(value)>20000 or chr(13) in value or chr(0) in value:
+        raise DeploymentBlocked("Invalid SSH private key")
+    pairs=[
+        ("-----BEGIN OPENSSH PRIVATE KEY-----","-----END OPENSSH PRIVATE KEY-----"),
+        ("-----BEGIN RSA PRIVATE KEY-----","-----END RSA PRIVATE KEY-----"),
+        ("-----BEGIN EC PRIVATE KEY-----","-----END EC PRIVATE KEY-----"),
+        ("-----BEGIN PRIVATE KEY-----","-----END PRIVATE KEY-----"),
+    ]
+    if not any(value.startswith(start) and value.strip().endswith(end)
+               and len(value)>len(start)+len(end)+64 for start,end in pairs):
+        raise DeploymentBlocked("Complete private SSH key required")
+    return value
+
+def ssh_known_hosts_value(value):
+    if not isinstance(value,str) or not 40<=len(value)<=32768 or chr(0) in value or chr(13) in value:
+        raise DeploymentBlocked("Verified SSH known_hosts required")
+    entries=[line for line in value.splitlines() if line and not line.startswith("#")]
+    if not entries or any(" " not in line or chr(9) in line for line in entries):
+        raise DeploymentBlocked("Malformed SSH known_hosts")
+    return value
+
 def instance(key,client=None):
     allowed_value("VULTR_API_KEY",key,20)
     owned=client is None
@@ -60,8 +82,8 @@ def config(env=None):
     if env.get("CAPSULA_DEPLOY_APPROVED")!="1":
         raise DeploymentBlocked("Explicit operator deployment approval required")
     key=allowed_value("VULTR_API_KEY",env.get("VULTR_API_KEY",""),20)
-    ssh_key=allowed_value("CAPSULA_DEPLOY_SSH_KEY",env.get("CAPSULA_DEPLOY_SSH_KEY",""),50)
-    hosts=allowed_value("CAPSULA_SSH_KNOWN_HOSTS",env.get("CAPSULA_SSH_KNOWN_HOSTS",""),40)
+    ssh_key=ssh_private_key_value(env.get("CAPSULA_DEPLOY_SSH_KEY",""))
+    hosts=ssh_known_hosts_value(env.get("CAPSULA_SSH_KNOWN_HOSTS",""))
     user=env.get("CAPSULA_DEPLOY_SSH_USER","")
     if not USER.fullmatch(user):raise DeploymentBlocked("Explicit SSH account required")
     admin=allowed_value("CAPSULA_ADMIN_API_KEY",env.get("CAPSULA_ADMIN_API_KEY",""),32)

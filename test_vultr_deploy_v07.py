@@ -5,8 +5,8 @@ from scripts.deploy_existing_vultr import config,instance,allowed_value,Deployme
 def env():
     return {
       "CAPSULA_DEPLOY_APPROVED":"1","VULTR_API_KEY":"v"*40,
-      "CAPSULA_DEPLOY_SSH_KEY":"key-line-"*12,
-      "CAPSULA_SSH_KNOWN_HOSTS":"1.2.3.4 ssh-ed25519 AAAAUNITTESTONLY",
+      "CAPSULA_DEPLOY_SSH_KEY":"-----BEGIN OPENSSH PRIVATE KEY-----\n"+"A"*120+"\n-----END OPENSSH PRIVATE KEY-----",
+      "CAPSULA_SSH_KNOWN_HOSTS":"1.2.3.4 ssh-ed25519 AAAAUNITTESTONLYAAAAAAAABBBB",
       "CAPSULA_DEPLOY_SSH_USER":"ubuntu",
       "CAPSULA_ADMIN_API_KEY":"a"*48,
       "GITHUB_SHA":"a"*40,
@@ -40,3 +40,18 @@ def test_deploy_no_cloud_key_in_envfile():
 def test_deploy_rejects_invalid_domain():
     e=env();e["CAPSULA_PUBLIC_FQDN"]="http://bad.example.com"
     with pytest.raises(DeploymentBlocked):config(e)
+
+def test_deploy_accepts_real_newline_formatted_secrets():
+    e=env()
+    e["CAPSULA_SSH_KNOWN_HOSTS"] += "\n1.2.3.4 ssh-rsa AAAADUMMYCHECK"
+    result=config(e)
+    assert "\n" in result["ssh_key"]
+    assert "\n" in result["hosts"]
+
+def test_deploy_rejects_carriage_return_and_nul():
+    for key in ("CAPSULA_DEPLOY_SSH_KEY","CAPSULA_SSH_KNOWN_HOSTS"):
+        for marker in ("\r","\x00"):
+            e=env()
+            e[key] += marker
+            with pytest.raises(DeploymentBlocked):
+                config(e)
