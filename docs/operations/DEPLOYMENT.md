@@ -30,7 +30,7 @@ worker hosts, with direct identity and containment checks; verify public
 HTTPS, login, model response and record a real demo.
 
 See [the full release gate](hackathon/RELEASE_GATE.md) and
-[cluster operations](docs/CLUSTER_OPERATIONS.md).
+[cluster operations](docs/operations/CLUSTER.md).
 
 ---
 
@@ -44,7 +44,7 @@ Provision a Linux machine with Python 3.11+ or Docker Engine and Compose. Keep i
 cp .env.example .env
 # Replace API key, set model config if desired, never commit .env
 python -c 'import secrets;print(secrets.token_urlsafe(48))'
-docker compose -f docker-compose.production.yml up -d --build
+docker compose --project-directory . -f infra/compose/production.yaml up -d --build
 curl http://127.0.0.1:8080/api/health
 ```
 
@@ -65,14 +65,14 @@ No inference is attempted when unconfigured. Vendor-specific adaptors, including
 
 ## 3. Isolated execution worker (separate host)
 
-Follow `WORKER_SECURITY.md` and `docker-compose.worker.yml` on a disposable isolated worker VM. Install Docker there, provide a private task mount and strong worker token. Never connect unrelated production hosts to a worker Docker socket. Set the controller's exact worker allowlist and register the worker in the UI; the worker lease is 45 seconds and needs periodic authenticated heartbeat renewal.
+Follow `WORKER_SECURITY.md` and `infra/compose/worker.yaml` on a disposable isolated worker VM. Install Docker there, provide a private task mount and strong worker token. Never connect unrelated production hosts to a worker Docker socket. Set the controller's exact worker allowlist and register the worker in the UI; the worker lease is 45 seconds and needs periodic authenticated heartbeat renewal.
 
 ## 4. Operator proof + validation
 
 ```bash
 pytest -q
-python smoke_worker.py
-python release_validate.py
+python tests/smoke_worker.py
+python tools/release_validate.py
 ```
 
 The smoke is **not** an isolation proof: it explicitly uses a development-only, trusted-code execution path. To establish containment, run `scripts/containment_probe.py` **inside the real disposable worker** and retain actual network/namespace evidence from the deployment. External attestation is not integrated.
@@ -109,17 +109,17 @@ The command creates a new disk, binds the worker port to host loopback, uses act
 ## 6. Autonomous scheduler, providers and browser workers
 
 Operator authorizes mission contracts in the web UI. The scheduler is a separate
-opt-in process: `docker compose -f docker-compose.production.yml -f docker-compose.autonomy.yml up -d --build`.
+opt-in process: `docker compose --project-directory . -f infra/compose/production.yaml -f infra/compose/autonomy.yaml up -d --build`.
 It invokes the API with the controller key on the private Compose network, not a host shell.
 Run only after an approved inference endpoint has been configured; no model is silently provisioned.
 
 For browser agents, build the one-shot image on an isolated worker machine:
-`docker build -f browser.Dockerfile -t capsula-browser:local .`. Provide a private
+`docker build -f infra/docker/browser.Dockerfile -t capsula-browser:local .`. Provide a private
 Docker-network whose outbound requests are explicitly filtered by a real gateway
 allowlisting selected HTTPS hostnames and resolved public IPs. Then configure
 `CAPSULA_BROWSER_NETWORK`, `CAPSULA_BROWSER_ALLOWLIST`, and
 `CAPSULA_BROWSER_EGRESS_ENFORCED=1` (the flag is an operator assertion, **not** attestation).
-Run `docker compose -f docker-compose.browser.yml up -d --build` on that worker VM.
+Run `docker compose --project-directory . -f infra/compose/browser.yaml up -d --build` on that worker VM.
 The worker service starts a fresh container per browser task; the control plane does not.
 A separate `CAPSULA_MODEL_VISION_MODELS` allowlist controls screenshot review.
 
@@ -132,7 +132,7 @@ a production isolation pass.
 ## v0.8 execution and finance service
 
 Deploy the CAPSULA controller separately from worker VMs. Rebuild both
-`Dockerfile.production` and `worker.Dockerfile`: they now include
+`infra/docker/controller.Dockerfile` and `infra/docker/worker.Dockerfile`: they now include
 `capsule_api.py`, `capsule_runtime.py` and the finance adapters. Run
 `python scripts/migrate_cluster.py` against your private PostgreSQL
 database before activating enterprise routes. The worker Docker daemon

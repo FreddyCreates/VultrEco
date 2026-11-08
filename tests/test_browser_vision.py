@@ -131,8 +131,12 @@ def test_production_compose_does_not_mount_host_docker_socket():
     assert 'CAPSULA_API_KEY' in content
     for path in ('infra/docker/controller.Dockerfile','infra/docker/development.Dockerfile'):
         docker=Path(path).read_text()
-        for module in ('autonomy.py','challenge.py','vision.py'):
-            assert module in docker
+        assert "COPY src ./src" in docker
+        assert "capsula.api.app:app" in docker
+    for module in ("src/capsula/agents/autonomy.py",
+                   "src/capsula/agents/challenge.py",
+                   "src/capsula/intelligence/vision.py"):
+        assert Path(module).is_file()
 
 
 def test_static_autonomy_ui_and_model_boundaries():

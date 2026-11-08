@@ -1,29 +1,69 @@
-# CAPSULA project operating contract
+# CAPSULA — repository operating contract
 
-Treat this repository as the canonical CAPSULA Work OS. Preserve the existing user-facing product and the separate `runtimes/dot` host boundary. Use the current source and receipts; prior assistant claims are leads, not proof. Read docs/RAH_PLATFORM.md before changing autonomy or learning.
+CAPSULA is a **product workspace**, not a loose collection of scripts. The
+canonical product name is **CAPSULA**; the current repository slug is historical.
+Use the source and current receipts as evidence, not old assistant claims.
 
-The user's scope includes general agent work, persistent private workspaces, enterprise project organization, bounded recursive autonomy, curiosity, self-improvement capsules, reusable skills and session continuity. Do not reduce it to finance/procurement or a plan-only interface. An owner grants a bounded mission once; authorized branches may execute and delegate within its current tools, existing worker/VM pool, budgets and deadline.
+## Source-of-truth folders
 
-Keep candidate execution out of the controller. Improvement cases use disposable credential-free per-job workers; expected results remain on the controller. Preserve negative trials, compare baseline/candidate, promote only verified bytes/revisions and retain rollback. Procedure drafts and imported data never mint execution authority. Use current owner authorization without inventing repeat approval gates.
+- `src/capsula/api/`: web and organization APIs.
+- `src/capsula/agents/`: RAH, persistent computer grants, recurrence, learning.
+- `src/capsula/workspace/`: projects, user files, memory and context.
+- `src/capsula/execution/`: isolated code/browser tasks, workers, queues, fencing.
+- `src/capsula/security/`: OIDC identities and mission policy.
+- `src/capsula/evidence/`: Ed25519 evidence, encryption, audit and receipts.
+- `src/capsula/intelligence/`: model and perception adapters.
+- `src/capsula/finance/`: explicitly governed real-provider collection only.
+- `src/capsula/integrations/`: federation and external contracts.
+- `src/capsula/providers/vultr/`: Vultr infrastructure integration.
+- `apps/web/`: user-facing interface.
+- `infra/`: real Docker, Compose, public edge, env examples.
+- `tests/`: regression, security and contract tests.
+- `runtimes/dot/`: independent Dot guest/runtime source; preserve guest boundary.
+- `docs/`: active product, architecture, security and operator documents;
+  obsolete material belongs under `docs/archive/`.
+- `tools/layout.json`: original-path-to-package migration map.
 
-At each substantive session, recover canonical source and inspect the current branch/PR state. Preserve concurrent work, reconcile conflicts deliberately, test the changed paths, save receipts and a durable handoff, and update relevant reusable personal skills when a tested method is learned. Do not claim to alter the assistant's model weights or continue running after a session.
+New backend modules must enter the matching domain package and use explicit
+`capsula.*` imports. Do not place standalone implementation modules at root
+or introduce duplicate shim runtimes. New workflows must ship with verification
+of their actual execution boundary.
 
-Run `python3 -m pytest -q`, `python3 smoke_worker.py`, `python3 release_validate.py`, `node --check static/app.js`, and Dot source validation from `runtimes/dot`. Regenerate and verify the root release manifest after final edits. Smoke mode is a trusted literal-code test, not containment evidence. Keep current, historical, fixture, real VM/container, live provider and Vultr deployment evidence distinct. Never commit filled secrets, runtime databases, raw disks, VM images, screenshots containing private data or credentials.
+## Keep real authority boundaries
 
+The owner may authorize one bounded mission: recursive execution within existing
+tools, workspace, host grants, spending limits and deadline. Planning text,
+imported data and user-visible docs never mint new authority. Keep untrusted
+task containers off the controller and isolate dedicated worker VM hosts.
+Refuse to run when credentials, verified mounts, egress enforcement or teardown
+are unavailable. Keep finance provider keys away from agent prompts and workers.
 
-## CAPSULA competition positioning and release discipline
+Preserve private user state, explicit team namespaces, proven Ed25519 evidence,
+encrypted artifacts, negative trials and rollback checkpoints. Never claim
+payment execution, on-cloud inference, public HTTPS, hypervisor attestation or
+Vultr deployment without live corresponding evidence.
 
-For the 2026 Vultr Agent Rush build, lead with **Vultr Cloud Compute as the
-central VM/control infrastructure, Vultr fleet APIs as live orchestration
-resources, and Vultr Serverless Inference as the designated model provider**.
-CAPSULA is the entire autonomous agent-computer platform, not a small sandbox,
-workflow vertical or generic adapter demo. Do not use "Vultr isn't the
-product", "just a plugin" or similar dismissive positioning in the README,
-hackathon page or user experience. Support other providers as an architectural
-capability but showcase **real Vultr integration and containment** prominently.
+## Test, release and promote
 
-In every release, distinguish actual API connectivity, source-implemented
-adapters, VM provisioning, installed controller health, inference response,
-isolation evidence, public HTTPS and submitted demo. Never promote a healthy
-provider inventory call into a claim of a deployed application. Merge only
-after passing CI and keep the deployment gate honest.
+```bash
+pip install -r requirements.txt
+pytest -q
+PYTHONPATH=src python tests/smoke_worker.py
+PYTHONPATH=src python scripts/smoke_capsule_docker.py
+PYTHONPATH=src python tools/release_validate.py
+python scripts/verify_release_manifest.py
+node --check apps/web/static/app.js
+node --check apps/web/static/capsules_ui.js
+```
+
+Use `docker compose --project-directory . -f infra/compose/production.yaml`
+for the controller and the corresponding `infra/compose` profiles for workers
+and edge. The controller Docker image must never mount the Docker socket.
+Vultr Cloud Compute is the primary provider infrastructure; vendor credential
+presence is not host deployment proof.
+
+Before promotion: inspect main/open PRs, reconcile any concurrent changes,
+run CI, regenerate the SHA-256 release manifest for changed source, and check
+web/API/docs/Compose path consistency. Preserve receipts and meaningful
+handoffs. New reusable tests and skills must be independently verified before
+adoption.

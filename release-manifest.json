@@ -33,8 +33,8 @@
     },
     {
       "path": "AGENTS.md",
-      "bytes": 3125,
-      "sha256": "e799d22898298648701bef55476e44df3b36a494802ab93ffa18358eabda7995"
+      "bytes": 3499,
+      "sha256": "204df70dc784f389ecc907024df1aea6290135b2da960e5ff1ee0b2915895e4d"
     },
     {
       "path": "apps/web/README.md",
@@ -163,8 +163,8 @@
     },
     {
       "path": "docs/operations/DEPLOYMENT.md",
-      "bytes": 10165,
-      "sha256": "ad049290a91e0316a9ccd08f5353b538159b21cf102fefe2176d8cb522138934"
+      "bytes": 10282,
+      "sha256": "addb272eec1a04b494d4995f4670c671166cc82cf34f695555c31a8db3a91a04"
     },
     {
       "path": "docs/operations/FLEET.md",
@@ -1038,8 +1038,8 @@
     },
     {
       "path": "tests/test_browser_vision.py",
-      "bytes": 7844,
-      "sha256": "9cb9a10a3beda9c9eb71018a24bbcc9d94689dbc6826de1aa3693ed187fb15d3"
+      "bytes": 8034,
+      "sha256": "938af1ccc0cebc96343a52b36c59b30219f25f1bbc4630f4ba71901cd7626b5c"
     },
     {
       "path": "tests/test_capsula_v08.py",
