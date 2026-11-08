@@ -8,7 +8,7 @@ from typing import Literal
 from pydantic import BaseModel, Field, field_validator
 from fastapi import HTTPException
 
-CAPS={'python','browser','inference','memory','artifact'}
+CAPS={'python','browser','vision','inference','memory','artifact'}
 PATH_RE=re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._/\-]{0,159}$')
 
 class ProjectFile(BaseModel):
@@ -28,12 +28,12 @@ class AgentInput(BaseModel):
     name:str=Field(min_length=2,max_length=80)
     role:str=Field(default='Engineering assistant',min_length=3,max_length=120)
     instructions:str=Field(default='',max_length=3000)
-    capabilities:list[Literal['python','browser','inference','memory','artifact']]=Field(default_factory=lambda:['python','inference'],max_length=5)
+    capabilities:list[Literal['python','browser','vision','inference','memory','artifact']]=Field(default_factory=lambda:['python','inference'],max_length=6)
     max_steps:int=Field(default=4,ge=1,le=12)
     model:str=Field(default='',max_length=120)
 
 class Step(BaseModel):
-    kind:Literal['python','browser','inference','memory','artifact']
+    kind:Literal['python','browser','vision','inference','memory','artifact']
     title:str=Field(min_length=2,max_length=100)
     code:str=Field(default='',max_length=16000)
     url:str=Field(default='',max_length=300)
@@ -126,10 +126,12 @@ def create_run(db,agent,body,signer,vault,audit_append):
     if agent['status']!='active':raise HTTPException(409,'Agent disabled')
     if len(body.steps)>agent['max_steps']:raise HTTPException(422,'Exceeds agent step limit')
     if any(s.kind not in agent['capabilities'] for s in body.steps):raise HTTPException(403,'Agent capability not granted')
-    for s in body.steps:
+    for i,s in enumerate(body.steps):
+        if s.kind=='vision' and (i==0 or body.steps[i-1].kind!='browser'):
+            raise HTTPException(422,'Vision verification must immediately follow the browser screenshot')
         if s.kind=='python' and not s.code.strip():raise HTTPException(422,'Python step requires code')
         if s.kind=='browser' and not s.url.startswith('https://'):raise HTTPException(422,'Browser step requires HTTPS URL')
-        if s.kind=='inference' and not (s.prompt.strip() and agent['model']):raise HTTPException(422,'Inference step requires prompt and configured agent model')
+        if s.kind in ('inference','vision') and not (s.prompt.strip() and agent['model']):raise HTTPException(422,'Model step requires prompt and configured agent model')
         if s.kind in ('memory','artifact') and not s.content.strip():raise HTTPException(422,'Write step requires content')
     rid='run_'+uuid.uuid4().hex[:20];ts=utc()
     requires=body.approval_required or any(s.kind in ('python','browser') for s in body.steps)

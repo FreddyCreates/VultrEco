@@ -22,3 +22,21 @@
 ## Per-job Python isolation mode
 
 Default worker execution now **fails closed** unless `CAPSULA_WORKER_HOST_RUN_PATH` and a Docker worker daemon are provisioned on a **separate dedicated worker VM**. Each code mission launches an ephemeral Docker container with no network, dropped capabilities, read-only filesystem, unprivileged UID, and bounded resources. The long-lived worker service itself can access the worker VM Docker daemon: that is host-admin authority and must be physically separated from the control plane and from all unrelated tenants. A hardened VM boundary, Docker daemon access controls, and external evidence are still required. The direct subprocess path is only accessible when the explicit `CAPSULA_WORKER_DEV_ALLOW_UNISOLATED=1` flag is set for a trusted loopback smoke test. That flag must never be used with arbitrary input or in deployment.
+
+
+## Autonomous delegation and browser images (v0.5)
+
+A root autonomous mission requires operator approval. Delegated child goals inherit
+a strict subset of capabilities, deadline and token planning budget; maximum
+recursion depth is 2. No wallet signing, payments or cross-workspace grants.
+An agent-generated plan is parsed/validated again, then any workflow approval is
+scoped and linked in the signed governance audit to the root contract.
+The scheduler itself has **no Docker socket**. Only a separate isolated worker VM
+has a Docker socket. Workers must destroy the per-job container and enforce CPU,
+memory, process, time, filesystem and network policies.
+
+Browser tasks are now disposable Playwright containers with network egress policy
+required by deployment. `CAPSULA_BROWSER_EGRESS_ENFORCED=1` is **not** proof of
+enforcement. Configure an actual network-level egress gateway, run a DNS rebinding
+and subresource escape test, and audit worker VM logs. Webpage instructions are
+untrusted; screenshot review by a vision model is interpretive, not attestation.

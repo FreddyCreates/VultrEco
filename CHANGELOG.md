@@ -1,5 +1,18 @@
 # CAPSULA Changelog
 
+## 0.5.0-alpha.1 — 2026-11-08
+
+**Autonomous capsules and broad work-platform release.**
+
+- Added persistent opt-in autonomy service: mission contracts with operator authorization, cycles, deadlines, model planning allowance, pause/resume/cancel, and auditable delegation.
+- Added two levels of scoped child capsules with reserved token allowance, inherited deadlines and capability subset enforcement; unauthorized scope expansion fails closed.
+- Added 12th responsive interface section for authoring, inspecting and controlling autonomous mission trees.
+- Added separate scheduler service and Docker Compose override; infrastructure remains provider-neutral.
+- Added strict model-generated Python code proposals with human review, execution through separate worker path, and bounded verified-failure retry contracts.
+- Added disposable browser-task runner returning page text and bounded screenshot; vision verification requires an explicitly configured visual model.
+- Hardened browser runtime: no Playwright execution in persistent worker service; dedicated disposable container and operator-enforced outbound egress requirement.
+- Added adversarial tests for delegated authority, budgets, invalid model plans, unavailable backends, browser containment configuration and vision media signature validation.
+
 ## 0.4.0-alpha.1 — 2026-11-08
 
 **Standalone Work OS — no mandatory cloud provider.**

@@ -4,7 +4,7 @@ from fastapi import FastAPI, Header, HTTPException
 from pydantic import BaseModel, Field
 from typing import Literal
 
-app=FastAPI(title='CAPSULA bounded worker',version='0.4.0-alpha.1')
+app=FastAPI(title='CAPSULA bounded worker',version='0.5.0-alpha.1')
 TOKEN=os.getenv('CAPSULA_WORKER_TOKEN','')
 MAX_BYTES=24_000
 class Job(BaseModel):
@@ -70,40 +70,55 @@ def run_python(code):
             return {'status':'denied','reason':'Docker runtime unavailable; refusing unisolated execution','stdout':'','stderr':'','exit_code':None}
 
 def run_browser(url,selector):
+    """Browser tasks are disposable containers, never a long-lived Playwright process."""
     from urllib.parse import urlparse
     from ipaddress import ip_address
-    import socket
+    import socket,re
     u=urlparse(url)
-    if u.scheme!='https' or not u.hostname or u.username or u.password or u.port not in (None,443):raise HTTPException(422,'Only HTTPS URLs without credentials are accepted')
-    allow=[x.strip().lower() for x in os.getenv('CAPSULA_BROWSER_ALLOWLIST','').split(',') if x.strip()]
-    if not allow or u.hostname.lower() not in allow:raise HTTPException(403,'Domain not in explicit browser allowlist')
-    # DNS/IP checks reduce common SSRF routes, but DNS rebinding remains a concern.
-    # Production requires a network egress proxy/firewall that enforces destinations.
+    if u.scheme!='https' or not u.hostname or u.username or u.password or u.port not in (None,443):
+        raise HTTPException(422,'Only HTTPS URLs without credentials are accepted')
+    allowed=[x.strip().lower() for x in os.getenv('CAPSULA_BROWSER_ALLOWLIST','').split(',') if x.strip()]
+    if not allowed or u.hostname.lower() not in allowed:
+        raise HTTPException(403,'Browser origin is not operator allowlisted')
     for item in socket.getaddrinfo(u.hostname,443):
-        host=item[4][0]
-        if not ip_address(host).is_global:raise HTTPException(403,'Non-public target rejected')
-    try:
-        from playwright.sync_api import sync_playwright
-    except ImportError:raise HTTPException(503,'Playwright is not installed')
-    with sync_playwright() as p:
-        browser=p.chromium.launch(headless=True,args=['--no-sandbox'])
+        if not ip_address(item[4][0]).is_global:raise HTTPException(403,'Private or reserved address forbidden')
+    root=os.getenv('CAPSULA_WORKER_CONTAINER_RUN_PATH','/work/runs')
+    host_root=os.getenv('CAPSULA_WORKER_HOST_RUN_PATH','')
+    docker_net=os.getenv('CAPSULA_BROWSER_NETWORK','')
+    image=os.getenv('CAPSULA_BROWSER_SANDBOX_IMAGE','capsula-browser:local')
+    # An application allowlist cannot replace a network-enforced egress gateway.
+    if (not host_root or not pathlib.Path(root).is_dir() or not docker_net
+            or os.getenv('CAPSULA_BROWSER_EGRESS_ENFORCED')!='1'):
+        return {'status':'denied','reason':'Disposable browser runtime and egress firewall required',
+                'stdout':'','stderr':'','exit_code':None}
+    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,60}',docker_net) or not re.fullmatch(r'[a-zA-Z0-9][a-zA-Z0-9._/:@-]{1,127}',image):
+        return {'status':'denied','reason':'Unapproved browser runtime configuration','stdout':'','stderr':'','exit_code':None}
+    with tempfile.TemporaryDirectory(prefix='capsula-browser-',dir=root) as directory:
+        path=pathlib.Path(directory)/'job.json';path.write_text(json.dumps({'url':url,'selector':selector,'allowed_hosts':allowed}))
+        host_file=pathlib.Path(host_root)/pathlib.Path(directory).name/'job.json'
+        name='capsula-browser-'+uuid.uuid4().hex[:16]
+        cmd=['docker','run','--rm','--name',name,'--network',docker_net,'--read-only',
+             '--cap-drop','ALL','--security-opt','no-new-privileges',
+             '--pids-limit','128','--memory','768m','--memory-swap','768m','--cpus','1',
+             '--user','10001:10001','--tmpfs','/tmp:rw,nosuid,size=128m',
+             '--mount',f'type=bind,src={host_file},dst=/work/job.json,readonly',image,'/work/job.json']
         try:
-            context=browser.new_context(accept_downloads=False,service_workers='block',permissions=[])
-            page=context.new_page()
-            def block(route):
-                req=route.request
-                hostname=urlparse(req.url).hostname
-                if hostname not in allow:route.abort()
-                else:route.continue_()
-            page.route('**/*',block)
-            response=page.goto(url,wait_until='domcontentloaded',timeout=9000)
-            if selector:page.locator(selector).first.wait_for(timeout=2000)
-            title=page.title();final=page.url;text=page.locator('body').inner_text(timeout=2000)[:4000]
-            return {'status':'completed','http_status':response.status if response else None,'title':title,'final_url':final,'text':text,'selector_found':bool(selector)}
-        finally:browser.close()
+            run=subprocess.run(cmd,capture_output=True,text=True,timeout=32)
+            if run.returncode!=0:
+                return {'status':'failed','reason':'Disposable browser task failed','stdout':'','stderr':run.stderr[:2000],'exit_code':run.returncode}
+            data=json.loads(run.stdout)
+            if not isinstance(data,dict) or data.get('status') not in ('completed','failed'):
+                raise ValueError('Invalid disposable browser response')
+            return data
+        except subprocess.TimeoutExpired:
+            subprocess.run(['docker','rm','-f',name],capture_output=True,timeout=5,check=False)
+            return {'status':'failed','reason':'Browser timeout; container destroyed','stdout':'','stderr':'','exit_code':124}
+        except (FileNotFoundError,ValueError,json.JSONDecodeError):
+            return {'status':'denied','reason':'Browser container unavailable or malformed response',
+                    'stdout':'','stderr':'','exit_code':None}
 
 @app.get('/health')
-def health():return {'role':'isolated-worker','version':'0.4.0-alpha.1','configured':bool(TOKEN),'browser_egress_policy':'allowlist-and-network-firewall-required','python_mode':'unsafe-loopback-smoke' if os.getenv('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED')=='1' else 'per-job-docker-or-deny'}
+def health():return {'role':'isolated-worker','version':'0.5.0-alpha.1','configured':bool(TOKEN),'browser_egress_policy':'allowlist-and-network-firewall-required','python_mode':'unsafe-loopback-smoke' if os.getenv('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED')=='1' else 'per-job-docker-or-deny'}
 
 @app.post('/execute')
 def execute(job:Job,authorization:str|None=Header(None)):

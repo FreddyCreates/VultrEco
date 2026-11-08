@@ -23,7 +23,7 @@ API_KEY=os.environ.get('CAPSULA_API_KEY','')
 DOCKER_IMAGE=os.environ.get('CAPSULA_SANDBOX_IMAGE','python:3.12-alpine')
 ALLOWED_IMAGE=re.compile(r'^[a-zA-Z0-9][a-zA-Z0-9._/:@-]{1,127}$')
 if not ALLOWED_IMAGE.fullmatch(DOCKER_IMAGE): raise RuntimeError('Invalid sandbox image')
-app=FastAPI(title='CAPSULA Mission Control',version='0.4.0-alpha.1')
+app=FastAPI(title='CAPSULA Mission Control',version='0.5.0-alpha.1')
 signer=Signer(DATA/'keys'/'ed25519.pem')
 vault=Vault(DATA/'keys'/'vault.key')
 
@@ -100,7 +100,7 @@ def health():
         r=subprocess.run(['docker','info','--format','{{.ServerVersion}}'],capture_output=True,timeout=3)
         docker_ready=r.returncode==0
     except (FileNotFoundError,subprocess.TimeoutExpired):pass
-    return {'service':'capsula','version':'0.4.0-alpha.1','auth_configured':bool(API_KEY),'sandbox_ready':docker_ready,'execution_mode':'docker-or-worker' if docker_ready else 'worker-required-or-deny','proof_protocol':'capsula.proof.v2','signing_key_id':signer.key_id,'inference_configured':__import__('inference').config()['configured']}
+    return {'service':'capsula','version':'0.5.0-alpha.1','auth_configured':bool(API_KEY),'sandbox_ready':docker_ready,'execution_mode':'docker-or-worker' if docker_ready else 'worker-required-or-deny','proof_protocol':'capsula.proof.v2','signing_key_id':signer.key_id,'inference_configured':__import__('inference').config()['configured']}
 
 @app.get('/api/overview')
 def overview(authorization:str|None=Header(None)):
@@ -154,7 +154,7 @@ def create(body:MissionInput,authorization:str|None=Header(None)):
     mid=uuid.uuid4().hex[:16];ts=now()
     with conn() as db:
         db.execute('INSERT INTO missions VALUES(?,?,?,?,?,?,?,?,?)',(mid,body.title,body.kind,'queued',ts,ts,canonical({'sealed':vault.seal(body.model_dump(),mid+':input')}),'{}','{}'))
-        decision=evaluate(body,((docker_ready() and os.getenv('CAPSULA_ALLOW_DIRECT_DOCKER')=='1') if body.kind=='python' else False) or bool(select_worker(db,body.kind)))
+        decision=evaluate(body,((docker_ready() and os.getenv('CAPSULA_ALLOW_DIRECT_DOCKER')=='1') if body.kind=='python' and os.getenv('CAPSULA_COMPETITION_MODE')!='1' else False) or bool(select_worker(db,body.kind)))
         event(db,mid,'mission.accepted',{'title':body.title,'kind':body.kind})
         event(db,mid,'policy.decision',decision)
     if decision['decision']=='deny':output={'status':'denied','reason':'; '.join(decision['reasons']),'stdout':'','stderr':'','exit_code':None}
@@ -272,7 +272,7 @@ def select_worker(db,kind):
 def dispatch_mission(body,mid):
     with conn() as db: worker=select_worker(db,body.kind)
     if not worker:
-        if body.kind=='python' and os.getenv('CAPSULA_ALLOW_DIRECT_DOCKER')=='1':
+        if body.kind=='python' and os.getenv('CAPSULA_ALLOW_DIRECT_DOCKER')=='1' and os.getenv('CAPSULA_COMPETITION_MODE')!='1':
             out=run_python(body.code,mid);out['execution_claim']='docker-process-exit-observed' if out['status']!='denied' else 'not-executed';return out
         return {'status':'denied','reason':'No isolated worker lease or approved sandbox backend for capability','exit_code':None,'stdout':'','stderr':''}
     if not WORKER_TOKEN or worker['endpoint'] not in WORKER_ALLOWED:
@@ -369,7 +369,7 @@ def list_payment_intents(authorization:str|None=Header(None)):
 @app.get('/api/security/posture')
 def security_posture(authorization:str|None=Header(None)):
     authed(authorization)
-    return {'version':'0.4.0-alpha.1','execution_attested':False,'remote_workers_enforced':bool(WORKER_ALLOWED and WORKER_TOKEN),'external_witness':False,'finance_signing_enabled':False,'key_management':'local encrypted private key; not external KMS','tenancy':'single-admin','browser_status':'requires separately isolated Playwright worker and network-level egress policy','deployment_verified':False}
+    return {'version':'0.5.0-alpha.1','execution_attested':False,'remote_workers_enforced':bool(WORKER_ALLOWED and WORKER_TOKEN),'external_witness':False,'finance_signing_enabled':False,'key_management':'local encrypted private key; not external KMS','tenancy':'single-admin','browser_status':'requires separately isolated Playwright worker and network-level egress policy','deployment_verified':False}
 
 from artifacts import ArtifactInput
 from inference import InferenceInput, infer
@@ -467,7 +467,7 @@ def platform_status(authorization:str|None=Header(None)):
     from inference import public_config
     with conn() as db:
         counts={k:db.execute(f'SELECT COUNT(*) n FROM {k}').fetchone()['n'] for k in ('workspaces','project_files','agent_profiles','agent_runs','missions','workers','approvals','artifact_blobs','memory')}
-    return {'name':'CAPSULA','version':'0.4.0-alpha.1','counts':counts,'models':public_config(),
+    return {'name':'CAPSULA','version':'0.5.0-alpha.1','counts':counts,'models':public_config(),
             'execution_backends':['docker-worker','remote-worker'],'default_runtime':'deny-without-isolation',
             'provider_policy':'no dependency on Vultr','tenancy':'single-admin','payment_execution':'disabled'}
 
@@ -555,7 +555,7 @@ def agent_plan(aid:str,body:PlanRequest,authorization:str|None=Header(None)):
         raise HTTPException(403,'Agent needs inference capability and an approved model')
     schema_prompt=(
         'Propose an executable CAPSULA workflow in strict JSON only: '
-        '{"title":"...","steps":[{"kind":"python|inference|memory|artifact|browser",'
+        '{"title":"...","steps":[{"kind":"python|inference|memory|artifact|browser|vision",'
         '"title":"...","code":"...","url":"...","prompt":"...",'
         '"content":"...","label":"...","name":"..."}]}. '
         'Do not include markdown. Use only permitted capabilities, never invent API keys or secrets, '
@@ -610,10 +610,24 @@ def agent_run_execute(rid:str,authorization:str|None=Header(None)):
         try:
             if kind in ('python','browser'):
                 mission=MissionInput(title=step['title'],kind=kind,code=step['code'],url=step['url'],selector=step['selector'])
-                value=create(mission,authorization);entry.update({'status':value['status'],'mission_id':value['id'],'receipt':value['receipt']['payload']['merkle_root']})
+                value=create(mission,authorization)
+                observed=globals()['mission'](value['id'],authorization)
+                out=observed['output']
+                if not observed['proof_valid']:raise HTTPException(409,'Mission evidence failed verification')
+                entry.update({'status':value['status'],'mission_id':value['id'],'receipt':value['receipt']['payload']['merkle_root'],
+                    'verified':True,'output':str(out.get('stdout',''))[:9000],'stderr':str(out.get('stderr',''))[:4500],
+                    'screenshot_b64':str(out.get('screenshot_b64',''))[:440000], 'image_mime':out.get('image_mime',''),
+                    'exit_code':out.get('exit_code')})
             elif kind=='inference':
-                response=infer(InferenceInput(model=a['model'],system=(a['role']+'\n'+a['instructions'])[:1000],prompt=step['prompt'],max_tokens=512))
+                response=infer(InferenceInput(model=a['model'],system=(a['role']+'\n'+a['instructions'])[:1000],prompt=step['prompt'].replace('{{last.output}}',str(results[-1].get('output',''))[:9000] if results else '')[:5000],max_tokens=512))
                 entry.update({'status':'completed','model':response['model'],'output':response['text'],'usage':response['usage']})
+            elif kind=='vision':
+                from vision import review
+                if not results or results[-1].get('kind')!='browser' or results[-1].get('status')!='completed' or not results[-1].get('screenshot_b64'):
+                    raise HTTPException(409,'No successful browser screenshot to verify')
+                response=review(a['model'],step['prompt'],results[-1]['screenshot_b64'],results[-1]['image_mime'])
+                entry.update({'status':'completed','model':response['model'],'output':response['text'],
+                              'verification':response['verification'],'usage':response['usage']})
             elif kind=='memory':
                 resolved=step['content'].replace('{{last.output}}',results[-1].get('output','') if results else '')
                 value=save_memory(MemoryInput(workspace=a['workspace'],label=step['label'] or step['title'],content=resolved,origin='agent:'+a['id']),authorization)
@@ -630,3 +644,11 @@ def agent_run_execute(rid:str,authorization:str|None=Header(None)):
         if entry['status']!='completed':final='failed' if entry['status']=='failed' else 'denied';break
     with conn() as db:core.update_run(db,rid,final,results,vault,signer,audit_append)
     return {'id':rid,'status':final,'steps_completed':sum(x['status']=='completed' for x in results),'steps_total':len(steps),'results':results}
+
+# Challenge API is intentionally installed after all base routes and tables are initialized.
+from challenge import bind as bind_challenge
+bind_challenge(app)
+
+# Scoped autonomy and agent-created capsule delegation.
+from autonomy import bind as bind_autonomy
+bind_autonomy(app)

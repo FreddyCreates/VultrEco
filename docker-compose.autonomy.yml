@@ -1,0 +1,22 @@
+# Opt-in autonomous loop. Launch only after mission authority and model provider are configured.
+services:
+  capsula-autonomy:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    command: ["python", "autonomy_daemon.py"]
+    restart: unless-stopped
+    environment:
+      CAPSULA_API_KEY: ${CAPSULA_API_KEY:?operator key required}
+      CAPSULA_CONTROL_URL: http://capsula:8080
+      CAPSULA_CONTROL_HOST: capsula
+      CAPSULA_CONTROL_ALLOW_INTERNAL_HTTP: "1"
+      CAPSULA_AUTONOMY_POLL_SECONDS: ${CAPSULA_AUTONOMY_POLL_SECONDS:-15}
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    pids_limit: 32
+    mem_limit: 128m
+    cpus: 0.25
+    tmpfs: ["/tmp:rw,noexec,nosuid,size=16m"]
+    depends_on: [capsula]

@@ -31,3 +31,15 @@
 ## Safety constraints
 
 The probe must run **inside the per-job Docker sandbox only**, not on the controller or worker host. A code-level denial is not proof of network-layer isolation by itself. Sandbox container logs and host-side verification should agree.
+
+
+## Expanded autonomous computing demonstration (v0.5)
+
+1. Create an agent with an operator-pinned model, `inference`, `artifact`, `memory`, and `python` capabilities.
+2. Create a root autonomous mission in the Autonomous missions screen, set a deadline, max cycles, child slots and token allowance.
+3. Show that execution is denied before the signed-off contract is approved; approve and activate.
+4. Run a cycle; show its child-capsule tree, encrypted artifact, signed run receipt and auditable budget.
+5. Demonstrate an attempted capability escalation is rejected. Pause or cancel the root and show descendant execution cannot proceed.
+6. Show a separate disposable worker container handling model-created Python; run the actual read-only-root and network-denial containment probe.
+7. Optionally demonstrate read-only browser screenshots and visual review using a pinned vision model on the isolated browser worker VM.
+8. Show live Vultr VM and Vultr Serverless Inference traces if entering Blast Radius Zero. Do not substitute local smoke tests for those live proofs.
