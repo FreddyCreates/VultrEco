@@ -1,0 +1,34 @@
+# Socket-free CAPSULA control plane, bound to VM loopback.
+# Worker endpoints and secrets must be configured separately, via TLS on a trusted network.
+services:
+  capsula:
+    build:
+      context: .
+      dockerfile: Dockerfile.production
+    restart: unless-stopped
+    environment:
+      CAPSULA_API_KEY: ${CAPSULA_API_KEY:?generate random admin token}
+      CAPSULA_DATA: /app/data
+      CAPSULA_WORKER_TOKEN: ${CAPSULA_WORKER_TOKEN:-}
+      CAPSULA_WORKER_ALLOWED_ENDPOINTS: ${CAPSULA_WORKER_ALLOWED_ENDPOINTS:-}
+      CAPSULA_MODEL_PROVIDER: ${CAPSULA_MODEL_PROVIDER:-openai-compatible}
+      CAPSULA_MODEL_URL: ${CAPSULA_MODEL_URL:-}
+      CAPSULA_MODEL_HOST: ${CAPSULA_MODEL_HOST:-}
+      CAPSULA_MODEL_API_KEY: ${CAPSULA_MODEL_API_KEY:-}
+      CAPSULA_MODEL_ALLOWED_MODELS: ${CAPSULA_MODEL_ALLOWED_MODELS:-}
+      CAPSULA_MODEL_ALLOW_INTERNAL_HTTP: ${CAPSULA_MODEL_ALLOW_INTERNAL_HTTP:-0}
+    volumes:
+      - capsula-data:/app/data
+    ports:
+      - "127.0.0.1:8080:8080"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt:
+      - no-new-privileges:true
+    pids_limit: 128
+    mem_limit: 512m
+    cpus: 1.0
+    tmpfs:
+      - /tmp:rw,nosuid,noexec,size=64m
+volumes:
+  capsula-data:

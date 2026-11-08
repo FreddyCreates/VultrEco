@@ -1,0 +1,303 @@
+{
+  "protocol": "capsula.release-manifest.v1",
+  "version": "0.4.0-alpha.1",
+  "timestamp": "2026-11-08T16:27:53.890278+00:00",
+  "evidence": "local tests, bounded loopback worker; not deployment or isolation attestation",
+  "files": [
+    {
+      "path": ".env.example",
+      "bytes": 690,
+      "sha256": "c13417e4465d8f8fb82bf4cd982df1bc68f122618313a67aad2932c931786cc8"
+    },
+    {
+      "path": ".env.worker.example",
+      "bytes": 212,
+      "sha256": "887f9f931042798f64e6cc850cf1add5820d195646896a73cddf98fb8a18ecfc"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 535,
+      "sha256": "5012c1888981a276f9d2b7252192f9aa9275dbbeeb2eeb49de51858314859e8a"
+    },
+    {
+      "path": ".gitignore",
+      "bytes": 77,
+      "sha256": "fca0d1fda49991236fa93a9670f6aae356bb9641b59993770ca7c2256e4684c3"
+    },
+    {
+      "path": "ARCHITECTURE.md",
+      "bytes": 2754,
+      "sha256": "06efc4b9fc2c0f93ca8bfb8565b1ad1bb1284f2f0f64862b33a0ddbac517e41c"
+    },
+    {
+      "path": "CHANGELOG.md",
+      "bytes": 1867,
+      "sha256": "5691ae3124d090404e882088722e17ca3a833c46ea70114d103de11237379f71"
+    },
+    {
+      "path": "DEPLOYMENT.md",
+      "bytes": 2677,
+      "sha256": "31b16d5834beb1ec8ad945028c33bd1736cb7ce6ede6b87c3590285ed2d2a05d"
+    },
+    {
+      "path": "Dockerfile",
+      "bytes": 522,
+      "sha256": "f37f8a11af2b0c2a7737d8af7a737f863739562eda6957160a831dde803b5f49"
+    },
+    {
+      "path": "Dockerfile.production",
+      "bytes": 522,
+      "sha256": "f37f8a11af2b0c2a7737d8af7a737f863739562eda6957160a831dde803b5f49"
+    },
+    {
+      "path": "OPERATOR_BOUNDARY.md",
+      "bytes": 1414,
+      "sha256": "f0858d2663412248b0fbc69dafafaef17599c313182b1d5fd438743fac4c79d6"
+    },
+    {
+      "path": "PRODUCTION.md",
+      "bytes": 1409,
+      "sha256": "e7f0cc8c80c6cafc73c4103e8ffd4bd691e558cdda9765cf902021eda0e47383"
+    },
+    {
+      "path": "README.md",
+      "bytes": 7712,
+      "sha256": "1a5415bf1f023bf838616fe50d7f0537b5dfef5ed845b30f69247efae22d0480"
+    },
+    {
+      "path": "VERSION",
+      "bytes": 14,
+      "sha256": "26523d06ddb20f6df1c11d1c4fbacdff5ed1106e6ff619d8711c7cff8e8540c5"
+    },
+    {
+      "path": "WORKER_SECURITY.md",
+      "bytes": 2629,
+      "sha256": "4fbf5cd2e1b897cacf4c1e70bd9eba3d72cf1d3cd59043bd99ee9ecf18902e8d"
+    },
+    {
+      "path": "app.py",
+      "bytes": 42171,
+      "sha256": "bd1df80f407d25b7a1dbb2b6f92454b9c1369c1051ededf744a537a1c1968525"
+    },
+    {
+      "path": "artifacts.py",
+      "bytes": 515,
+      "sha256": "6e7c8e7475ceb003704f1c30c683ec7a2c30f7e9eb51842cb8bde0d44c066176"
+    },
+    {
+      "path": "audit.py",
+      "bytes": 1894,
+      "sha256": "d6a8232606e14670489ce89f3d40aa2f71c8288c8d04f8bb2abc09261c7aac33"
+    },
+    {
+      "path": "browser.Dockerfile",
+      "bytes": 442,
+      "sha256": "a54304c85f72085447030c56e1d1202274f69daa7e793393484946321c20b460"
+    },
+    {
+      "path": "docker-compose.browser.yml",
+      "bytes": 781,
+      "sha256": "b33218ff2b72a385d858d7565839026b48aceb7e2b26b590d0cd7cc52eca5bc8"
+    },
+    {
+      "path": "docker-compose.production.yml",
+      "bytes": 1201,
+      "sha256": "ad5ea8cd9dfe9ccd1858d3977e234db8af178cd3287a605b2854567f22258524"
+    },
+    {
+      "path": "docker-compose.worker.yml",
+      "bytes": 1027,
+      "sha256": "4c1a82c6f8ad022b84027667e37d0ea44e074b35eeea5e0bc1bcb4c2dc31d6f4"
+    },
+    {
+      "path": "docker-compose.yml",
+      "bytes": 1201,
+      "sha256": "ad5ea8cd9dfe9ccd1858d3977e234db8af178cd3287a605b2854567f22258524"
+    },
+    {
+      "path": "federation.py",
+      "bytes": 3623,
+      "sha256": "d69e831a24b72053837426210189b074826e39a0c0d4ded28afb8ef2c66a89ef"
+    },
+    {
+      "path": "hackathon/DEMO_RUNBOOK.md",
+      "bytes": 2502,
+      "sha256": "21ed7c2cb96723e4f0d50576112a8e4140549d0cbe108044c892f223b34f942b"
+    },
+    {
+      "path": "hackathon/README.md",
+      "bytes": 434,
+      "sha256": "030506f514db0cb739a60efe8be60951acb7908a2e7af16acfbca5b5e5966c29"
+    },
+    {
+      "path": "hackathon/RELEASE_GATE.md",
+      "bytes": 1811,
+      "sha256": "1caf8f659f2fca2ad7acca2465937665c840175275f42061697e2bbddb6daad4"
+    },
+    {
+      "path": "hackathon/SUBMISSION.md",
+      "bytes": 3562,
+      "sha256": "adb3833baa7b38cdfe87376e13ff387c5f2dc223d6a7ddb4d7c0cb8bba3d301d"
+    },
+    {
+      "path": "hackathon/validation.json",
+      "bytes": 422,
+      "sha256": "eb718a634d9dd74df2d0dfbdff7e5f0bda17a327c7f33f03ba51831bde13cb1b"
+    },
+    {
+      "path": "inference.py",
+      "bytes": 3812,
+      "sha256": "e9af4e81e02df15ca0ba0c8b35dbd0b2f4be612b4d62b80ebd0ac9eeed0f1e0d"
+    },
+    {
+      "path": "nexus_bridge.py",
+      "bytes": 1466,
+      "sha256": "4f6cf0baf9849879f7c60563ceb2ef87b10123748128b4d60a09561e4de25f29"
+    },
+    {
+      "path": "platform_core.py",
+      "bytes": 11692,
+      "sha256": "269e937511a6a5e1e896317466ff4e0f17ae46f9677c040a5206705fe7795b0c"
+    },
+    {
+      "path": "policy.py",
+      "bytes": 1963,
+      "sha256": "46eb6ef3d2dfcf608a0bdf925bd52d4fbb96540b00fa5d54cafeae580e1b7f38"
+    },
+    {
+      "path": "proof.py",
+      "bytes": 4507,
+      "sha256": "3701b0412dfab3530639bbf4ddafe8d7d081aea75b969ee1e3df70430a0d1e22"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 475,
+      "sha256": "a7860a3b5fa2980d4f7988070a45e678cf805a5bb225fd8e30ee7efda8c46858"
+    },
+    {
+      "path": "release_validate.py",
+      "bytes": 1752,
+      "sha256": "9915da92b432c08d447c27e5998c0004ffa6ee8ab41959baf13bb35f5604af72"
+    },
+    {
+      "path": "requirements-worker.txt",
+      "bytes": 51,
+      "sha256": "7e93dd4402d2a94af9caefb77e759c58acb8441f833034f090e97caaf9b3293e"
+    },
+    {
+      "path": "requirements.txt",
+      "bytes": 100,
+      "sha256": "2a27bc6bf1d6babc5c537b259c59e811ce18559dd724e24f934166de2e596b39"
+    },
+    {
+      "path": "scripts/containment_probe.py",
+      "bytes": 1238,
+      "sha256": "1cd95003fd6fdfc3efbcdcc977834159a6bfa3634d951bb4fd850238c9898557"
+    },
+    {
+      "path": "scripts/verify_release_manifest.py",
+      "bytes": 763,
+      "sha256": "99012eca03f4a346934f9f80632094a64b4809ecf5d3cb30d3fe5ac88a387c46"
+    },
+    {
+      "path": "smoke_worker.py",
+      "bytes": 2251,
+      "sha256": "fdfc66a650caf020e6cedee32edab18dc32f323a02932f419c22a65a050242f8"
+    },
+    {
+      "path": "static/app.css",
+      "bytes": 15779,
+      "sha256": "eafc6dbb58885a54ab40afd7aba06c947a4fe9cfdb0ce290b9dbf145698a19f8"
+    },
+    {
+      "path": "static/app.js",
+      "bytes": 24245,
+      "sha256": "318ac5b9062d5c2c4f394f6779cb1e0bdf9a63a389ead246d5b8d30287b13d8b"
+    },
+    {
+      "path": "static/capsula-icon.svg",
+      "bytes": 701,
+      "sha256": "cd8a5b0d5a2cd1964b5f735b3dcf9813225fea4591df14e8e40c27478ceeb952"
+    },
+    {
+      "path": "static/index.html",
+      "bytes": 23496,
+      "sha256": "2b0d551291d0f62e4bfe184ceb6457c5f3d0e8d32a6eaf22ba3dbf44bac163ac"
+    },
+    {
+      "path": "test-receipt.json",
+      "bytes": 510,
+      "sha256": "c2dd1b1f2bbebfe17a6896cf159936b251bb1b7a6b8751b43f807011e3bbade2"
+    },
+    {
+      "path": "test_api_v2.py",
+      "bytes": 2812,
+      "sha256": "767c6b8d2723a3f77788cb7f3b278ebf9b357cd246ca7e2cf958283ff09992fe"
+    },
+    {
+      "path": "test_artifacts_v3.py",
+      "bytes": 2229,
+      "sha256": "0c0a3c91c629569d2810f5e48a487f12660c59454caf4afe06157f8d58c09bf7"
+    },
+    {
+      "path": "test_federation_v3.py",
+      "bytes": 7963,
+      "sha256": "6896deb81616ae02c64351442b269fec43e778dcb248f69f9e8001bb964135c5"
+    },
+    {
+      "path": "test_nexus_bridge.py",
+      "bytes": 1747,
+      "sha256": "79ce0ce5da23d2e0cca813914048de4e59101c7f33b366a27618efb93d8dbd86"
+    },
+    {
+      "path": "test_offline.py",
+      "bytes": 955,
+      "sha256": "a8a45cbcd819034c7287c1d1f79432d4e1fbec115119c1074eb6b72c04bd87c7"
+    },
+    {
+      "path": "test_platform_v4.py",
+      "bytes": 15678,
+      "sha256": "ded50c3f69bdbfd9b738c62abc2aebea8d1e8fb72e215da9fb66c6f303619740"
+    },
+    {
+      "path": "test_proof.py",
+      "bytes": 3450,
+      "sha256": "07d2e46c0a1996d43e9458e5e4a344c8ca2d45a5e96715acd85b051c6bb105e1"
+    },
+    {
+      "path": "test_workspaces.py",
+      "bytes": 1614,
+      "sha256": "65f9db3647bfb20096cf5fb47b4f583af1f7f453a3f11a1f60131069d576fd2a"
+    },
+    {
+      "path": "tests.py",
+      "bytes": 1461,
+      "sha256": "bdb2fbce66476a58c21d5f8dcb2b307fa6bff26b12c0ac3a070e6a9778d5572a"
+    },
+    {
+      "path": "verify_evidence.py",
+      "bytes": 1882,
+      "sha256": "96c01f7febb5d1b58c1d2b220fc117e82d5bd7f95999b2f18dad6ea723a933f7"
+    },
+    {
+      "path": "verify_governance.py",
+      "bytes": 1133,
+      "sha256": "854300058e05ad65aea908659dc9da62c96b802eb3181c44619076b019aaa71f"
+    },
+    {
+      "path": "worker.Dockerfile",
+      "bytes": 439,
+      "sha256": "fe6ad7f04ac07ef538a470457e966edbe09261f1428770e742f8295e03ed4d3f"
+    },
+    {
+      "path": "worker_runtime.py",
+      "bytes": 7464,
+      "sha256": "af8b00c7a413f14eda833e4617a6ec7fa52ff5a17b776eccfd85365072ef42b0"
+    },
+    {
+      "path": "workspaces.py",
+      "bytes": 614,
+      "sha256": "5f5b4accc11bca4bf19d27e53ae8eefe35fcb9c9bc511e5ebae0f983ef207615"
+    }
+  ]
+}
