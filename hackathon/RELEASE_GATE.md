@@ -1,23 +1,27 @@
-# CAPSULA Alpha submission readiness gate
+# CAPSULA 0.5.0-alpha.1 | submission gates, November 8, 2026
 
-| Gate | Evidence | Status |
+This platform is broader than procurement or finance. Engineering, browser use,
+research, documents, data analysis, support, sales, recruiting, finance and
+procurement are optional capability playbooks. The application runs provider
+independently; the hackathon submission requires real Vultr deployment evidence.
+
+| Gate | Status | Reproducible proof |
 | --- | --- | --- |
-| Local tests | `python -m pytest -q`: 160 passed | PASS (local) |
-| Static release verification | `python release_validate.py` | PASS (local) |
-| Genuine worker loopback | `python smoke_worker.py` | Re-run on desired operator VM |
-| Per-job Docker isolation on Vultr | worker-VM security logs, denied network/root writes | NOT VERIFIED |
-| Vultr Serverless Inference | real model call & request trace | NOT VERIFIED |
-| Public Vultr deployment | valid HTTPS URL & external browser test | NOT VERIFIED |
-| Signed evidence and artifact verification | evidence download, pinned public-key verification | Needs live run |
-| Browser agent isolation | egress firewall, DNS/rebinding and origin policy test | NOT VERIFIED |
-| Loom Cluster / Pocket Agent integration | external E2E test | NOT CONNECTED |
-| Wallet money movement | real user-authorized signed settlement | NOT CONNECTED (proposals only) |
-| GitHub source publish | public repo contains build | BLOCKED: GitHub App not installed on FreddyCreates |
-| Submission video / slide presentation | links | NOT READY |
-| Hackathon official submit | LabLab confirmation | NOT SUBMITTED |
+| Full application source | PASS | GitHub main contains v0.4; v0.5 branch awaiting merge |
+| Complete local Python tests | PASS (local) | `pytest -q`: 279 passed |
+| Syntax + version + release gate | PASS (local) | `compileall`, `node --check`, `release_validate.py` |
+| Signed worker loopback | PASS (non-isolated smoke) | `python smoke_worker.py`: result 42, signed receipt |
+| Operator-authorized recursive capsules | PASS (API tests) | mission contract, scoped child authority, pause/cancel, scheduler |
+| Model-to-code, policy, retry | PASS (contract tests) | Challenge API, bounded worker path; real model requires configuration |
+| Disposable browser and vision | PASS (contract tests) | worker image, egress preconditions, screenshot vision adapter |
+| Actual container isolation on independent worker VM | NOT VERIFIED | Run and retain containment probe on deployed VM |
+| Actual browser network egress gateway | NOT VERIFIED | Run private-IP, DNS rebinding, subresource escape tests |
+| Live Vultr Serverless Inference | NOT VERIFIED | Configuration, trace and a real model response needed |
+| Public HTTPS Vultr application | NOT VERIFIED | Public URL and independent login/use test needed |
+| Real recorded demo with containment moment | NOT PROVIDED | Video link + actual worker logs needed |
+| External Loom / Pocket Agent / NOVA / LiveVault | NOT VERIFIED | These remain integration contracts, not connected executions |
+| Payment execution / enterprise multi-tenant SSO | NOT IMPLEMENTED | No spend/signing or enterprise RBAC claims |
+| LabLab final submission | NOT SUBMITTED | Confirmation screenshot/link required |
 
-Release stage: **0.4.0-alpha.1**, not 1.0. A signed receipt is not a hardware attestation. The platform can only claim containment when it is independently tested at the worker VM boundary.
-
-## GitHub access resolution
-
-Current GitHub App installation covers `ItsNotAILABS` only. The repository `FreddyCreates/VultrEco` is under the separate `FreddyCreates` personal account. Install or authorize the same GitHub App for `FreddyCreates`, grant access to `VultrEco` and Contents write permission, then retry upload. Do not create another repository as a workaround without approval.
+Do not represent local tests as deployment, live containment, external attestations,
+or verified market/financial activity. A model asserting success is not evidence.

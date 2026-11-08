@@ -1,20 +1,15 @@
 {
-  "protocol": "capsula.test-receipt.v2",
-  "version": "0.4.0-alpha.1",
-  "recorded_at": "2026-11-08T16:27:53.889051+00:00",
-  "pytest": {
-    "passed": 212,
-    "failed": 0
-  },
-  "python_compile": "PASS",
-  "js_syntax": "PASS",
-  "worker_loopback": {
-    "result": "PASS",
-    "output": "42",
-    "signed_receipt_verified": true,
-    "production_worker_attested": false
-  },
-  "release_contract": "PASS",
-  "external_host_execution_claim": "NONE",
-  "visual_browser_test": "BLOCKED_BY_ENVIRONMENT_POLICY"
+  "protocol": "capsula.local-test-receipt.v1",
+  "version": "0.5.0-alpha.1",
+  "timestamp_utc": "2026-11-08T18:54:16.380686+00:00",
+  "tests": 279,
+  "tests_status": "PASS",
+  "syntax": "PASS",
+  "release_validate": "PASS",
+  "loopback_worker": "PASS",
+  "external_vm_containment": "NOT VERIFIED",
+  "browser_firewall": "NOT VERIFIED",
+  "vultr_inference": "NOT VERIFIED",
+  "demo": "NOT VERIFIED",
+  "attestation": "NO hardware or external attestation"
 }

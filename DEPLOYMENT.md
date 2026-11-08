@@ -44,3 +44,26 @@ The smoke is **not** an isolation proof: it explicitly uses a development-only, 
 ## 5. Backups, custody and recovery
 
 Back up `/app/data/capsula.sqlite3` and `/app/data/keys` together, with encrypted offline backups and restrictive file permissions. Encryption keys are local and currently lack automated rotation/recovery. Losing the AES-GCM key makes encrypted records unrecoverable. Keep `CAPSULA_API_KEY` and worker tokens out of the repository.
+
+## 6. Autonomous scheduler, providers and browser workers
+
+Operator authorizes mission contracts in the web UI. The scheduler is a separate
+opt-in process: `docker compose -f docker-compose.production.yml -f docker-compose.autonomy.yml up -d --build`.
+It invokes the API with the controller key on the private Compose network, not a host shell.
+Run only after an approved inference endpoint has been configured; no model is silently provisioned.
+
+For browser agents, build the one-shot image on an isolated worker machine:
+`docker build -f browser.Dockerfile -t capsula-browser:local .`. Provide a private
+Docker-network whose outbound requests are explicitly filtered by a real gateway
+allowlisting selected HTTPS hostnames and resolved public IPs. Then configure
+`CAPSULA_BROWSER_NETWORK`, `CAPSULA_BROWSER_ALLOWLIST`, and
+`CAPSULA_BROWSER_EGRESS_ENFORCED=1` (the flag is an operator assertion, **not** attestation).
+Run `docker compose -f docker-compose.browser.yml up -d --build` on that worker VM.
+The worker service starts a fresh container per browser task; the control plane does not.
+A separate `CAPSULA_MODEL_VISION_MODELS` allowlist controls screenshot review.
+
+For the Vultr Agent Rush submission, deploy the control plane on Vultr VM, the
+workers on separate disposable Vultr VMs, and wire Vultr Serverless Inference
+using `CAPSULA_MODEL_PROVIDER`, `CAPSULA_MODEL_URL`, and model allowlisting.
+Collect real logs and containment probe outputs. Do not call local loopback tests
+a production isolation pass.

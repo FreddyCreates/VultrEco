@@ -19,9 +19,9 @@ function formBody(form){return Object.fromEntries(new FormData(form).entries())}
 function submitForm(id,fn){$(id).addEventListener('submit',async e=>{e.preventDefault();let b=e.currentTarget.querySelector('button[type=submit]');const old=b?.textContent;if(b)b.disabled=true;try{await fn(e.currentTarget)}catch(err){notify(err.message,true)}finally{if(b){b.disabled=false;b.textContent=old}}})}
 function setPage(name){
  currentPage=name;$$('.page').forEach(p=>p.classList.toggle('active',p.id==='page-'+name));$$('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===name));
- $('#crumb-title').textContent=({'overview':'Overview','projects':'Projects & Files','agents':'Agents','runs':'Workflows','missions':'Missions','computers':'Computers','models':'Models','vault':'Memory & Artifacts','finance':'Finance','approvals':'Approvals','security':'Security & Evidence'})[name]||name;
+ $('#crumb-title').textContent=({'overview':'Overview','projects':'Projects & Files','agents':'Agents','autonomy':'Autonomous missions','runs':'Workflows','missions':'Missions','computers':'Computers','models':'Models','vault':'Memory & Artifacts','finance':'Finance','approvals':'Approvals','security':'Security & Evidence'})[name]||name;
  history.replaceState(null,'','#'+name);window.scrollTo({top:0,behavior:'instant'});
- const load=({overview:loadOverview,projects:loadProjects,agents:loadAgents,runs:loadRuns,missions:loadMissions,computers:loadComputers,models:loadModels,vault:loadVault,finance:loadFinance,approvals:loadApprovals,security:loadSecurity})[name];if(apiKey&&load)load().catch(e=>notify(e.message,true));
+ const load=({overview:loadOverview,projects:loadProjects,agents:loadAgents,autonomy:loadAutonomy,runs:loadRuns,missions:loadMissions,computers:loadComputers,models:loadModels,vault:loadVault,finance:loadFinance,approvals:loadApprovals,security:loadSecurity})[name];if(apiKey&&load)load().catch(e=>notify(e.message,true));
 }
 async function unlock(){
  const value=$('#auth-key').value.trim();if(!value)return;
@@ -82,10 +82,48 @@ async function decideApproval(id,decision){await api('approvals/'+encodeURICompo
 $('#approvals-refresh').onclick=()=>loadApprovals().catch(e=>notify(e.message,true));
 async function loadSecurity(){let [post,pk,audit,contracts]=await Promise.all([api('security/posture'),api('proof/public-key'),api('audit'),api('federation/contracts')]);$('#audit-state').textContent=audit.verified?'Verified':'INVALID';$('#audit-state').style.color=audit.verified?'var(--lime)':'var(--red)';$('#security-list').innerHTML=Object.entries(post).map(([k,v])=>`<div class="status-row"><span>${esc(k.replaceAll('_',' '))}</span><span class="small">${esc(String(v))}</span></div>`).join('');$('#proof-identity').innerHTML=`<div><div class="eyebrow">ED25519 IDENTITY</div><p class="small muted">${esc(pk.key_id)}</p><pre>${esc(pk.public_key)}</pre><p class="small">Audit events: ${audit.entries.length} · Integrity: ${audit.verified?'VERIFIED':'INVALID'}</p></div>`;$('#protocol-list').innerHTML=contracts.supported.map(x=>`<span class="chip">${esc(x)}</span>`).join('')}
 $('#security-refresh').onclick=()=>loadSecurity().catch(e=>notify(e.message,true));
+// Mission-level authority is separate from individual ad-hoc workflow approval.
+let autonomyCache=[];
+async function loadAutonomy(){
+ const [agents,goals,playbooks]=await Promise.all([api('agents'),api('autonomy/goals'),api('autonomy/playbooks')]);
+ autonomyCache=goals;
+ const selected=$('#autonomy-agent').value;
+ $('#autonomy-agent').innerHTML=agents.filter(a=>a.status==='active'&&a.model&&a.capabilities.includes('inference')).map(a=>`<option value="${esc(a.id)}">${esc(a.name)} · ${esc(a.workspace)} · ${esc(a.model)}</option>`).join('')||'<option value="">Create a model-enabled agent first</option>';
+ if(selected&&agents.some(a=>a.id===selected))$('#autonomy-agent').value=selected;
+ $('#auto-total').textContent=goals.length;
+ const active=goals.filter(g=>['active','running'].includes(g.state)).length;
+ $('#auto-live').textContent=active;
+ $('#auto-children').textContent=goals.filter(g=>g.parent_id).length;
+ $('#autonomy-active-count').textContent=active||'';
+ $('#autonomy-list').innerHTML=goals.length?goals.map(g=>`<div class="auto-task">
+   <div class="auto-task-top"><div class="list-text"><strong>${esc(g.id)}</strong><small>${esc(g.workspace)} · ${g.depth?'Child capsule · depth '+g.depth:'Root mission'} · ${esc(g.agent_id)}</small></div>${statusTag(g.state)}</div>
+   <div class="auto-bars"><span>${g.cycles_done}/${g.max_cycles} cycles</span><span>${g.tokens_used}/${g.token_budget} tokens</span><span>${g.children_created}/${g.max_children} children</span></div>
+   <div class="auto-actions"><button class="small-btn" data-auto="${esc(g.id)}|inspect">Inspect</button>
+   ${g.state==='awaiting_approval'?`<button class="small-btn" data-auto="${esc(g.id)}|activate">Activate after approval</button>`:''}
+   ${g.state==='active'?`<button class="small-btn" data-auto="${esc(g.id)}|tick">Run cycle</button><button class="small-btn" data-auto="${esc(g.id)}|pause">Pause</button>`:''}
+   ${g.state==='paused'?`<button class="small-btn" data-auto="${esc(g.id)}|resume">Resume</button>`:''}
+   ${g.state==='blocked'?`<button class="small-btn" data-auto="${esc(g.id)}|retry">Retry after review</button>`:''}
+   ${['active','paused','blocked','awaiting_approval'].includes(g.state)?`<button class="small-btn danger" data-auto="${esc(g.id)}|cancel">Cancel</button>`:''}
+   </div></div>`).join(''):empty('No autonomous missions. Define a bounded mission to begin.');
+ $('#autonomy-playbooks').innerHTML=playbooks.map(p=>`<div class="playbook"><span>${esc(p.domain)}</span><strong>${esc(p.name)}</strong><p>${esc(p.risk)}</p><small>${esc(p.capabilities.join(' · '))}</small></div>`).join('');
+}
+submitForm('#autonomy-form',async form=>{
+ const d=formBody(form);d.capabilities=[...form.querySelectorAll('input[name=autocap]:checked')].map(x=>x.value);
+ for(const k of ['max_cycles','max_children','max_steps_per_cycle','deadline_minutes','interval_seconds','token_budget'])d[k]=Number(d[k]);
+ const r=await api('autonomy/goals',{method:'POST',body:JSON.stringify(d)});
+ notify('Contract created: approve '+r.approval_id+' before activation');setPage('autonomy');await loadAutonomy();
+ $('#autonomy-detail').textContent='Mission '+r.id+' created. Go to Approvals to grant the bounded mission authority. No execution has happened.';
+});
+$('#autonomy-refresh').onclick=()=>loadAutonomy().catch(e=>notify(e.message,true));
+async function inspectAuto(id){const g=await api('autonomy/goals/'+encodeURIComponent(id));$('#autonomy-detail').innerHTML=`<div class="status-row"><span>Objective</span>${statusTag(g.state)}</div><p>${esc(g.objective)}</p><div class="status-row"><span>Capabilities</span><small>${esc(g.capabilities.join(', '))}</small></div><div class="status-row"><span>Deadline</span><small>${esc(g.deadline)}</small></div><div class="status-row"><span>Approval</span><small>${esc(g.approval_id)}</small></div><div class="status-row"><span>Parent</span><small>${esc(g.parent_id||'Root mission')}</small></div><div class="status-row"><span>Last workflow</span><small>${esc(g.last_run||'None')}</small></div><div class="status-row"><span>Last error</span><small>${esc(g.last_error||'None')}</small></div>`}
 // Delegated interaction across all dynamically rendered lists.
 document.addEventListener('click',async e=>{
- const node=e.target.closest('[data-go],[data-page],[data-run],[data-mission],[data-agent],[data-workspace],[data-file],[data-execute],[data-approve],[data-reject],[data-step-remove],[data-memory],[data-artifact]');if(!node)return;
+ const node=e.target.closest('[data-go],[data-page],[data-auto],[data-run],[data-mission],[data-agent],[data-workspace],[data-file],[data-execute],[data-approve],[data-reject],[data-step-remove],[data-memory],[data-artifact]');if(!node)return;
  try{
+  if(node.dataset.auto){let [id,action]=node.dataset.auto.split('|');if(action==='inspect'){await inspectAuto(id);return}if(action==='cancel'&&!confirm('Cancel this mission and its direct children?'))return;
+    let endpoint=action==='activate'?'activate':action==='tick'?'tick':'decision';let cfg={method:'POST'};
+    if(endpoint==='decision')cfg.body=JSON.stringify({decision:action});
+    await api('autonomy/goals/'+encodeURIComponent(id)+'/'+endpoint,cfg);notify('Mission action: '+action);await loadAutonomy();await inspectAuto(id);return}
   if(node.dataset.go||node.dataset.page){setPage(node.dataset.go||node.dataset.page);return}
   if(node.hasAttribute('data-step-remove')){stepDraft.splice(Number(node.dataset.stepRemove),1);drawSteps();return}
   if(node.dataset.run){setPage('runs');await openRun(node.dataset.run);return}

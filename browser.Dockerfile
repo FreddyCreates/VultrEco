@@ -1,11 +1,8 @@
+# Build on an isolated worker VM. Run each browser task as a disposable container.
 FROM mcr.microsoft.com/playwright/python:v1.57.0-noble
-WORKDIR /srv
-RUN useradd --uid 10001 --create-home capsule
-COPY requirements-worker.txt .
-RUN pip install --no-cache-dir -r requirements-worker.txt
-COPY worker_runtime.py .
-RUN mkdir -p /home/capsule && chown -R 10001:10001 /srv /home/capsule
+RUN useradd --uid 10001 --create-home capsula && mkdir -p /app && chown 10001:10001 /app
+WORKDIR /app
+COPY browser_task.py /app/browser_task.py
 USER 10001
-ENV HOME=/home/capsule PYTHONDONTWRITEBYTECODE=1
-EXPOSE 8081
-CMD ["uvicorn","worker_runtime:app","--host","0.0.0.0","--port","8081"]
+ENV HOME=/tmp PYTHONDONTWRITEBYTECODE=1
+ENTRYPOINT ["python", "/app/browser_task.py"]

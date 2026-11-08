@@ -26,3 +26,16 @@ Operator browser  →  CAPSULA Work OS (FastAPI + static UI)
 **Trust boundary:** signature provenance establishes consistency with a signing key held by the CAPSULA installation. It cannot prove the executor host was not compromised. The Docker worker must run on a physically or virtually isolated worker host, not alongside high-value data. External telemetry/attestation, multi-user identity, external KMS, policy-enforced tenant separation and production browser isolation are future hardening gates.
 
 **Backend contracts:** model provider receives `POST /v1/chat/completions`-compatible requests; CAPSULA workers expose `POST /execute` with a shared, operator-provisioned token and return bounded results with a digest; Nexus uses explicit `nexus.task.v1` / `nexus.handoff.v1` objects. These boundaries can be replaced with locally operated services without changing the customer UI.
+
+
+### CAPSULA autonomy planes (v0.5)
+
+Operator -> scoped mission grant (signed audit) -> opt-in scheduler -> strict
+model JSON proposal -> validation -> child capsule/granted steps -> worker isolation
+-> signed receipt/artifact -> retained memory/evaluation. Root mission controls
+capabilities, max cycles, deadlines, planning token allowance and child slots.
+Python tasks use per-job read-only, network-disabled Docker on dedicated worker VM.
+Browser tasks use per-job Playwright image with network-level egress gateway;
+vision review is an independent explicit model capability and never used as
+cryptographic attestation. Universal playbooks are capability/risk templates,
+not claims of third-party business integrations.

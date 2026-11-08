@@ -4,3 +4,15 @@
 @media(max-width:700px){.layout{display:block}.sidebar{width:100%;height:auto;position:relative;padding:12px;border-right:0;border-bottom:1px solid var(--border)}.sidebar .brand{padding:0 4px 9px}.workspace-pill,.nav-group-title,.sidebar-bottom{display:none}.sidebar nav{display:flex;flex-direction:row;overflow:auto;gap:5px;margin:5px 0}.sidebar .nav{white-space:nowrap;padding:7px 9px;width:auto;font-size:11px}.sidebar .nav-icon{font-size:12px;width:11px}.topbar{height:57px;padding:0 17px}.clock{display:none}.main{padding:24px 16px 42px}.page-head{display:block;min-height:0;padding-top:23px}.hero-orb{display:none}.page-head h1{font-size:37px}.metric-grid,.metric-grid.three,.feature-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.metric{min-height:100px;padding:16px}.metric>strong{font-size:25px}.columns.half,.columns.two-one{grid-template-columns:1fr}.panel{padding:16px}.section-heading{display:block}.section-heading h1{font-size:30px}.section-heading>.button{margin-top:12px}.field-two{grid-template-columns:1fr}.main-footer{flex-wrap:wrap;padding:16px;font-size:8px}.wallet-surface button{margin-left:0}.top-actions{gap:8px}}
 
 .mark img{width:32px;height:32px;object-fit:contain}.mark.lg img{width:48px;height:48px}
+
+/* Autonomous mission governance and capsule trees */
+.auto-task{border:1px solid #314549;border-radius:10px;background:linear-gradient(140deg,#16242b,#10181e);padding:16px;display:flex;flex-direction:column;gap:13px}
+.auto-task-top{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.auto-bars{display:flex;gap:14px;flex-wrap:wrap;color:#90aeb1;font:11px ui-monospace,monospace}
+.auto-actions{display:flex;gap:7px;flex-wrap:wrap}
+.playbook-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.playbook{background:#101d25;border:1px solid #314349;padding:17px;border-radius:10px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.playbook>span{font-size:9px;color:#a2e4b0;text-transform:uppercase;letter-spacing:1px;font-weight:800}
+.playbook strong{font-size:13px}.playbook p{font-size:11px;color:#9dabb4;line-height:1.6;margin:0}.playbook small{font:10px ui-monospace,monospace;color:#6f9191}
+@media(max-width:900px){.playbook-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.playbook-grid{grid-template-columns:1fr}}

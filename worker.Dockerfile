@@ -6,6 +6,7 @@ RUN useradd --uid 10001 --create-home capsule
 COPY requirements-worker.txt .
 RUN pip install --no-cache-dir -r requirements-worker.txt
 COPY worker_runtime.py .
+COPY browser_task.py .
 USER 10001
 ENV HOME=/home/capsule PYTHONDONTWRITEBYTECODE=1
 EXPOSE 8081
