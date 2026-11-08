@@ -6,7 +6,7 @@ from capsula.intelligence import inference
 def test_live_route_requires_auth_and_stays_quiet(monkeypatch):
     monkeypatch.delenv('VULTR_API_KEY', raising=False)
     monkeypatch.delenv('VULTR_INFERENCE_API_KEY', raising=False)
-    from test_api_v2 import c, auth
+    from tests.test_api_v2 import c, auth
     assert c.get('/api/vultr/live').status_code == 401
     body = c.get('/api/vultr/live', headers=auth).json()
     assert body['configured'] is False

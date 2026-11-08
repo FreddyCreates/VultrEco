@@ -7,7 +7,9 @@ from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
 from typing import Literal
-from capsula.evidence.proof import Signer, Vault, canon as canonical_bytes, sha, tree, inclusion, check_inclusion
+from capsula.evidence.proof import Signer, Vault, canon as canonical_bytes, sha, tree, inclusion, check_inclusion, unb64
+from capsula.intelligence.inference import config as inference_config
+from capsula.agents import computers
 from capsula.security.policy import CAPABILITIES, evaluate
 from capsula.workspace import platform_core as core
 from capsula.agents import learning
@@ -105,7 +107,7 @@ def health():
         r=subprocess.run(['docker','info','--format','{{.ServerVersion}}'],capture_output=True,timeout=3)
         docker_ready=r.returncode==0
     except (FileNotFoundError,subprocess.TimeoutExpired):pass
-    return {'service':'capsula','version':'0.8.0-alpha.1','auth_configured':bool(API_KEY),'sandbox_ready':docker_ready,'execution_mode':'docker-or-worker' if docker_ready else 'worker-required-or-deny','proof_protocol':'capsula.proof.v2','signing_key_id':signer.key_id,'inference_configured':__import__('inference').config()['configured']}
+    return {'service':'capsula','version':'0.8.0-alpha.1','auth_configured':bool(API_KEY),'sandbox_ready':docker_ready,'execution_mode':'docker-or-worker' if docker_ready else 'worker-required-or-deny','proof_protocol':'capsula.proof.v2','signing_key_id':signer.key_id,'inference_configured':inference_config()['configured']}
 
 @app.get('/api/overview')
 def overview(authorization:str|None=Header(None)):
@@ -183,7 +185,7 @@ def verify_proof(receipt,events,output,mid):
         pay.get('event_count')==len(events) and pay.get('merkle_root')==tree(events) and
         pay.get('event_chain_head')==(events[-1]['hash'] if events else '0'*64) and
         pay.get('result_digest')==sha(canonical_bytes(output)) and
-        pub.get('key_id')=='ed25519:'+sha(__import__('proof').unb64(pub.get('public_key','')))[:24] and
+        pub.get('key_id')=='ed25519:'+sha(unb64(pub.get('public_key','')))[:24] and
         Signer.verify_external(pay,receipt.get('signature',''),pub.get('public_key','')))
     except (ValueError,KeyError,TypeError):return False
 
@@ -249,8 +251,8 @@ def get_memory(workspace:str,memory_id:str,authorization:str|None=Header(None)):
 @app.get('/api/integrations')
 def integrations(authorization:str|None=Header(None)):
     authed(authorization)
-    x=federation_inventory();x['model_provider']={'status':'configured-not-verified' if __import__('inference').config()['configured'] else 'unconnected','purpose':'operator-selected OpenAI-compatible inference, local or remote'};x['vultr_inference']={'status':'optional adapter, required in challenge deployment profile','purpose':'Vultr challenge model lane'};x['phantom']={'status':'browser-connection-only','purpose':'user-controlled wallet discovery'}
-    x['rah']={'name':'RAH bounded mission autonomy','status':'host configured, live execution requires acceptance' if __import__('computers').configured()['configured'] else 'implemented; dedicated host unconfigured','purpose':'Existing VM pool, recursive grants, hashed artifact handoffs'}
+    x=federation_inventory();x['model_provider']={'status':'configured-not-verified' if inference_config()['configured'] else 'unconnected','purpose':'operator-selected OpenAI-compatible inference, local or remote'};x['vultr_inference']={'status':'optional adapter, required in challenge deployment profile','purpose':'Vultr challenge model lane'};x['phantom']={'status':'browser-connection-only','purpose':'user-controlled wallet discovery'}
+    x['rah']={'name':'RAH bounded mission autonomy','status':'host configured, live execution requires acceptance' if computers.configured()['configured'] else 'implemented; dedicated host unconfigured','purpose':'Existing VM pool, recursive grants, hashed artifact handoffs'}
     x['improvement']={'name':'Clean improvement capsules','status':'implemented; separate worker required','purpose':'Frozen baseline/candidate cases and verified procedure promotion'}
     return x
 

@@ -823,8 +823,8 @@
     },
     {
       "path": "src/capsula/api/app.py",
-      "bytes": 47157,
-      "sha256": "8bc26628f66b25822b6a57d679c4fa3c64a91a7546294ea92d86d67b687ec826"
+      "bytes": 47209,
+      "sha256": "fcfa68d38152d2136a2f686cb4e809ead68d4301c3237aba002b9a007f7575f8"
     },
     {
       "path": "src/capsula/api/capsule_api.py",
@@ -1038,8 +1038,8 @@
     },
     {
       "path": "tests/test_browser_vision.py",
-      "bytes": 7782,
-      "sha256": "a3509ab0d139a473ef6fb84112482bd0cb6f8816f511248ec52ea6b2cfffbabc"
+      "bytes": 7806,
+      "sha256": "b1084671f12d63544319b458579f5e02efb9be5f5ad454ca1659c1f8764b2fee"
     },
     {
       "path": "tests/test_capsula_v08.py",
@@ -1108,8 +1108,8 @@
     },
     {
       "path": "tests/test_vultr_cloud.py",
-      "bytes": 1715,
-      "sha256": "f5e2fe50cf408e6acbc306f13b2a81bf87bdd1de955a09512f98d7b658ec4b4b"
+      "bytes": 1721,
+      "sha256": "4c014c5c02705a642471f48f432c835eaac8aa55e3ec20088111a8c920297d36"
     },
     {
       "path": "tests/test_vultr_deploy_v07.py",

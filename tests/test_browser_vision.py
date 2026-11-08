@@ -109,7 +109,7 @@ def test_vision_uses_pinned_provider_not_browser_origin(monkeypatch):
 
 
 def test_vision_step_requires_prior_browser_and_capability():
-    from test_autonomy import req,create_agent
+    from tests.test_autonomy import req,create_agent
     agent=create_agent()
     a=req('post',f"/api/agents/{agent['id']}/runs",{'title':'No screenshot available',
        'steps':[{'kind':'vision','title':'Describe an unseen screenshot','prompt':'Describe'}]})
@@ -126,7 +126,7 @@ def test_vision_step_requires_prior_browser_and_capability():
 
 
 def test_production_compose_does_not_mount_host_docker_socket():
-    content=Path('docker-compose.production.yml').read_text()
+    content=Path('infra/compose/production.yaml').read_text()
     assert '/var/run/docker.sock' not in content
     assert 'CAPSULA_API_KEY' in content
     for path in ('Dockerfile.production','Dockerfile'):
@@ -136,9 +136,9 @@ def test_production_compose_does_not_mount_host_docker_socket():
 
 
 def test_static_autonomy_ui_and_model_boundaries():
-    s=Path('static/index.html').read_text()
+    s=Path('apps/web/static/index.html').read_text()
     assert 'page-autonomy' in s and 'autonomy-form' in s
     assert 'Autonomous missions' in s
-    js=Path('static/app.js').read_text()
+    js=Path('apps/web/static/app.js').read_text()
     for name in ('loadAutonomy','autonomy/goals','autonomy/playbooks','data-auto'):
         assert name in js
