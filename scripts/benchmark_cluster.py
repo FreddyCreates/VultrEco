@@ -11,8 +11,8 @@ import time
 import uuid
 import sys
 from pathlib import Path
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
-from cluster_queue import Queue
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
+from capsula.execution.cluster_queue import Queue
 
 def pct(values,p):
     if not values:return 0.0

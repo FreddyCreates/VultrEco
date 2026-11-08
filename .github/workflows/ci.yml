@@ -23,6 +23,7 @@ jobs:
       CAPSULA_CLUSTER_DATABASE_URL: postgresql://capsula:ci-only-not-production@127.0.0.1:5432/capsula
       CAPSULA_API_KEY: ci-admin-not-production-only
       CAPSULA_DATA: /tmp/capsula-ci
+      PYTHONPATH: src:.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -30,15 +31,15 @@ jobs:
           python-version: '3.12'
       - run: python -m pip install -r requirements.txt
       - run: pytest -q
-      - run: python -m compileall -q .
-      - run: node --check static/app.js
-      - run: node --check static/capsules_ui.js
-      - run: python smoke_worker.py
+      - run: python -m compileall -q src tests scripts tools
+      - run: node --check apps/web/static/app.js
+      - run: node --check apps/web/static/capsules_ui.js
+      - run: python tests/smoke_worker.py
       - name: Execute a real disposable Docker file-processing capsule
         run: |
           docker pull python:3.12-alpine
           python scripts/smoke_capsule_docker.py
-      - run: python release_validate.py
+      - run: python tools/release_validate.py
       - run: python scripts/verify_release_manifest.py
       - name: Dedicated VM runtime source contracts
         run: python scripts/validate.py

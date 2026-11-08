@@ -156,8 +156,8 @@ def deploy(conf=None):
             " && git checkout --detach "+conf["sha"])
         run("umask 077; cat > \"$HOME/capsula/src/.env\" && chmod 0600 \"$HOME/capsula/src/.env\"",
             input=runtime_environment(conf))
-        extra=" -f docker-compose.edge.yml" if conf["fqdn"] else ""
-        run("cd \"$HOME/capsula/src\" && docker compose -f docker-compose.production.yml"+extra+" up -d --build")
+        extra=" -f infra/compose/edge.yaml" if conf["fqdn"] else ""
+        run("cd \"$HOME/capsula/src\" && docker compose --project-directory . -f infra/compose/production.yaml"+extra+" up -d --build")
         raw=run("for i in $(seq 1 24); do curl -fsS --connect-timeout 2 --max-time 5 http://127.0.0.1:8080/api/health && exit 0; sleep 2; done; exit 1")
         try:status=json.loads(raw)
         except ValueError as exc:raise DeploymentBlocked("Control-plane health is not JSON") from exc

@@ -64,7 +64,7 @@ def build(project,out,toolchain,docker,dependencies,token):
             if source.is_file() and not target.exists():target.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(source,target)
     (root/'worker').mkdir();shutil.copy2(project/'worker_runtime.py',root/'worker/worker_runtime.py')
     (root/'worker/probe.py').write_text('''import os,json,subprocess,pathlib
-from worker_runtime import app,auth
+from capsula.execution.worker_runtime import app,auth
 from fastapi import Header
 @app.get('/probe/proof')
 def proof(authorization:str|None=Header(None)):

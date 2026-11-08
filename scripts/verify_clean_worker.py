@@ -13,7 +13,7 @@ import secrets
 import sys
 import threading
 import time
-sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]/"src"))
 
 
 def verify(endpoint,token_file,out,inspect_bootstrap=False):
@@ -25,7 +25,8 @@ def verify(endpoint,token_file,out,inspect_bootstrap=False):
         CAPSULA_WORKER_TOKEN=token,CAPSULA_WORKER_ALLOWED_ENDPOINTS=endpoint,
         CAPSULA_ALLOW_DIRECT_DOCKER='0',CONTROLLER_ONLY_CANARY=secrets.token_urlsafe(40))
     os.environ.pop('CAPSULA_WORKER_DEV_ALLOW_UNISOLATED',None)
-    import app,platform_routes
+    from capsula.api import app
+    from capsula.api import platform_routes
     from fastapi.testclient import TestClient
     client=TestClient(app.app);headers={'Authorization':'Bearer '+owner}
     def api(method,path,body=None):
