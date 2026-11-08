@@ -298,8 +298,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 11155,
-      "sha256": "edda680d3bcc1f3463db279ecd53f135e602703944c7c6dc170e4f82ccbee42d"
+      "bytes": 11374,
+      "sha256": "01ad8c8d1c60698717e7ff21a19f7f5586e3200349d83c5f836681cb84b8ba1b"
     },
     {
       "path": "receipts/clean-worker.json",
@@ -1038,8 +1038,8 @@
     },
     {
       "path": "tests/test_browser_vision.py",
-      "bytes": 7806,
-      "sha256": "b1084671f12d63544319b458579f5e02efb9be5f5ad454ca1659c1f8764b2fee"
+      "bytes": 7844,
+      "sha256": "9cb9a10a3beda9c9eb71018a24bbcc9d94689dbc6826de1aa3693ed187fb15d3"
     },
     {
       "path": "tests/test_capsula_v08.py",

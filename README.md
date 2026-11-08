@@ -89,6 +89,8 @@ CAPSULA is the experience. **Vultr provides the computing foundation that lets i
 
 The architecture keeps Vultr central to the integrated cloud experience while allowing future infrastructure adapters without rewriting what CAPSULA is.
 
+CAPSULA also exposes explicit federation contracts for NEXUS, Loom Cluster, POCKET Agent, LiveVault, PARRALAX and Triple-MCP. These are integration surfaces—not claims that every external service is connected today.
+
 ## Built for the real world.
 
 **Build.** Let an agent inspect a codebase, generate a file, run a check, and return the changes for review.

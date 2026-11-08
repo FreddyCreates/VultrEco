@@ -129,7 +129,7 @@ def test_production_compose_does_not_mount_host_docker_socket():
     content=Path('infra/compose/production.yaml').read_text()
     assert '/var/run/docker.sock' not in content
     assert 'CAPSULA_API_KEY' in content
-    for path in ('Dockerfile.production','Dockerfile'):
+    for path in ('infra/docker/controller.Dockerfile','infra/docker/development.Dockerfile'):
         docker=Path(path).read_text()
         for module in ('autonomy.py','challenge.py','vision.py'):
             assert module in docker
