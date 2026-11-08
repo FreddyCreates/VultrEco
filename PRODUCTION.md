@@ -1,11 +1,9 @@
-# Production state — CAPSULA 0.3.0-alpha.1
+# CAPSULA 0.4.0-alpha.1 — Readiness and remaining work
 
-**Classification: LOCAL ALPHA (not deployed, not certified).**
+**Current:** provider-neutral application with working project, agent, planning, run, approval, memory, artifact and evidence APIs, tested locally. It is **not production-certified**.
 
-The source provides a tested local control plane and lease-based worker transport with signed evidence. A loopback process execution has been observed end-to-end, with a verified mission receipt. The socket-free controller image is authored but has not been built or deployed here. Docker container isolation, Chromium browser isolation, Vultr network access, external inference, and real wallet settlement have not been verified here.
+**Verified locally:** Python compilation, unit/integration adversarial tests, import and release validation, JavaScript parser, loopback worker process with a real Python output and signed evidence. It is the integration path, not proof of isolation. Browser Chromium visual rendering is restricted by the current automated environment, so screenshots are not offered as UI certification.
 
-Completed gates: Python syntax, API regression, policy denial, signed evidence, encrypted memory/artifact integrity, NEXUS local contract validation, wallet proposal rejection, governance audit tampering and loopback worker execution.
+**Explicit external gaps:** no live production worker/VM containment attestation; no integrated multi-user identity; no running scheduler/RAH autonomous recursion; no proven actual Loom Cluster scheduling, Pocket Agent federation, LiveVault external key management, PARRALAX settlement; no real wallet signing or bank payment; no live model or cloud runtime deployment proof; no independent security audit.
 
-Open gates: external NEXUS/LOOM/POCKET service health probes, live Vultr credentials, real worker VM network attestation, browser egress certification, external key management, multi-user RBAC, independent audit log witness, production payment authority, observability and recovery testing, and an external red-team test.
-
-Operator must not treat a local signature as hardware attestation; key material currently lives on a local filesystem. A compromise of the controller compromises its signing key unless external key isolation is added.
+**Go/no-go:** Never call this v1.0 until sandbox network controls, key isolation, multi-tenant access, attestation/external witness, load tests, recovery, and external API/vendor behavior have been verified. A public hackathon deployment may be labelled *alpha with real contained execution* only after validating the actual worker host's policy and capture evidence.

@@ -16,7 +16,7 @@
 | Submission video / slide presentation | links | NOT READY |
 | Hackathon official submit | LabLab confirmation | NOT SUBMITTED |
 
-Release stage: **0.3.0-alpha.1**, not 1.0. A signed receipt is not a hardware attestation. The platform can only claim containment when it is independently tested at the worker VM boundary.
+Release stage: **0.4.0-alpha.1**, not 1.0. A signed receipt is not a hardware attestation. The platform can only claim containment when it is independently tested at the worker VM boundary.
 
 ## GitHub access resolution
 

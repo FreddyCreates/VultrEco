@@ -1,0 +1,20 @@
+{
+  "protocol": "capsula.test-receipt.v2",
+  "version": "0.4.0-alpha.1",
+  "recorded_at": "2026-11-08T16:27:53.889051+00:00",
+  "pytest": {
+    "passed": 212,
+    "failed": 0
+  },
+  "python_compile": "PASS",
+  "js_syntax": "PASS",
+  "worker_loopback": {
+    "result": "PASS",
+    "output": "42",
+    "signed_receipt_verified": true,
+    "production_worker_attested": false
+  },
+  "release_contract": "PASS",
+  "external_host_execution_claim": "NONE",
+  "visual_browser_test": "BLOCKED_BY_ENVIRONMENT_POLICY"
+}

@@ -1,14 +1,28 @@
-# CAPSULA architecture (local alpha)
+# CAPSULA — Provider-neutral architecture, v0.4
 
-User browser → single-admin FastAPI mission control → NEXUS-compatible admission/policy → worker scheduler (SQLite leases) → isolated worker transport → result/provenance → controller-signed mission receipt → encrypted memory/artifact store.
+```
+Operator browser  →  CAPSULA Work OS (FastAPI + static UI)
+                         │
+                         ├─ Projects → encrypted versioned file ledger (SQLite + AES-GCM)
+                         ├─ Agents → capability registry, role/instructions/step limit
+                         ├─ Planner → pinned OpenAI-compatible inference provider
+                         │                  (local/self-hosted/remote)
+                         ├─ Approvals → signed governance log
+                         ├─ Runs → deterministic sequential step executor
+                         │      ├─ Python/browser → leased isolated worker HTTPS API
+                         │      ├─ Inference → pinned compatible model endpoint
+                         │      ├─ Memory → authenticated sealed workspace record
+                         │      └─ Artifact → content-addressed encrypted record
+                         ├─ Proof → Ed25519 + Merkle + per-mission event chain
+                         ├─ Finance → unsigned proposals; browser wallet discovery
+                         └─ Federation → NEXUS ingress/handoff contracts
+                                            │
+                       optional: Loom Cluster / Pocket Agent / LiveVault / PARRALAX
+                       optional: Vultr / bare metal / Kubernetes / any VM provider
+```
 
-Planes:
-- **User/team:** single-admin only, no true tenant isolation.
-- **Federation:** NEXUS local task/handoff contracts; external NEXUS and Loom Cluster unconnected.
-- **Execution:** separate worker API and deployment manifests; Python process under worker container resource limits. Browser alpha only, network protections incomplete.
-- **Model:** Vultr inference configurable with pinned HTTPS hostname and allowlisted models; untested remotely.
-- **Memory:** SQLite index, AES-GCM sealed records and content-addressed artifacts, local keys.
-- **Proof:** Ed25519 signed domain-separated mission and governance records, Merkle inclusion paths, offline pinned-key verifiers. No witness or hardware attestation.
-- **Finance:** browser wallet discovery, invoice drafts, budget proposals and unsigned payment intents. No keys, no custody, no chain broadcast.
+**Control-plane invariants:** one operator key is required for all privileged APIs; no agent can alter an operator-pinned model URL or worker allowlist; an unconfigured worker is denied; model plans remain proposals; human approval is required for Python/browser effects; no payment intent signs or transfers funds; encrypted content is authenticated to its workspace/path/revision; every sensitive state transition emits a signed governance entry.
 
-Canonical external technology is preserved: NEXUS, Loom Cluster, CAPSULA runtime, POCKET Agent, NOVA Runtime, LiveVault, Medina Memory, Triple-MCP, PARRALAX. The app never claims an unavailable external service is active.
+**Trust boundary:** signature provenance establishes consistency with a signing key held by the CAPSULA installation. It cannot prove the executor host was not compromised. The Docker worker must run on a physically or virtually isolated worker host, not alongside high-value data. External telemetry/attestation, multi-user identity, external KMS, policy-enforced tenant separation and production browser isolation are future hardening gates.
+
+**Backend contracts:** model provider receives `POST /v1/chat/completions`-compatible requests; CAPSULA workers expose `POST /execute` with a shared, operator-provisioned token and return bounded results with a digest; Nexus uses explicit `nexus.task.v1` / `nexus.handoff.v1` objects. These boundaries can be replaced with locally operated services without changing the customer UI.

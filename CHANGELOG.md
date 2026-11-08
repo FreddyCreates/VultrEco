@@ -1,25 +1,29 @@
-# Release history
+# CAPSULA Changelog
 
-## 0.3.0-alpha.1 — Worker federation, trust visibility, bounded finance proposals
+## 0.4.0-alpha.1 — 2026-11-08
 
-- Separate authenticated worker service and lease-based worker registration/job records. By default its Python path requires an isolated, per-job Docker container on a separate worker VM; the unsafe subprocess path is smoke-only.
-- Remote worker result digest comparison and controller-signed mission evidence.
-- Loopback worker execution smoke test (real process, signed receipt); no sandbox isolation certification.
-- Experimental allowlisted Chromium browser worker; production safety requirements explicitly documented.
-- NEXUS task/handoff local protocol adapter and Vultr inference configuration boundary.
-- Signed governance audit events and independent offline verifier.
-- Encrypted, content-addressed workspace artifacts and signed custody history.
-- Operator approval state machine, proposal-only spending limits, revocation, payment proposals without execution.
-- UI sections for Workers, Approvals, Sealed Artifacts and Security Posture.
-- Socket-free controller deployment option, per-worker manifests and CI verification workflow.
-- Expanded regression coverage and package release manifest.
+**Standalone Work OS — no mandatory cloud provider.**
 
-## 0.2.0-alpha.1 — Cryptographic evidence and encrypted memory
+- Rebuilt the application front end as 11 task-focused responsive screens with actual wired API actions; all routes are self-contained static assets.
+- Added encrypted, versioned project files with revision precondition checks and traversal-safe project paths.
+- Added agent registry with capability lists, max step limits, active/disabled state and workspace isolation by logical scope.
+- Added goal-to-plan inference compiler, strict plan parsing, authority validation and mandatory approval before effectful execution.
+- Added durable workflows with step results, approval linkage, deterministic terminal states, stop-on-failure and encrypted result storage.
+- Added permitted memory/artifact steps and explicit model-output-to-memory/artifact transfer using `{{last.output}}` for write-only steps.
+- Generalized the model API to operator-pinned OpenAI-compatible endpoints (self-hosted loopback, private network or HTTPS), not Vultr-only.
+- Hardened control-plane execution: direct Docker invocation disabled by default; worker required unless explicitly enabled on an isolated operator host.
+- Added dedicated V4 integration/adversarial tests; retained prior v0.3 proof/governance/worker tests.
+- Updated container image, Compose, release gate and CI source checks.
 
-- Ed25519-signed mission receipts, Merkle inclusion proof, offline verification.
-- AES-256-GCM encrypted mission data and workspace memory.
-- Capability and integration posture registry.
+## 0.3.0-alpha.1 — 2026-11-04
 
-## 0.1.0-alpha.1 — Initial mission control
+- Leased worker registry, Python and experimental browser workers, signed governance audit and artifact custody.
+- NEXUS contract adapter, proposal-only financial authorizations and non-custodial wallet discovery.
 
-- Web dashboard, Docker-based bounded Python tasks, persistent mission records, invoice drafts, Phantom account discovery.
+## 0.2.0-alpha.1 — 2026-11-04
+
+- Ed25519 signer, signed Merkle event receipts, encrypted memory and offline verifiers.
+
+## 0.1.0-alpha.1 — 2026-11-04
+
+- Initial mission-control UI, Python sandbox prototype and SQLite mission store.

@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-11-08T16:27:29.849937+00:00",
+  "version": "0.4.0-alpha.1",
+  "automated_tests": 212,
+  "local_suite": "PASS",
+  "release_contract": "PASS",
+  "node_static_parse": "PASS",
+  "worker_loopback": "PASS \u2014 not sandbox attestation",
+  "sandbox_isolation_on_vultr": "NOT VERIFIED",
+  "live_inference": "NOT VERIFIED",
+  "github_push": "PENDING",
+  "external_approval": "NOT REQUIRED FOR LOCAL APP"
+}

@@ -1,12 +1,9 @@
-# Operator boundaries
+# CAPSULA Operator Boundary
 
-- Never authorize untrusted agents to administer the control-plane VM or Docker daemon.
-- Single-admin API key is not user identity, tenancy or role-based access. Keep the alpha private.
-- Worker tokens must be unique and rotated. Registration requires a preconfigured exact endpoint; nonloopback workers require TLS.
-- Local process resource limits and Docker restrictions are layered defenses, not a formal proof of VM containment.
-- Browser worker with `--no-sandbox` requires an external microVM/VM boundary; DNS allowlist by itself does not prevent rebinding or SSRF. Use an egress firewall/proxy.
-- Finance intents and proposal grants are not authority to spend. Every real transaction requires a future approved, user-signed transaction and settlement reconciliation.
-- Receipts prove possession of the operator key and integrity of recorded data, not independent truth of actions or host measurements.
-- Keep a separately pinned public signing key. A key bundled with untrusted evidence does not identify a trusted signer.
-- Protect backups of encrypted state and signing keys separately; do not publish credentials or private artifacts.
-- Review licenses and dependencies and retain attribution for reused upstream code before hackathon submission.
+- **Authority** — single authenticated administrator, in-memory browser key. No multi-user RBAC/SSO; never share the single administrator token with agents or untrusted clients.
+- **Agents** — persistent logical identities and explicit capabilities. Model-generated plans are untrusted JSON proposals, bounded by the agent's role, allowed actions and max steps. A separate recorded approval precedes execution.
+- **Execution** — Python/browser code executes only via a registered worker with a valid lease or explicitly opted-in local isolated runtime; direct Docker execution on the controller is disabled by default. Worker's successful response is a claim, not attestation.
+- **Memory/artifacts** — AES-256-GCM encryption bound to workspace IDs and revisions. Signed custody verifies operator key origin, not the honesty of the host.
+- **Inference** — model URL and model allowlist are operator environment variables, not settable by agents. Remote HTTP is rejected; trusted private-network HTTP requires explicit operator pinning and opt-in.
+- **Finance** — proposals and invoice drafts exist; user wallet discovery is client-side. No keys/custody, signing, broadcasting, automated payouts or spending authority are enabled.
+- **Provider** — deploy on local hardware, private VMs or a chosen cloud. Vultr is optional; the core app does not depend on a Vultr account.
