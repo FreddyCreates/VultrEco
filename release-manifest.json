@@ -345,8 +345,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 7393,
-      "sha256": "36a7faeea0e39d1dab06199adf37f75a5099bc8d1cb601c9a9626c72ea0f9c13"
+      "bytes": 7687,
+      "sha256": "056a0f7a5c944564cdcf0f2253cfcc064879082193d0da6e32e3924a46e06b8c"
     },
     {
       "path": "receipts/clean-worker.json",

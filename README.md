@@ -107,6 +107,11 @@ Paid `apply` requires a human-run workflow with budget confirmation and
 `CAPSULA_DEPLOY_APPROVED=1`. Cloud-init installs host prerequisites; it does
 **not** claim a service is ready or smuggle keys onto a public VM.
 
+
+## Cryptographic provenance
+
+CAPSULA's execution and governance records use **Ed25519** signatures; encrypted project memory and artifacts use **AES-256-GCM**. This provides local-key provenance and authenticated confidentiality, not external attestation or proof against a compromised host.
+
 ## Acceptance gates
 
 Run `pytest -q`, `python release_validate.py`,
