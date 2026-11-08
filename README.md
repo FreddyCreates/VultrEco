@@ -68,6 +68,16 @@ both without shrinking its capabilities.
 > deployment and VM-isolation claims require separate operator evidence.
 
 
+## Real Docker acceptance evidence
+
+GitHub CI runs `scripts/smoke_capsule_docker.py`: a real Docker
+container reads a CSV under `/inputs`, denies writes to container root,
+denies public network access, checks absence of protected environment keys,
+writes a result under `/outputs`, verifies the SHA-256 digest and confirms
+container destruction. This is **GitHub-runner Docker evidence**, not Vultr
+VM isolation or independent hypervisor attestation. Repeat on your deployed
+Vultr worker VMs using `scripts/benchmark_multi_vm.py`.
+
 ## Real work, real computers, real deliverables
 
 From the **Capsules & Deliverables** tab, a workspace owner selects actual

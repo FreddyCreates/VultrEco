@@ -15,8 +15,8 @@
     },
     {
       "path": ".github/workflows/ci.yml",
-      "bytes": 1662,
-      "sha256": "0934792f529b31cdc5af11de05cdf4f9850a51fc775505b3c017bb563c75f398"
+      "bytes": 1886,
+      "sha256": "34687fbe30ce5a1f222c3fe1d48e18ff00f9b270b6c34a9c366a1d54daa6f8d7"
     },
     {
       "path": ".github/workflows/vultr-existing-deploy.yml",
@@ -380,8 +380,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 15042,
-      "sha256": "93d5a25a25aacc5818e4311882263dafa58f29b31261bafdae27f144d896a673"
+      "bytes": 15574,
+      "sha256": "1ac01974b6ad7c7154a03340f123a6cbe093041369b2c09bc58b8036af5a7064"
     },
     {
       "path": "receipts/clean-worker.json",
@@ -405,8 +405,8 @@
     },
     {
       "path": "release_validate.py",
-      "bytes": 2685,
-      "sha256": "7b36999ce360f9f70b24699eeca2bac4c9640ac529d7258927c5a65fdddd58c8"
+      "bytes": 2720,
+      "sha256": "46616281f602c5ae213ce31842dd9daa4fe8986a0f34e73431924743de9d82a3"
     },
     {
       "path": "requirements-worker.txt",
@@ -837,6 +837,11 @@
       "path": "scripts/provision_vultr.py",
       "bytes": 5446,
       "sha256": "f2a962a231d429544340c3e4f639ab095d93ac79d1c1edb9b511d43f24267132"
+    },
+    {
+      "path": "scripts/smoke_capsule_docker.py",
+      "bytes": 3077,
+      "sha256": "348edd7a3a9356b08b5ca8fede4572228e9903bc35ccb6ba515cf488dd83262a"
     },
     {
       "path": "scripts/verify_clean_worker.py",
