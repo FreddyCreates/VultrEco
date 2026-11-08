@@ -15,6 +15,7 @@ from workspaces import MemoryInput, WorkspaceInput
 from audit import schema as audit_schema, append as audit_append, verify as audit_verify
 from federation import schema as federation_schema, inventory as federation_inventory, WorkerRegistration, FinanceIntent, GrantInput, ApprovalInput, now as fed_now, expiry as fed_expiry, worker_status
 import ipaddress, urllib.parse, decimal, httpx
+import fleet
 
 ROOT=pathlib.Path(__file__).resolve().parent
 DATA=pathlib.Path(os.environ.get('CAPSULA_DATA','./data')).resolve()
@@ -271,15 +272,17 @@ WORKER_ALLOWED=os.getenv('CAPSULA_WORKER_ALLOWED_ENDPOINTS','').split(',')
 WORKER_ALLOWED={x.strip() for x in WORKER_ALLOWED if x.strip()}
 
 def select_worker(db,kind):
-    return db.execute('SELECT * FROM workers WHERE kind=? AND status=? AND lease_expiry>? ORDER BY heartbeat DESC LIMIT 1',(kind,'active',now())).fetchone()
+    return fleet.peek(db,kind)
 
 def dispatch_mission(body,mid):
-    with conn() as db: worker=select_worker(db,body.kind)
+    with conn() as db: reservation=fleet.reserve(db,body.kind,mid,lease_seconds=45)
+    worker=reservation['worker'] if reservation else None
     if not worker:
         if body.kind=='python' and os.getenv('CAPSULA_ALLOW_DIRECT_DOCKER')=='1' and os.getenv('CAPSULA_COMPETITION_MODE')!='1':
             out=run_python(body.code,mid);out['execution_claim']='docker-process-exit-observed' if out['status']!='denied' else 'not-executed';return out
         return {'status':'denied','reason':'No isolated worker lease or approved sandbox backend for capability','exit_code':None,'stdout':'','stderr':''}
     if not WORKER_TOKEN or worker['endpoint'] not in WORKER_ALLOWED:
+        with conn() as db:fleet.complete(db,reservation['lease_id'],False)
         return {'status':'denied','reason':'Worker endpoint/token not allowlisted','exit_code':None,'stdout':'','stderr':''}
     jobid=uuid.uuid4().hex;ts=now();deadline=fed_expiry(15)
     with conn() as db:
@@ -293,7 +296,9 @@ def dispatch_mission(body,mid):
         if reply.get('digest') != 'sha256:'+hashlib.sha256(canonical({k:v for k,v in result.items() if k!='execution_claim'}).encode()).hexdigest():raise ValueError('Worker result integrity mismatch')
     except (httpx.HTTPError,ValueError,KeyError,TypeError) as exc:
         result={'status':'failed','reason':'Worker dispatch or proof failure','exit_code':None,'stdout':'','stderr':'','execution_claim':'not-verified'}
-    with conn() as db:db.execute('UPDATE jobs SET status=?,updated=?,result=? WHERE id=?',(result['status'],now(),canonical(result),jobid))
+    with conn() as db:
+        db.execute('UPDATE jobs SET status=?,updated=?,result=? WHERE id=?',(result['status'],now(),canonical(result),jobid))
+        fleet.complete(db,reservation['lease_id'],result['status']=='completed')
     return result
 
 @app.get('/api/workers')
@@ -681,3 +686,6 @@ bind_challenge(app)
 # Scoped autonomy and agent-created capsule delegation.
 from autonomy import bind as bind_autonomy
 bind_autonomy(app)
+
+from fleet_routes import bind as bind_fleet
+bind_fleet(_sys.modules[__name__])
